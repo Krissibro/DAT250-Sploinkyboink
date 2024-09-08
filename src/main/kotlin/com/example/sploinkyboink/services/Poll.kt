@@ -1,4 +1,4 @@
-package com.example.sploinkyboink
+package com.example.sploinkyboink.services
 
 import java.time.Instant
 
@@ -9,12 +9,12 @@ data class Poll(
     val publishedAt: Instant,
     val validUntil: Instant,
     val voteOptions: List<String>,
-    val votes: MutableMap<User, Vote> = mutableMapOf()
+    val votes: MutableMap<String, Vote> = mutableMapOf()
 ) {
     // User votes on the poll
     fun vote(user: User, vote: Vote) {
         if (vote.voteOption in voteOptions) {
-            votes[user] = vote
+            votes[user.username] = vote
         } else {
             throw IllegalArgumentException("Invalid vote option")
         }
@@ -22,7 +22,7 @@ data class Poll(
 
     // User edits their existing vote
     fun editVote(user: User, vote: Vote) {
-        if (votes.containsKey(user)) {
+        if (votes.containsKey(user.username)) {
             vote(user, vote)
         } else {
             throw IllegalArgumentException("No existing vote to edit")
@@ -31,11 +31,11 @@ data class Poll(
 
     // User deletes their vote
     fun deleteVote(user: User) {
-        votes.remove(user)
+        votes.remove(user.username)
     }
 
     // Get all votes for the poll
-    fun getAllVotes(): MutableMap<User, Vote> {
+    fun getAllVotes(): MutableMap<String, Vote> {
         return votes
     }
 }

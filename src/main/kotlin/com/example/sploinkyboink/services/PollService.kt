@@ -1,4 +1,4 @@
-package com.example.sploinkyboink
+package com.example.sploinkyboink.services
 
 import org.springframework.stereotype.Service
 
@@ -104,7 +104,7 @@ class PollService {
     }
 
     // Lists all votes in a poll
-    fun getAllVotesFromPoll(pollId: String): MutableMap<User, Vote>? {
+    fun getAllVotesFromPoll(pollId: String): MutableMap<String, Vote>? {
         val poll = getPoll(pollId)
         return poll?.getAllVotes()
     }

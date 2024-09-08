@@ -1,4 +1,4 @@
-package com.example.sploinkyboink
+package com.example.sploinkyboink.services
 
 data class User (
     val username : String,

@@ -1,4 +1,4 @@
-package com.example.sploinkyboink
+package com.example.sploinkyboink.services
 
 import java.time.Instant
 
