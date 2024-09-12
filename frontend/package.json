@@ -8,16 +8,10 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  "proxy": {
-    "/api": {
-      "target": "http://localhost:8080",
-      "changeOrigin": true,
-      "secure": false
-    }
-  },
   "devDependencies": {
-    "vite": "^5.4.4",
-    "svelte": "^4.2.19"
+    "vite": "^4.4.4",
+    "svelte": "^4.2.19",
+    "@sveltejs/vite-plugin-svelte": "^2.5.3"
   },
   "dependencies": {
     "sirv-cli": "^2.0.0"
