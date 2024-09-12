@@ -1,0 +1,25 @@
+{
+  "name": "svelte-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5000",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:8080",
+      "changeOrigin": true,
+      "secure": false
+    }
+  },
+  "devDependencies": {
+    "vite": "^5.4.4",
+    "svelte": "^4.2.19"
+  },
+  "dependencies": {
+    "sirv-cli": "^2.0.0"
+  }
+}
