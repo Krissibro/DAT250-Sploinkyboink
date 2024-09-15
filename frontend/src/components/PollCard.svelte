@@ -1,4 +1,3 @@
-<!-- src/components/PollCard.svelte -->
 <script lang="ts">
     import type { Poll } from '../types';
     export let poll: Poll;
