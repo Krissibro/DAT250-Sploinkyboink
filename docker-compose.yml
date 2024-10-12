@@ -1,0 +1,28 @@
+services:
+  backend:
+    build:
+      context: ./backend   # This tells Docker Compose to use the Dockerfile in the backend folder
+    ports:
+      - "8080:8080"        # Exposes backend on localhost:8080
+    networks:
+      - app-network        # Creates a shared network between services
+
+  frontend:
+    build:
+      context: ./frontend  # This tells Docker Compose to use the Dockerfile in the frontend folder
+    ports:
+      - "5173:5173"        # Exposes frontend on localhost:3000
+    networks:
+      - app-network        # Shared network for frontend and backend
+    depends_on:
+      - backend            # Ensures backend starts before frontend
+    environment:
+      - VITE_BACKEND_URL=http://backend:8080
+
+networks:
+  app-network:
+    driver: bridge
+
+
+
+
