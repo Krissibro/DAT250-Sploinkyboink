@@ -1,2 +1,4 @@
-Welcome to SploinkyBoink
+# Welcome to SploinkyBoink
+
+![Cat](./images/cat.jpg)
 
