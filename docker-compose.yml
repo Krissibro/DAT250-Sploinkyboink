@@ -6,6 +6,8 @@ services:
       - "8080:8080"        # Exposes backend on localhost:8080
     networks:
       - app-network        # Creates a shared network between services
+    depends_on:
+      - postgres_database  # Ensure the backend depends on the databases
 
   frontend:
     build:
@@ -19,10 +21,17 @@ services:
     environment:
       - VITE_BACKEND_URL=http://backend:8080
 
+  postgres_database:
+    extends:
+      file: ./backend/database/docker-compose-db.yml
+      service: postgres_database
+
 networks:
   app-network:
     driver: bridge
 
+volumes:
+  postgres_data:
 
 
 
