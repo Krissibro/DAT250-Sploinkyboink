@@ -1,16 +1,30 @@
-package com.example.sploinkyboink.services
+package com.example.sploinkyboink.entities
 
+import User
 import java.time.Instant
+import jakarta.persistence.*
 
+@Entity
+@Table(name = "polls")
 data class Poll(
+    @Id
     val pollId: String,
+
+    @ManyToOne
+    @JoinColumn(name = "user_username", nullable = false)
     val byUser: User,
+
     val question: String,
     val publishedAt: Instant,
     val validUntil: Instant,
-    val voteOptions: List<String>,
-    val votes: MutableMap<String, Vote> = mutableMapOf()
+
+    @ElementCollection
+    @CollectionTable(name = "poll_vote_options", joinColumns = [JoinColumn(name = "poll_id")])
+    @Column(name = "vote_option")
+    val voteOptions: List<String>
 ) {
+    @OneToMany(mappedBy = "poll", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val votes: MutableSet<Vote> = mutableSetOf()
     // User votes on the poll
     fun vote(user: User, vote: Vote) {
         if (vote.voteOption in voteOptions) {
