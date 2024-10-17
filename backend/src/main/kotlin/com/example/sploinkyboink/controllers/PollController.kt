@@ -1,9 +1,10 @@
 package com.example.sploinkyboink.controllers
 
-import com.example.sploinkyboink.services.Poll
+import User
+import com.example.sploinkyboink.entities.Poll
 import com.example.sploinkyboink.services.PollService
-import com.example.sploinkyboink.services.User
-import com.example.sploinkyboink.services.Vote
+import com.example.sploinkyboink.entities.User
+import com.example.sploinkyboink.entities.Vote
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -83,7 +84,7 @@ class PollController(
                 validUntil = Instant.now().plusSeconds(3600),
                 voteOptions = voteOptions
             )
-            pollService.createPoll(user, poll)
+            pollService.createPoll(poll)
             ResponseEntity("Poll created with ID: $pollId", HttpStatus.CREATED)
         } else {
             ResponseEntity("User not found", HttpStatus.NOT_FOUND)

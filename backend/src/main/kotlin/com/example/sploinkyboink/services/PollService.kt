@@ -1,111 +1,127 @@
 package com.example.sploinkyboink.services
 
+import com.example.sploinkyboink.entities.Poll
+import User
+import com.example.sploinkyboink.entities.Vote
+import com.example.sploinkyboink.repositories.PollRepository
+import com.example.sploinkyboink.repositories.UserRepository
+import com.example.sploinkyboink.repositories.VoteRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
-class PollService {
-    private val users = mutableMapOf<String, User>()
-    private val polls = mutableMapOf<String, Poll>()
+class PollService(
+    private val userRepository: UserRepository,
+    private val pollRepository: PollRepository,
+    private val voteRepository: VoteRepository
+) {
 
-    // Creates a new user
+    // User Operations
+
     fun createUser(user: User) {
-        if (!users.containsKey(user.username)) {
-            users[user.username] = user
+        if (!userRepository.existsById(user.username)) {
+            userRepository.save(user)
         } else {
             throw IllegalArgumentException("User already exists")
         }
     }
 
-    // Edits an existing user
     fun editUser(user: User) {
-        if (users.containsKey(user.username)) {
-            users[user.username] = user
+        if (userRepository.existsById(user.username)) {
+            userRepository.save(user)
         } else {
             throw IllegalArgumentException("User not found")
         }
     }
 
-    // Deletes a user
-    fun deleteUser(user: User) {
-        users.remove(user.username)
+    fun deleteUser(username: String) {
+        userRepository.deleteById(username)
     }
 
-    // Retrieves a user by username
     fun getUser(username: String): User? {
-        return users[username]
+        return userRepository.findById(username).orElse(null)
     }
 
-    // Lists all users
-    fun getAllUsers(): MutableCollection<User> {
-        return users.values
+    fun getAllUsers(): List<User> {
+        return userRepository.findAll()
     }
 
-    // Creates a new poll
-    fun createPoll(user: User, poll: Poll) {
-        if (polls.containsKey(poll.pollId)) {
+    // Poll Operations
+
+    fun createPoll(poll: Poll) {
+        if (!pollRepository.existsById(poll.pollId)) {
+            pollRepository.save(poll)
+        } else {
             throw IllegalArgumentException("Poll with this ID already exists")
-        } else {
-            polls[poll.pollId] = poll
         }
     }
 
-    // Edits an existing poll
     fun editPoll(poll: Poll) {
-        if (polls.containsKey(poll.pollId)) {
-            polls[poll.pollId] = poll
+        if (pollRepository.existsById(poll.pollId)) {
+            pollRepository.save(poll)
         } else {
             throw IllegalArgumentException("Poll not found")
         }
     }
 
-    // Retrieves a poll by pollId
     fun getPoll(pollId: String): Poll? {
-        return polls[pollId]
+        return pollRepository.findById(pollId).orElse(null)
     }
 
-    // Lists all polls
-    fun getAllPolls(): MutableCollection<Poll> {
-        return polls.values
+    fun getAllPolls(): List<Poll> {
+        return pollRepository.findAll()
     }
 
-    // Deletes a poll
     fun deletePoll(pollId: String) {
-        polls.remove(pollId)
+        pollRepository.deleteById(pollId)
     }
 
-    // User votes on a poll
-    fun userVoteOnPoll(user: User, pollId: String, vote: Vote) {
-        val poll = getPoll(pollId)
-        if (poll != null) {
-            poll.vote(user, vote)
-        } else {
-            throw IllegalArgumentException("Poll not found")
+    // Vote Operations
+
+    @Transactional
+    fun userVoteOnPoll(username: String, pollId: String, voteOption: String) {
+        val user = userRepository.findById(username)
+            .orElseThrow { IllegalArgumentException("User not found") }
+        val poll = pollRepository.findById(pollId)
+            .orElseThrow { IllegalArgumentException("Poll not found") }
+
+        if (voteOption !in poll.voteOptions) {
+            throw IllegalArgumentException("Invalid vote option")
         }
+
+        val vote = Vote(
+            poll = poll,
+            user = user,
+            voteOption = voteOption,
+            publishedAt = Instant.now()
+        )
+        voteRepository.save(vote)
     }
 
-    // User edits their vote on a poll
-    fun userEditVoteOnPoll(user: User, pollId: String, vote: Vote) {
-        val poll = getPoll(pollId)
-        if (poll != null) {
-            poll.editVote(user, vote)
-        } else {
-            throw IllegalArgumentException("Poll not found")
+    @Transactional
+    fun userEditVoteOnPoll(username: String, pollId: String, newVoteOption: String) {
+        val vote = voteRepository.findByPollPollIdAndUserUsername(pollId, username)
+            ?: throw IllegalArgumentException("Vote not found")
+
+        if (newVoteOption !in vote.poll.voteOptions) {
+            throw IllegalArgumentException("Invalid vote option")
         }
+
+        val updatedVote = vote.copy(
+            voteOption = newVoteOption,
+            publishedAt = Instant.now()
+        )
+        voteRepository.save(updatedVote)
     }
 
-    // User deletes their vote on a poll
-    fun userDeleteVoteOnPoll(user: User, pollId: String) {
-        val poll = getPoll(pollId)
-        if (poll != null) {
-            poll.deleteVote(user)
-        } else {
-            throw IllegalArgumentException("Poll not found")
-        }
+    @Transactional
+    fun userDeleteVoteOnPoll(username: String, pollId: String) {
+        val vote = voteRepository.findByPollPollIdAndUserUsername(pollId, username)
+            ?: throw IllegalArgumentException("Vote not found")
+        voteRepository.delete(vote)
     }
 
-    // Lists all votes in a poll
-    fun getAllVotesFromPoll(pollId: String): MutableMap<String, Vote>? {
-        val poll = getPoll(pollId)
-        return poll?.getAllVotes()
+    fun getAllVotesFromPoll(pollId: String): List<Vote> {
+        return voteRepository.findByPollPollId(pollId)
     }
 }
