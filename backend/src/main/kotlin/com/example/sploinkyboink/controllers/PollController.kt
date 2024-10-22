@@ -1,9 +1,8 @@
 package com.example.sploinkyboink.controllers
 
-import User
+import com.example.sploinkyboink.entities.User
 import com.example.sploinkyboink.entities.Poll
 import com.example.sploinkyboink.services.PollService
-import com.example.sploinkyboink.entities.User
 import com.example.sploinkyboink.entities.Vote
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -11,61 +10,10 @@ import org.springframework.web.bind.annotation.*
 import java.time.Instant
 
 @RestController
-@RequestMapping("/api")         // Base-mapping, could keep "/api", maybe "/feedApi", "/feedAppApi" or "/sploinkyboinkend" ?
+@RequestMapping("/sploinkyboinkend")         // aka "/api"
 class PollController(
     private val pollService: PollService
 ) {
-
-    // USER ENDPOINTS -----------------------
-
-    @PostMapping("/users")      // "/create-user" ?
-    fun createUser(
-        @RequestParam username: String,
-        @RequestParam email: String
-    ): ResponseEntity<String> {
-        val user = User(username, email)
-        return try {
-            pollService.createUser(user)
-            ResponseEntity("User created", HttpStatus.CREATED)
-        } catch (e: IllegalArgumentException) {
-            ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
-        }
-    }
-
-    @GetMapping("/users")       // "/get-all-users" or "/list_users"
-    fun getAllUsers(): ResponseEntity<List<User>> {
-        return ResponseEntity(pollService.getAllUsers().toList(), HttpStatus.OK)
-    }
-
-    @GetMapping("/users/{username}")    // Can remain the same
-    fun getUser(@PathVariable username: String): ResponseEntity<User> {
-        val user = pollService.getUser(username)
-        return if (user != null) {
-            ResponseEntity(user, HttpStatus.OK)
-        } else {
-            ResponseEntity(HttpStatus.NOT_FOUND)
-        }
-    }
-
-    @DeleteMapping("/users/{username}")     // Change to "/users/{username}/delete-user" ?
-    fun deleteUser(@PathVariable username: String): ResponseEntity<String> {
-        return try {
-            pollService.deleteUser(pollService.getUser(username)!!)
-            ResponseEntity("User deleted", HttpStatus.OK)
-        } catch (e: IllegalArgumentException) {
-            ResponseEntity(e.message, HttpStatus.NOT_FOUND)
-        }
-    }
-
-    // Additional endpoint to update user information? @PutMapping("/users/{username}") or @PutMapping("/users/{username}/update-user")
-
-    // Additional endpoint to retrieve all polls created by a user? @GetMapping("/users/{username}/get-user-polls") or @GetMapping("/users/{username}/list-user-polls")
-
-    // Additional endpoint to retrieve all polls the user has voted/participated in? @GetMapping("/users/{users}/participated-polls")
-
-
-
-    // POLL ENDPOINTS -----------------------
 
     @PostMapping("/polls")      // "/create-poll"
     fun createPoll(
@@ -82,6 +30,7 @@ class PollController(
                 question = question,
                 publishedAt = Instant.now(),
                 validUntil = Instant.now().plusSeconds(3600),
+                lastModifiedAt = Instant.now(),
                 voteOptions = voteOptions
             )
             pollService.createPoll(poll)
