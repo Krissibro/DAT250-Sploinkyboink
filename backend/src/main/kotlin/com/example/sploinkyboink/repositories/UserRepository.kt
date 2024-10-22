@@ -1,6 +1,6 @@
 package com.example.sploinkyboink.repositories
 
-import User
+import com.example.sploinkyboink.entities.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

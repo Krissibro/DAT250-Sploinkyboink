@@ -1,8 +1,9 @@
 package com.example.sploinkyboink.entities
 
-import User
 import java.time.Instant
 import jakarta.persistence.*
+import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedDate
 
 @Entity
 @Table(name = "votes")
@@ -19,6 +20,9 @@ data class Vote (
     @JoinColumn(name = "user_username", nullable = false)
     val user: User,
 
-    val voteOption: String,
-    val publishedAt: Instant
+    var voteOption: String,
+    @CreatedDate
+    var publishedAt: Instant,
+    @LastModifiedDate
+    var lastModifiedAt: Instant
 )

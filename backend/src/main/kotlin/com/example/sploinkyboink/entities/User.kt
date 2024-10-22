@@ -1,13 +1,13 @@
+package com.example.sploinkyboink.entities
+
 import jakarta.persistence.*
 
 @Entity
 @Table(name = "users")
-data class User (
+data class User(
     @Id
-    @Column(nullable = false, unique = true)
     val username: String,
 
     @Column(nullable = false, unique = true)
-    val email: String
-) {
-}
+    var email: String
+)
