@@ -12,11 +12,13 @@ data class Vote (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
+    @ManyToOne
     @JoinColumn(name = "poll_id", nullable = false)
-    val pollID: String,
+    var poll: Poll,
 
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    val userID: Long,
+    val user: User,
 
     var voteOption: String,
 
