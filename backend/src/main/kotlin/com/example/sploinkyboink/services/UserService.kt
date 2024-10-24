@@ -61,8 +61,14 @@ class UserService(
     }
 
     // Retrieve a user by their username
-    fun getUser(username: String): User? {
+    fun getUserByUsername(username: String): User? {
         return userRepository.findByUsername(username)
+            ?: throw IllegalArgumentException("User with username $username not found")
+    }
+
+    fun getUserByUserID(userID: Long): User? {
+        return userRepository.findById(userID)
+            .orElseThrow { IllegalArgumentException("User with userID $userID not found") }
     }
 
     // Retrieve all users

@@ -12,17 +12,18 @@ data class Vote (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
-    @ManyToOne
     @JoinColumn(name = "poll_id", nullable = false)
-    val poll: Poll,
+    val pollID: String,
 
-    @ManyToOne
-    @JoinColumn(name = "user_username", nullable = false)
-    val user: User,
+    @JoinColumn(name = "user_id", nullable = false)
+    val userID: Long,
 
     var voteOption: String,
+
     @CreatedDate
-    var publishedAt: Instant,
+    @Column(nullable = false, updatable = false)
+    val publishedAt: Instant? = null,
     @LastModifiedDate
-    var lastModifiedAt: Instant
+    @Column(nullable = false)
+    var lastModifiedAt: Instant? = null
 )

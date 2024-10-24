@@ -9,7 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate
 @Table(name = "polls")
 data class Poll(
     @Id
-    val pollId: String,
+    val pollID: String,
 
     @Column(name = "user_userID", nullable = false)
     val byUserID: Long,
@@ -17,9 +17,12 @@ data class Poll(
     var question: String,
 
     @CreatedDate
-    val publishedAt: Instant,
+    @Column(nullable = false, updatable = false)
+    val publishedAt: Instant? = null,
+
     @LastModifiedDate
-    val lastModifiedAt: Instant,
+    @Column(nullable = false)
+    val lastModifiedAt: Instant? = null,
     var validUntil: Instant,
 
     @ElementCollection

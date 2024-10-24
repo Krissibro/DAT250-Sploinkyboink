@@ -38,7 +38,7 @@ class UserController(
     @GetMapping("/users/{username}")
     fun getUserByUsername(@PathVariable username: String): ResponseEntity<User> {
         return try {
-            val user = userService.getUser(username)
+            val user = userService.getUserByUsername(username)
             ResponseEntity(user, HttpStatus.OK)
         } catch (e: IllegalArgumentException) {
             ResponseEntity(HttpStatus.NOT_FOUND)
