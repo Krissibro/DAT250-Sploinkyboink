@@ -11,9 +11,8 @@ data class Poll(
     @Id
     val pollId: String,
 
-    @ManyToOne
-    @JoinColumn(name = "user_username", nullable = false)
-    val byUser: User,
+    @Column(name = "user_userID", nullable = false)
+    val byUserID: Long,
 
     var question: String,
 

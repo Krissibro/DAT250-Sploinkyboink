@@ -8,19 +8,20 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/sploinkyboinkend")    // Aka "/api"
-class UserController (
+class UserController(
     private val userService: UserService
 ) {
 
-    // Create a new user
+    // Register a new user
     @PostMapping("/users")
     fun createUser(
         @RequestParam username: String,
+        @RequestParam password: String,
+        @RequestParam confirmPassword: String,
         @RequestParam email: String
     ): ResponseEntity<String> {
-        val user = User(username, email)
         return try {
-            userService.createUser(user)
+            userService.registerUser(username, password, confirmPassword, email)
             ResponseEntity("User created", HttpStatus.CREATED)
         } catch (e: IllegalArgumentException) {
             ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
@@ -44,53 +45,78 @@ class UserController (
         }
     }
 
-    // Delete a user by username
-    @DeleteMapping("/users/{username}")
-    fun deleteUserByUsername(@PathVariable username: String): ResponseEntity<String> {
+    // Delete a user by userID
+    @DeleteMapping("/users/{userID}")
+    fun deleteUserById(@PathVariable userID: Long): ResponseEntity<String> {
         return try {
-            userService.deleteUser(username)
+            userService.deleteUser(userID)
             ResponseEntity("User deleted", HttpStatus.OK)
         } catch (e: IllegalArgumentException) {
             ResponseEntity(e.message, HttpStatus.NOT_FOUND)
         }
     }
 
-    // Edit/update user information
-    @PutMapping("/users/{username}")
-    fun updateUser(
-        @PathVariable username: String,
-        @RequestParam email: String
+    // Update user email
+    @PutMapping("/users/{userID}/email")
+    fun changeEmail(
+        @PathVariable userID: Long,
+        @RequestParam newEmail: String
     ): ResponseEntity<String> {
         return try {
-            val updatedUser = User(username, email)
-            userService.editUser(username, updatedUser)
-            ResponseEntity("User updated", HttpStatus.OK)
+            userService.changeEmail(userID, newEmail)
+            ResponseEntity("Email updated successfully", HttpStatus.OK)
         } catch (e: IllegalArgumentException) {
-            ResponseEntity(e.message, HttpStatus.NOT_FOUND)
+            ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
         }
     }
 
+    // Update username
+    @PutMapping("/users/{userID}/username")
+    fun changeUsername(
+        @PathVariable userID: Long,
+        @RequestParam newUsername: String
+    ): ResponseEntity<String> {
+        return try {
+            userService.changeUsername(userID, newUsername)
+            ResponseEntity("Username updated successfully", HttpStatus.OK)
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+        }
+    }
 
-    // Additional endpoints for polls related to the user
+    // Change user password
+    @PutMapping("/users/{userID}/password")
+    fun changePassword(
+        @PathVariable userID: Long,
+        @RequestParam newPassword: String,
+        @RequestParam confirmPassword: String
+    ): ResponseEntity<String> {
+        return try {
+            userService.changePassword(userID, newPassword, confirmPassword)
+            ResponseEntity("Password updated successfully", HttpStatus.OK)
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+        }
+    }
 
-    // Get all polls created by a user
+    // Get all polls created by a user (stubbed method, needs actual implementation)
     @GetMapping("/users/{username}/polls")
     fun getPollsCreatedByUser(@PathVariable username: String): ResponseEntity<List<String>> {
-        // Assuming there is a service method to get polls by user
+        // TODO: Example stub, replace with actual service method once it's ready
         return try {
-            val polls = listOf("poll1", "poll2") // Example data, replace with actual service method
+            val polls = listOf("poll1", "poll2") // Replace with actual data
             ResponseEntity(polls, HttpStatus.OK)
         } catch (e: IllegalArgumentException) {
             ResponseEntity(HttpStatus.NOT_FOUND)
         }
     }
 
-    // Get all polls the user has voted in or participated in
+    // Get all polls the user has participated in (stubbed method, needs actual implementation)
     @GetMapping("/users/{username}/participated-polls")
     fun getPollsUserParticipatedIn(@PathVariable username: String): ResponseEntity<List<String>> {
-        // Assuming there is a service method to get polls user voted in
+        // TODO: Example stub, replace with actual service method once it's ready
         return try {
-            val participatedPolls = listOf("poll3", "poll4") // Example data, replace with actual service method
+            val participatedPolls = listOf("poll3", "poll4") // Replace with actual data
             ResponseEntity(participatedPolls, HttpStatus.OK)
         } catch (e: IllegalArgumentException) {
             ResponseEntity(HttpStatus.NOT_FOUND)
