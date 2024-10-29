@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class RabbitMQConfig {
     @Bean
-    fun analyticsQueue(): Queue {
+    fun eventQueue(): Queue {
         return Queue("eventQueue", false)
     }
 }
