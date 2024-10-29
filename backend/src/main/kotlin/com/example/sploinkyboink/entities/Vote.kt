@@ -28,4 +28,7 @@ data class Vote (
     @LastModifiedDate
     @Column(nullable = false)
     var lastModifiedAt: Instant? = null
-)
+) {
+    override fun equals(other: Any?) = other is Vote && other.id == this.id
+    override fun hashCode() = id.hashCode()
+}

@@ -92,7 +92,7 @@ class PollService(
             ?: throw IllegalArgumentException("User with userID $userID not found")
 
         // Check if the user has already voted
-        if (poll.votes.any { it == user }) {
+        if (poll.votes.any { it.user == user }) {
             throw IllegalStateException("User has already voted in this poll")
         }
 
@@ -107,7 +107,7 @@ class PollService(
         }
 
         // Create and save the vote
-        val vote = Vote(poll = poll, user = user, voteOption = voteOption)
+        val vote = Vote(poll = poll, user = user, voteOption = voteOption, publishedAt = Instant.now(), lastModifiedAt = Instant.now())
         poll.votes.add(vote)
         voteRepository.save(vote)
 
@@ -118,7 +118,7 @@ class PollService(
     @Transactional
     fun editVote(pollID: String, userID: Long, newVoteOption: String): Vote {
         val poll = getPollById(pollID)
-        val existingVote = poll.votes.find { it == userService.getUserByUserID(userID) }
+        val existingVote = poll.votes.find { it.user == userService.getUserByUserID(userID) }
             ?: throw IllegalArgumentException("No existing vote to edit")
 
         if (newVoteOption !in poll.voteOptions) {
@@ -126,6 +126,7 @@ class PollService(
         }
 
         existingVote.voteOption = newVoteOption
+        existingVote.lastModifiedAt = Instant.now()
         return voteRepository.save(existingVote)
     }
 
@@ -133,7 +134,7 @@ class PollService(
     @Transactional
     fun deleteVote(pollID: String, userID: Long) {
         val poll = getPollById(pollID)
-        val existingVote = poll.votes.find { it == userService.getUserByUserID(userID) }
+        val existingVote = poll.votes.find { it.user == userService.getUserByUserID(userID) }
             ?: throw IllegalArgumentException("No existing vote to delete")
 
         poll.votes.remove(existingVote)

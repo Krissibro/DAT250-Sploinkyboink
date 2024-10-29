@@ -4,17 +4,17 @@ FROM node:18 AS frontend
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the wait-for-it script
+# Copy the wait-for-it script early in the Dockerfile to leverage caching
 COPY wait-for-it.sh /wait-for-it.sh
 RUN chmod +x /wait-for-it.sh
 
-# Copy the package.json and package-lock.json to install dependencies
+# Copy only package.json and package-lock.json initially
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Install only production dependencies if this is for production
+RUN NODE_ENV=production npm ci
 
-# Copy the rest of the application files
+# Copy the rest of the application files after installing dependencies
 COPY . .
 
 # Expose the port Vite will run on
