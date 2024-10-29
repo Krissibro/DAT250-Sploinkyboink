@@ -29,6 +29,12 @@ dependencies {
     // Jackson
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
+    //JWT
+    implementation("io.ktor:ktor-server-auth:3.0.0")
+    implementation("io.ktor:ktor-server-auth-jwt:3.0.0")
+
+
+
     //  Kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-allopen")
@@ -40,6 +46,9 @@ dependencies {
 
     // Database
     runtimeOnly("org.postgresql:postgresql")
+
+
+
 }
 
 noArg {
