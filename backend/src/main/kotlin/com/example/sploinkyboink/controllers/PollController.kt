@@ -2,7 +2,6 @@ package com.example.sploinkyboink.controllers
 
 import com.example.sploinkyboink.services.Poll
 import com.example.sploinkyboink.services.PollService
-import com.example.sploinkyboink.services.User
 import com.example.sploinkyboink.services.Vote
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
