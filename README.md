@@ -64,7 +64,7 @@ The business logic for this application centers around three main entities: **Us
 ### Sequence diagram 
 The sequence diagram shows the interactions involved in voting on a poll. A user either submits a vote successfully or receives an error response. 
 
-![Sequence diagram](./images/SequenceDiagramVotingLogic.PNG)
+![Sequence diagram](./images/SequenceDiagramVotingLogic.png)
 
 #### Voting Process Sequence:
 1. User requests to vote on a poll.
