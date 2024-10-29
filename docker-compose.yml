@@ -25,13 +25,21 @@ services:
 
   postgres_database:
     extends:
-      file: ./backend/database/docker-compose-db.yml
       service: postgres_database
+      file: ./backend/database/docker-compose-db.yml
+
 
   mongodb_database:
     extends:
-      file: ./backend/database/docker-compose-db.yml
       service: mongodb_database
+      file: ./backend/database/docker-compose-db.yml
+
+
+  rabbitmq:
+    extends:
+      service: rabbitmq
+      file: ./backend/database/docker-compose-db.yml
+
 
 networks:
   app-network:
