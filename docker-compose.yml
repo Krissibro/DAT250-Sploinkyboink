@@ -28,12 +28,18 @@ services:
       file: ./backend/database/docker-compose-db.yml
       service: postgres_database
 
+  mongodb_database:
+    extends:
+      file: ./backend/database/docker-compose-db.yml
+      service: mongodb_database
+
 networks:
   app-network:
     driver: bridge
 
 volumes:
   postgres_data:
+  mongo_data:
 
 
 
