@@ -1,9 +1,11 @@
 package com.example.sploinkyboink.services
 
+import com.example.sploinkyboink.entities.Event
 import com.example.sploinkyboink.entities.Poll
 import com.example.sploinkyboink.entities.Vote
 import com.example.sploinkyboink.repositories.PollRepository
 import com.example.sploinkyboink.repositories.VoteRepository
+import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.PageRequest
@@ -15,7 +17,8 @@ import java.time.Instant
 class PollService(
     private val pollRepository: PollRepository,
     private val voteRepository: VoteRepository,
-    private val userService: UserService  // Dependency to access User-related operations
+    private val userService: UserService,  // Dependency to access User-related operations
+    private val rabbitTemplate: RabbitTemplate,
 ) {
     // Poll creation, now with byUserID
     fun createPoll(byUserID: Long, question: String, voteOptions: List<String>, validUntil: Instant): Poll {
@@ -32,6 +35,13 @@ class PollService(
             validUntil = validUntil,
             voteOptions = voteOptions
         )
+
+        // TODO: Example event, add more info?
+        val event = Event(
+            type = "PollCreated",
+            details = mapOf("pollID" to poll.pollID, "userID" to byUserID, "question" to question)
+        )
+        rabbitTemplate.convertAndSend("eventQueue", event)
 
         return pollRepository.save(poll)
     }
