@@ -44,7 +44,14 @@ Clean the project to ensure consistency in the build process:
 
 ## Poll System Business Logic 
 
-The business logic for this application centers around three main entities: **Users**, **Polls**, and **Votes**. Each entity has defined actions within the system, facilitated by the `PollController` and `PollService` classes. The system enforces important constraints to ensure business rules are followed.
+The business logic for this application centers around three main entities: **Users**, **Polls**, and **Votes**. Each entity has defined actions within the system, facilitated by the controller and service classes:
+
+* **PollController** 
+* **UserController**
+* **PollService**  
+* **UserService** 
+
+The controllers connect the frontend inputs to the backend. The service classes will take care of the business logic based on the input received from the controllers and interact with the database. The system enforces important constraints to ensure business rules are followed.
 
 #### 1. User Management
 - Users can be created, retrieved, and deleted within the system.  
@@ -64,7 +71,7 @@ The business logic for this application centers around three main entities: **Us
 ### Sequence diagram 
 The sequence diagram shows the interactions involved in voting on a poll. A user either submits a vote successfully or receives an error response. 
 
-![Sequence diagram](./images/SequenceDiagramVotingLogic.PNG)
+![Sequence diagram](./images/SequenceDiagramVotingLogic.png)
 
 #### Voting Process Sequence:
 1. User requests to vote on a poll.
