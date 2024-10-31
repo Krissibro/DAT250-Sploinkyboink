@@ -18,7 +18,7 @@ class PollService(
     private val pollRepository: PollRepository,
     private val voteRepository: VoteRepository,
     private val userService: UserService,  // Dependency to access User-related operations
-    private val rabbitTemplate: RabbitTemplate,
+    private val eventService: EventService
 ) {
     // Poll creation, now with byUserID
     fun createPoll(byUserID: Long, question: String, voteOptions: List<String>, validUntil: Instant): Poll {
@@ -36,12 +36,7 @@ class PollService(
             voteOptions = voteOptions
         )
 
-        // TODO: Example event, add more info?
-        val event = Event(
-            type = "PollCreated",
-            details = mapOf("pollID" to poll.pollID, "userID" to byUserID, "question" to question)
-        )
-        rabbitTemplate.convertAndSend("eventQueue", event)
+        eventService.sendPollCreatedEvent(poll)
 
         return pollRepository.save(poll)
     }
@@ -121,6 +116,8 @@ class PollService(
         poll.votes.add(vote)
         voteRepository.save(vote)
 
+        eventService.sendVoteEvent(poll)
+
         return vote
     }
 
@@ -137,6 +134,9 @@ class PollService(
 
         existingVote.voteOption = newVoteOption
         existingVote.lastModifiedAt = Instant.now()
+
+        eventService.sendVoteEvent(poll)
+
         return voteRepository.save(existingVote)
     }
 
@@ -149,5 +149,7 @@ class PollService(
 
         poll.votes.remove(existingVote)
         voteRepository.delete(existingVote)
+
+        eventService.sendVoteEvent(poll)
     }
 }
