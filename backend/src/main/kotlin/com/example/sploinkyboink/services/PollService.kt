@@ -25,7 +25,7 @@ class PollService(
         val user = userService.getUserByUserID(byUserID)
             ?: throw IllegalArgumentException("User with userID $byUserID not found")
 
-        val pollId = "poll_${System.currentTimeMillis()}"
+        val pollId = "poll${System.currentTimeMillis()}"
         val poll = Poll(
             pollID = pollId,
             byUser = user,

@@ -1,21 +1,25 @@
 package com.example.sploinkyboink.entities
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import jakarta.persistence.*
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 @Entity
 @Table(name = "users", uniqueConstraints = [UniqueConstraint(columnNames = ["username", "email"])])
+@JsonIgnoreProperties(ignoreUnknown = true, value = ["hibernateLazyInitializer", "handler"])
 data class User(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val userID: Long = 0,
 
     @Column(nullable = false, unique = true)
     var username: String,
 
+    @JsonIgnore
     @Column(nullable = false, unique = true)
     var email: String,
 
+    @JsonIgnore
     @Column(nullable = false)
     var passwordHash: String,
 ) {

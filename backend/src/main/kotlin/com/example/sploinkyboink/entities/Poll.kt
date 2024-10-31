@@ -5,6 +5,7 @@ import jakarta.persistence.*
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonManagedReference
 
 @Entity
 @Table(name = "polls")
@@ -34,6 +35,7 @@ data class Poll(
     var voteOptions: List<String>,
 
     @OneToMany(mappedBy = "poll", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @JsonManagedReference
     val votes: MutableSet<Vote> = mutableSetOf()
 ) {
     override fun equals(other: Any?) = other is Poll && other.pollID == this.pollID

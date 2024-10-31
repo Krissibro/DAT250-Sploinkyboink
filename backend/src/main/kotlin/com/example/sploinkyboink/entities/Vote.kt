@@ -1,5 +1,7 @@
 package com.example.sploinkyboink.entities
 
+import com.fasterxml.jackson.annotation.JsonBackReference
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.Instant
 import jakarta.persistence.*
 import org.springframework.data.annotation.CreatedDate
@@ -14,6 +16,7 @@ data class Vote (
 
     @ManyToOne
     @JoinColumn(name = "poll_id", nullable = false)
+    @JsonBackReference
     var poll: Poll,
 
     @ManyToOne(fetch = FetchType.LAZY)

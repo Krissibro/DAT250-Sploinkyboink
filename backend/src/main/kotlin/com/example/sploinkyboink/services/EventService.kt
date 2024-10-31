@@ -13,8 +13,8 @@ class EventService(
     private val rabbitTemplate: RabbitTemplate,
 ) {
     fun logEvent(event: Event) {
-        println("Received event: $event")
-        eventRepository.save(event)
+        val savedEvent = eventRepository.save(event)  // Save to get the generated ID
+        println("Received event with ID: ${savedEvent.id}, details: $savedEvent")
     }
 
     fun sendVoteEvent(poll: Poll) {
