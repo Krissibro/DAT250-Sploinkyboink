@@ -8,6 +8,8 @@ services:
       - app-network        # Creates a shared network between services
     depends_on:
       - postgres_database  # Ensure the backend depends on the databases
+      - mongodb_database
+      - rabbitmq
     environment:
       - POSTGRES_DATABASE_URL=jdbc:postgresql://postgres_database:5432/PollApp
       - MONGO_DATABASE_URL=mongodb://mongodb_database:27017/events
