@@ -13,6 +13,7 @@ class EventService(
     private val rabbitTemplate: RabbitTemplate,
 ) {
     fun logEvent(event: Event) {
+        println("Received event: $event")
         eventRepository.save(event)
     }
 
