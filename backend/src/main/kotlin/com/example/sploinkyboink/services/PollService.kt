@@ -70,11 +70,18 @@ class PollService(
         val existingPoll = pollRepository.findById(pollID)
             .orElseThrow { IllegalArgumentException("Poll not found") }
 
+        // Delete votes for options that no longer exist
+        val optionsToRemove = existingPoll.voteOptions - updatedVoteOptions.toSet()
+        existingPoll.votes.removeIf { it.voteOption in optionsToRemove }
+
         existingPoll.question = updatedQuestion
         existingPoll.validUntil = updatedValidUntil
         existingPoll.voteOptions = updatedVoteOptions
 
-        return pollRepository.save(existingPoll)
+        val updatedPoll = pollRepository.save(existingPoll)
+        eventService.sendPollEditedEvent(updatedPoll)
+
+        return updatedPoll
     }
 
     // Get poll results (voting results)

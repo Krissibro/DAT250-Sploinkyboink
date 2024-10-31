@@ -44,4 +44,19 @@ class EventService(
         )
         rabbitTemplate.convertAndSend("eventQueue", event)
     }
+
+    fun sendPollEditedEvent(poll: Poll) {
+        val event = Event(
+            type = "PollEdited",
+            details = mapOf(
+                "pollID" to poll.pollID,
+                "byUser" to (poll.byUser ?: "Unknown"),
+                "question" to poll.question,
+                "voteOptions" to poll.voteOptions,
+                "lastModifiedAt" to (poll.lastModifiedAt ?: Instant.now()),
+                "validUntil" to poll.validUntil
+            )
+        )
+        rabbitTemplate.convertAndSend("eventQueue", event)
+    }
 }
