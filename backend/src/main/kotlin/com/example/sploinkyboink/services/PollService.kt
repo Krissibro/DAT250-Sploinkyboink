@@ -1,9 +1,11 @@
 package com.example.sploinkyboink.services
 
+import com.example.sploinkyboink.entities.Event
 import com.example.sploinkyboink.entities.Poll
 import com.example.sploinkyboink.entities.Vote
 import com.example.sploinkyboink.repositories.PollRepository
 import com.example.sploinkyboink.repositories.VoteRepository
+import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.PageRequest
@@ -15,14 +17,15 @@ import java.time.Instant
 class PollService(
     private val pollRepository: PollRepository,
     private val voteRepository: VoteRepository,
-    private val userService: UserService  // Dependency to access User-related operations
+    private val userService: UserService,  // Dependency to access User-related operations
+    private val eventService: EventService
 ) {
     // Poll creation, now with byUserID
     fun createPoll(byUserID: Long, question: String, voteOptions: List<String>, validUntil: Instant): Poll {
         val user = userService.getUserByUserID(byUserID)
             ?: throw IllegalArgumentException("User with userID $byUserID not found")
 
-        val pollId = "poll_${System.currentTimeMillis()}"
+        val pollId = "poll${System.currentTimeMillis()}"
         val poll = Poll(
             pollID = pollId,
             byUser = user,
@@ -32,6 +35,8 @@ class PollService(
             validUntil = validUntil,
             voteOptions = voteOptions
         )
+
+        eventService.sendPollCreatedEvent(poll)
 
         return pollRepository.save(poll)
     }
@@ -65,11 +70,18 @@ class PollService(
         val existingPoll = pollRepository.findById(pollID)
             .orElseThrow { IllegalArgumentException("Poll not found") }
 
+        // Delete votes for options that no longer exist
+        val optionsToRemove = existingPoll.voteOptions - updatedVoteOptions.toSet()
+        existingPoll.votes.removeIf { it.voteOption in optionsToRemove }
+
         existingPoll.question = updatedQuestion
         existingPoll.validUntil = updatedValidUntil
         existingPoll.voteOptions = updatedVoteOptions
 
-        return pollRepository.save(existingPoll)
+        val updatedPoll = pollRepository.save(existingPoll)
+        eventService.sendPollEditedEvent(updatedPoll)
+
+        return updatedPoll
     }
 
     // Get poll results (voting results)
@@ -111,6 +123,8 @@ class PollService(
         poll.votes.add(vote)
         voteRepository.save(vote)
 
+        eventService.sendVoteEvent(poll)
+
         return vote
     }
 
@@ -127,6 +141,9 @@ class PollService(
 
         existingVote.voteOption = newVoteOption
         existingVote.lastModifiedAt = Instant.now()
+
+        eventService.sendVoteEvent(poll)
+
         return voteRepository.save(existingVote)
     }
 
@@ -139,5 +156,7 @@ class PollService(
 
         poll.votes.remove(existingVote)
         voteRepository.delete(existingVote)
+
+        eventService.sendVoteEvent(poll)
     }
 }

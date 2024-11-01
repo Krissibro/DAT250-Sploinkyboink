@@ -15,12 +15,20 @@ services:
   mongodb_database:
     image: mongo:latest
     environment:
-      MONGO_INIT_DB_ROOT_USERNAME: root
-      MONGO_INIT_DB_ROOT_PASSWORD: joe-biden-bazinga-blast
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: joe-biden-bazinga-blast
     ports:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    networks:
+      - app-network
+
+  rabbitmq:
+    image: rabbitmq:latest
+    ports:
+      - "5672:5672"
+      - "15672:15672"  # Management UI for RabbitMQ
     networks:
       - app-network
 

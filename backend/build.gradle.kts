@@ -47,9 +47,8 @@ dependencies {
 
     // Database
     runtimeOnly("org.postgresql:postgresql")
-
-
-
+    implementation("org.springframework.boot:spring-boot-starter-amqp")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 }
 
 noArg {
