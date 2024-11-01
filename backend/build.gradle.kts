@@ -25,6 +25,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.security:spring-security-crypto")
+    implementation("org.springframework.boot:spring-boot-starter-security")
 
     // Jackson
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

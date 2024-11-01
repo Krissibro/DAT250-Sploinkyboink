@@ -1,15 +1,22 @@
 package com.example.sploinkyboink.controllers
 
 import com.example.sploinkyboink.entities.User
+import com.example.sploinkyboink.services.JwtService
 import com.example.sploinkyboink.services.UserService
+import io.ktor.http.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import jakarta.servlet.http.Cookie
+import jakarta.servlet.http.HttpServletResponse
+import com.auth0.jwt.JWT
+import jakarta.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("/sploinkyboinkend")    // Aka "/api"
 class UserController(
-    private val userService: UserService
+    private val userService: UserService,
+    private val jwtService: JwtService
 ) {
 
     // Register a new user
@@ -26,6 +33,37 @@ class UserController(
         } catch (e: IllegalArgumentException) {
             ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
         }
+    }
+
+    // Logging in a user
+    @PostMapping("/login")
+    fun loginUser(
+        @RequestParam username: String,
+        @RequestParam password: String,
+        response: HttpServletResponse
+    ): ResponseEntity<String> {
+        try {
+            val authenticated = userService.authenticate(username, password)
+            if (authenticated) {
+                val token = jwtService.generateToken(username)
+                response.addHeader("Authorization", "Bearer $token")
+                return ResponseEntity.ok("Login successful")
+            }
+            return ResponseEntity("Invalid credentials", HttpStatus.UNAUTHORIZED)
+        }catch (e: IllegalArgumentException) {
+            return ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+        }
+
+    }
+
+    //  Logging out a user
+    @PostMapping("/logout")
+    fun logout(response: HttpServletResponse): ResponseEntity<Any> {
+
+        val cookie = Cookie("jwt", "")
+        cookie.maxAge = 0
+        response.addCookie(cookie)
+        return ResponseEntity("Logout successful", HttpStatus.OK)
     }
 
     // Get all users
