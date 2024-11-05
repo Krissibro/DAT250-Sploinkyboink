@@ -1,0 +1,957 @@
+---------------------------------------------------------------------
+SploinkyboinkApplication.kt
+-----------------------
+
+package com.example.sploinkyboink
+
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing
+
+@SpringBootApplication
+@EnableJpaAuditing
+class SploinkyboinkApplication
+
+fun main(args: Array<String>) {
+	runApplication<SploinkyboinkApplication>(*args)
+}
+
+
+
+---------------------------------------------------------------------
+RabbitMQConfig.kt
+-----------------------
+
+package com.example.sploinkyboink.configurations
+
+import org.springframework.amqp.core.Queue
+import org.springframework.amqp.rabbit.connection.ConnectionFactory
+import org.springframework.amqp.rabbit.core.RabbitTemplate
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+
+@Configuration
+class RabbitMQConfig {
+    @Bean
+    fun eventQueue(): Queue {
+        return Queue("eventQueue", false)
+    }
+
+    @Bean
+    fun jsonMessageConverter(): Jackson2JsonMessageConverter {
+        return Jackson2JsonMessageConverter()
+    }
+
+    @Bean
+    fun rabbitTemplate(connectionFactory: ConnectionFactory): RabbitTemplate {
+        val rabbitTemplate = RabbitTemplate(connectionFactory)
+        rabbitTemplate.messageConverter = jsonMessageConverter()
+        return rabbitTemplate
+    }
+}
+
+
+
+---------------------------------------------------------------------
+PollController.kt
+-----------------------
+
+package com.example.sploinkyboink.controllers
+
+import com.example.sploinkyboink.entities.Poll
+import com.example.sploinkyboink.services.PollService
+import org.springframework.data.domain.Page
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
+import java.time.Instant
+
+@RestController
+@RequestMapping("/sploinkyboinkend")         // aka "/api"
+class PollController(
+    private val pollService: PollService
+) {
+
+    @PostMapping("/polls")
+    fun createPoll(
+        @RequestParam userID: Long,
+        @RequestParam question: String,
+        @RequestParam voteOptions: List<String>,
+        @RequestParam validUntil: Instant
+    ): ResponseEntity<String> {
+        return try {
+            val poll = pollService.createPoll(userID, question, voteOptions, validUntil)
+            ResponseEntity("Poll created with ID: ${poll.pollID}", HttpStatus.CREATED)
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    @GetMapping("/polls")
+    fun getAllPolls(
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "10") size: Int
+    ): ResponseEntity<Page<Poll>> {
+        val polls = pollService.getAllPolls(page, size)
+        return ResponseEntity(polls, HttpStatus.OK)
+    }
+
+    // Get all active polls (where validUntil is in the future)
+    @GetMapping("/polls/active")
+    fun getAllActivePolls(
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "10") size: Int
+    ): ResponseEntity<Page<Poll>> {
+        val activePolls = pollService.getAllActivePolls(page, size)
+        return ResponseEntity(activePolls, HttpStatus.OK)
+    }
+
+    @PostMapping("/polls/{pollID}/vote")
+    fun voteOnPoll(
+        @PathVariable pollID: String,
+        @RequestParam userID: Long,
+        @RequestParam voteOption: String
+    ): ResponseEntity<String> {
+        return try {
+            pollService.voteOnPoll(pollID, userID, voteOption)
+            ResponseEntity("Vote registered successfully", HttpStatus.OK)
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+        } catch (e: IllegalStateException) {
+            ResponseEntity(e.message, HttpStatus.CONFLICT)  // e.g., already voted or poll expired
+        }
+    }
+
+    @PutMapping("/polls/{pollID}/vote")
+    fun editVoteOnPoll(
+        @PathVariable pollID: String,
+        @RequestParam userID: Long,
+        @RequestParam newVoteOption: String
+    ): ResponseEntity<String> {
+        return try {
+            pollService.editVote(pollID, userID, newVoteOption)
+            ResponseEntity("Vote updated successfully", HttpStatus.OK)
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    // Delete a vote from a poll
+    @DeleteMapping("/polls/{pollID}/vote")
+    fun deleteVoteOnPoll(
+        @PathVariable pollID: String,
+        @RequestParam userID: Long
+    ): ResponseEntity<String> {
+        return try {
+            pollService.deleteVote(pollID, userID)
+            ResponseEntity("Vote deleted", HttpStatus.OK)
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    @DeleteMapping("/polls/{pollID}")
+    fun deletePoll(@PathVariable pollID: String): ResponseEntity<String> {
+        return try {
+            pollService.deletePoll(pollID)
+            ResponseEntity("Poll deleted", HttpStatus.OK)
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity(e.message, HttpStatus.NOT_FOUND)
+        }
+    }
+
+    @PutMapping("/polls/{pollID}")
+    fun editPoll(
+        @PathVariable pollID: String,
+        @RequestParam question: String,
+        @RequestParam voteOptions: List<String>,
+        @RequestParam validUntil: Instant
+    ): ResponseEntity<String> {
+        return try {
+            pollService.editPoll(pollID, question, voteOptions, validUntil)
+            ResponseEntity("Poll updated successfully", HttpStatus.OK)
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    // Additional endpoint for summarized poll results
+    @GetMapping("/polls/{pollID}/results")
+    fun getPollResults(@PathVariable pollID: String): ResponseEntity<Any> {
+        return try {
+            val results = pollService.getPollResults(pollID)
+            ResponseEntity(results, HttpStatus.OK)
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity(e.message, HttpStatus.NOT_FOUND)
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------
+UserController.kt
+-----------------------
+
+package com.example.sploinkyboink.controllers
+
+import com.example.sploinkyboink.entities.User
+import com.example.sploinkyboink.services.UserService
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
+
+@RestController
+@RequestMapping("/sploinkyboinkend")    // Aka "/api"
+class UserController(
+    private val userService: UserService
+) {
+
+    // Register a new user
+    @PostMapping("/users")
+    fun createUser(
+        @RequestParam username: String,
+        @RequestParam password: String,
+        @RequestParam confirmPassword: String,
+        @RequestParam email: String
+    ): ResponseEntity<String> {
+        return try {
+            userService.registerUser(username, password, confirmPassword, email)
+            ResponseEntity("User created", HttpStatus.CREATED)
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    // Get all users
+    @GetMapping("/users")
+    fun getAllUsers(): ResponseEntity<List<User>> {
+        return ResponseEntity(userService.getAllUsers(), HttpStatus.OK)
+    }
+
+    // Get a specific user by username
+    @GetMapping("/users/{username}")
+    fun getUserByUsername(@PathVariable username: String): ResponseEntity<User> {
+        return try {
+            val user = userService.getUserByUsername(username)
+            ResponseEntity(user, HttpStatus.OK)
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity(HttpStatus.NOT_FOUND)
+        }
+    }
+
+    // Delete a user by userID
+    @DeleteMapping("/users/{userID}")
+    fun deleteUserById(@PathVariable userID: Long): ResponseEntity<String> {
+        return try {
+            userService.deleteUser(userID)
+            ResponseEntity("User deleted", HttpStatus.OK)
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity(e.message, HttpStatus.NOT_FOUND)
+        }
+    }
+
+    // Update user email
+    @PutMapping("/users/{userID}/email")
+    fun changeEmail(
+        @PathVariable userID: Long,
+        @RequestParam newEmail: String
+    ): ResponseEntity<String> {
+        return try {
+            userService.changeEmail(userID, newEmail)
+            ResponseEntity("Email updated successfully", HttpStatus.OK)
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    // Update username
+    @PutMapping("/users/{userID}/username")
+    fun changeUsername(
+        @PathVariable userID: Long,
+        @RequestParam newUsername: String
+    ): ResponseEntity<String> {
+        return try {
+            userService.changeUsername(userID, newUsername)
+            ResponseEntity("Username updated successfully", HttpStatus.OK)
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    // Change user password
+    @PutMapping("/users/{userID}/password")
+    fun changePassword(
+        @PathVariable userID: Long,
+        @RequestParam newPassword: String,
+        @RequestParam confirmPassword: String
+    ): ResponseEntity<String> {
+        return try {
+            userService.changePassword(userID, newPassword, confirmPassword)
+            ResponseEntity("Password updated successfully", HttpStatus.OK)
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    // Get all polls created by a user (stubbed method, needs actual implementation)
+    @GetMapping("/users/{username}/polls")
+    fun getPollsCreatedByUser(@PathVariable username: String): ResponseEntity<List<String>> {
+        // TODO: Example stub, replace with actual service method once it's ready
+        return try {
+            val polls = listOf("poll1", "poll2") // Replace with actual data
+            ResponseEntity(polls, HttpStatus.OK)
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity(HttpStatus.NOT_FOUND)
+        }
+    }
+
+    // Get all polls the user has participated in (stubbed method, needs actual implementation)
+    @GetMapping("/users/{username}/participated-polls")
+    fun getPollsUserParticipatedIn(@PathVariable username: String): ResponseEntity<List<String>> {
+        // TODO: Example stub, replace with actual service method once it's ready
+        return try {
+            val participatedPolls = listOf("poll3", "poll4") // Replace with actual data
+            ResponseEntity(participatedPolls, HttpStatus.OK)
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity(HttpStatus.NOT_FOUND)
+        }
+    }
+}
+
+
+
+---------------------------------------------------------------------
+Event.kt
+-----------------------
+
+package com.example.sploinkyboink.entities
+
+import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.mapping.Document
+import java.time.Instant
+
+@Document(collection = "events")
+data class Event(
+    @Id val id: String? = null,
+    val timestamp: Instant = Instant.now(),
+    val type: String,
+    val details: Map<String, Any>
+)
+
+
+---------------------------------------------------------------------
+Poll.kt
+-----------------------
+
+package com.example.sploinkyboink.entities
+
+import java.time.Instant
+import jakarta.persistence.*
+import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedDate
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonManagedReference
+
+@Entity
+@Table(name = "polls")
+data class Poll(
+    @Id
+    val pollID: String,
+
+    @ManyToOne(fetch = FetchType.LAZY)  // Map to the User entity
+    @JoinColumn(name = "user_id", nullable = false)  // Reference to the User table
+    @JsonIgnore
+    val byUser: User?,
+
+    var question: String,
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    val publishedAt: Instant? = null,
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    val lastModifiedAt: Instant? = null,
+    var validUntil: Instant,
+
+    @ElementCollection
+    @CollectionTable(name = "poll_vote_options", joinColumns = [JoinColumn(name = "poll_id")])
+    @Column(name = "vote_option")
+    var voteOptions: List<String>,
+
+    @OneToMany(mappedBy = "poll", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @JsonManagedReference
+    val votes: MutableSet<Vote> = mutableSetOf()
+) {
+    override fun equals(other: Any?) = other is Poll && other.pollID == this.pollID
+    override fun hashCode() = pollID.hashCode()
+}
+
+
+---------------------------------------------------------------------
+User.kt
+-----------------------
+
+package com.example.sploinkyboink.entities
+
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import jakarta.persistence.*
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+
+@Entity
+@Table(name = "users", uniqueConstraints = [UniqueConstraint(columnNames = ["username", "email"])])
+@JsonIgnoreProperties(ignoreUnknown = true, value = ["hibernateLazyInitializer", "handler"])
+data class User(
+    @Id
+    val userID: Long = 0,
+
+    @Column(nullable = false, unique = true)
+    var username: String,
+
+    @JsonIgnore
+    @Column(nullable = false, unique = true)
+    var email: String,
+
+    @JsonIgnore
+    @Column(nullable = false)
+    var passwordHash: String,
+) {
+    // Password setting method to hash the password using BCrypt
+    fun setPassword(password: String) {
+        val encoder = BCryptPasswordEncoder()
+        this.passwordHash = encoder.encode(password)
+    }
+
+    // Password verification
+    fun checkPassword(rawPassword: String): Boolean {
+        val encoder = BCryptPasswordEncoder()
+        return encoder.matches(rawPassword, this.passwordHash)
+    }
+}
+
+
+
+---------------------------------------------------------------------
+Vote.kt
+-----------------------
+
+package com.example.sploinkyboink.entities
+
+import com.fasterxml.jackson.annotation.JsonBackReference
+import com.fasterxml.jackson.annotation.JsonIgnore
+import java.time.Instant
+import jakarta.persistence.*
+import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedDate
+
+@Entity
+@Table(name = "votes")
+data class Vote (
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0,
+
+    @ManyToOne
+    @JoinColumn(name = "poll_id", nullable = false)
+    @JsonBackReference
+    var poll: Poll,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    val user: User,
+
+    var voteOption: String,
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    val publishedAt: Instant? = null,
+    @LastModifiedDate
+    @Column(nullable = false)
+    var lastModifiedAt: Instant? = null
+) {
+    override fun equals(other: Any?) = other is Vote && other.id == this.id
+    override fun hashCode() = id.hashCode()
+}
+
+
+---------------------------------------------------------------------
+EventListener.kt
+-----------------------
+
+package com.example.sploinkyboink.listeners
+
+import com.example.sploinkyboink.entities.Event
+import com.example.sploinkyboink.services.EventService
+import org.springframework.amqp.rabbit.annotation.RabbitListener
+import org.springframework.stereotype.Component
+
+@Component
+class EventListener(
+    private val eventService: EventService
+) {
+    @RabbitListener(queues = ["eventQueue"])
+    fun receiveMessage(event: Event) {
+        eventService.logEvent(event)
+    }
+}
+
+
+---------------------------------------------------------------------
+EventRepository.kt
+-----------------------
+
+package com.example.sploinkyboink.repositories
+
+import com.example.sploinkyboink.entities.Event
+import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.stereotype.Repository
+
+@Repository
+interface EventRepository : MongoRepository<Event, String>
+
+
+---------------------------------------------------------------------
+PollRepository.kt
+-----------------------
+
+package com.example.sploinkyboink.repositories
+
+import com.example.sploinkyboink.entities.Poll
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
+import java.time.Instant
+
+@Repository
+interface PollRepository : JpaRepository<Poll, String> {
+    // Custom query to get all active polls (validUntil is in the future)
+    fun findByValidUntilAfter(now: Instant, pageable: Pageable): Page<Poll>
+}
+
+
+
+---------------------------------------------------------------------
+UserRepository.kt
+-----------------------
+
+package com.example.sploinkyboink.repositories
+
+import com.example.sploinkyboink.entities.User
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
+
+@Repository
+interface UserRepository : JpaRepository<User, Long> {
+    fun findByUsername(username: String): User?
+    fun findByEmail(email: String): User?
+}
+
+
+
+---------------------------------------------------------------------
+VoteRepository.kt
+-----------------------
+
+package com.example.sploinkyboink.repositories
+
+import com.example.sploinkyboink.entities.Vote
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
+
+@Repository
+interface VoteRepository : JpaRepository<Vote, Long> {
+}
+
+
+
+---------------------------------------------------------------------
+EventService.kt
+-----------------------
+
+package com.example.sploinkyboink.services
+
+import com.example.sploinkyboink.entities.Event
+import com.example.sploinkyboink.entities.Poll
+import com.example.sploinkyboink.repositories.EventRepository
+import org.springframework.amqp.rabbit.core.RabbitTemplate
+import org.springframework.stereotype.Service
+import java.time.Instant
+
+@Service
+class EventService(
+    private val eventRepository: EventRepository,
+    private val rabbitTemplate: RabbitTemplate,
+) {
+    fun logEvent(event: Event) {
+        val savedEvent = eventRepository.save(event)  // Save to get the generated ID
+        println("Received event with ID: ${savedEvent.id}, details: $savedEvent")
+    }
+
+    fun sendVoteEvent(poll: Poll) {
+        // TODO: Example event, add more info?
+        val event = Event(
+            type = "VoteEvent",
+            details = mapOf(
+                "pollID" to poll.pollID,
+                "question" to poll.question,
+                "options" to poll.voteOptions,
+                "voteCounts" to poll.votes.groupingBy { it.voteOption }.eachCount()  // Aggregated vote counts
+            )
+        )
+        rabbitTemplate.convertAndSend("eventQueue", event)
+    }
+
+    fun sendPollCreatedEvent(poll: Poll) {
+        val event = Event(
+            type = "PollCreated",
+            details = mapOf(
+                "pollID" to poll.pollID,
+                "byUser" to (poll.byUser ?: "Unknown"),
+                "question" to poll.question,
+                "voteOptions" to poll.voteOptions,
+                "publishedAt" to (poll.publishedAt ?: Instant.now()),
+                "validUntil" to poll.validUntil
+            )
+        )
+        rabbitTemplate.convertAndSend("eventQueue", event)
+    }
+
+    fun sendPollEditedEvent(poll: Poll) {
+        val event = Event(
+            type = "PollEdited",
+            details = mapOf(
+                "pollID" to poll.pollID,
+                "byUser" to (poll.byUser ?: "Unknown"),
+                "question" to poll.question,
+                "voteOptions" to poll.voteOptions,
+                "lastModifiedAt" to (poll.lastModifiedAt ?: Instant.now()),
+                "validUntil" to poll.validUntil
+            )
+        )
+        rabbitTemplate.convertAndSend("eventQueue", event)
+    }
+}
+
+
+
+---------------------------------------------------------------------
+PollService.kt
+-----------------------
+
+package com.example.sploinkyboink.services
+
+import com.example.sploinkyboink.entities.Event
+import com.example.sploinkyboink.entities.Poll
+import com.example.sploinkyboink.entities.Vote
+import com.example.sploinkyboink.repositories.PollRepository
+import com.example.sploinkyboink.repositories.VoteRepository
+import org.springframework.amqp.rabbit.core.RabbitTemplate
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.PageRequest
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
+
+@Service
+class PollService(
+    private val pollRepository: PollRepository,
+    private val voteRepository: VoteRepository,
+    private val userService: UserService,  // Dependency to access User-related operations
+    private val eventService: EventService
+) {
+    // Poll creation, now with byUserID
+    fun createPoll(byUserID: Long, question: String, voteOptions: List<String>, validUntil: Instant): Poll {
+        val user = userService.getUserByUserID(byUserID)
+            ?: throw IllegalArgumentException("User with userID $byUserID not found")
+
+        val pollId = "poll${System.currentTimeMillis()}"
+        val poll = Poll(
+            pollID = pollId,
+            byUser = user,
+            question = question,
+            publishedAt = Instant.now(),
+            lastModifiedAt = Instant.now(),
+            validUntil = validUntil,
+            voteOptions = voteOptions
+        )
+
+        eventService.sendPollCreatedEvent(poll)
+
+        return pollRepository.save(poll)
+    }
+
+    // Get a poll by ID
+    fun getPollById(pollID: String): Poll {
+        return pollRepository.findById(pollID).orElseThrow { IllegalArgumentException("Poll not found") }
+    }
+
+    // Get all polls with pagination
+    fun getAllPolls(page: Int, size: Int): Page<Poll> {
+        val pageable = PageRequest.of(page, size)
+        return pollRepository.findAll(pageable)
+    }
+
+    // Get all active polls (those whose validUntil is in the future)
+    fun getAllActivePolls(page: Int, size: Int): Page<Poll> {
+        val pageable: Pageable = PageRequest.of(page, size)
+        return pollRepository.findByValidUntilAfter(Instant.now(), pageable)
+    }
+
+    // Delete a poll
+    @Transactional
+    fun deletePoll(pollID: String) {
+        pollRepository.deleteById(pollID)
+    }
+
+    // Edit a poll (update allowed fields)
+    @Transactional
+    fun editPoll(pollID: String, updatedQuestion: String, updatedVoteOptions: List<String>, updatedValidUntil: Instant): Poll {
+        val existingPoll = pollRepository.findById(pollID)
+            .orElseThrow { IllegalArgumentException("Poll not found") }
+
+        // Delete votes for options that no longer exist
+        val optionsToRemove = existingPoll.voteOptions - updatedVoteOptions.toSet()
+        existingPoll.votes.removeIf { it.voteOption in optionsToRemove }
+
+        existingPoll.question = updatedQuestion
+        existingPoll.validUntil = updatedValidUntil
+        existingPoll.voteOptions = updatedVoteOptions
+
+        val updatedPoll = pollRepository.save(existingPoll)
+        eventService.sendPollEditedEvent(updatedPoll)
+
+        return updatedPoll
+    }
+
+    // Get poll results (voting results)
+    fun getPollResults(pollID: String): MutableMap<String, Long> {
+        val poll = pollRepository.findById(pollID).orElseThrow {
+            IllegalArgumentException("Poll with ID $pollID not found")
+        }
+
+        // Group the votes by the vote option, count occurrences, and map the results
+        return poll.votes.groupingBy { it.voteOption }.eachCount().mapValues { it.value.toLong() }.toMutableMap()
+    }
+
+
+    // Voting logic
+
+    @Transactional
+    fun voteOnPoll(pollID: String, userID: Long, voteOption: String): Vote {
+        val poll = getPollById(pollID)
+        val user = userService.getUserByUserID(userID)
+            ?: throw IllegalArgumentException("User with userID $userID not found")
+
+        // Check if the user has already voted
+        if (poll.votes.any { it.user == user }) {
+            throw IllegalStateException("User has already voted in this poll")
+        }
+
+        // Check if the poll is still active
+        if (Instant.now().isAfter(poll.validUntil)) {
+            throw IllegalStateException("Poll has expired")
+        }
+
+        // Validate vote option
+        if (voteOption !in poll.voteOptions) {
+            throw IllegalArgumentException("Invalid vote option")
+        }
+
+        // Create and save the vote
+        val vote = Vote(poll = poll, user = user, voteOption = voteOption, publishedAt = Instant.now(), lastModifiedAt = Instant.now())
+        poll.votes.add(vote)
+        voteRepository.save(vote)
+
+        eventService.sendVoteEvent(poll)
+
+        return vote
+    }
+
+    // Edit vote on poll
+    @Transactional
+    fun editVote(pollID: String, userID: Long, newVoteOption: String): Vote {
+        val poll = getPollById(pollID)
+        val existingVote = poll.votes.find { it.user == userService.getUserByUserID(userID) }
+            ?: throw IllegalArgumentException("No existing vote to edit")
+
+        if (newVoteOption !in poll.voteOptions) {
+            throw IllegalArgumentException("Invalid vote option")
+        }
+
+        existingVote.voteOption = newVoteOption
+        existingVote.lastModifiedAt = Instant.now()
+
+        eventService.sendVoteEvent(poll)
+
+        return voteRepository.save(existingVote)
+    }
+
+    // Delete a user's vote from a poll
+    @Transactional
+    fun deleteVote(pollID: String, userID: Long) {
+        val poll = getPollById(pollID)
+        val existingVote = poll.votes.find { it.user == userService.getUserByUserID(userID) }
+            ?: throw IllegalArgumentException("No existing vote to delete")
+
+        poll.votes.remove(existingVote)
+        voteRepository.delete(existingVote)
+
+        eventService.sendVoteEvent(poll)
+    }
+}
+
+
+
+---------------------------------------------------------------------
+UserService.kt
+-----------------------
+
+package com.example.sploinkyboink.services
+
+import com.example.sploinkyboink.entities.User
+import com.example.sploinkyboink.repositories.UserRepository
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+
+@Service
+class UserService(
+    private val userRepository: UserRepository,
+) {
+
+    // TODO: NEEDS actual JwtToken validation function which can be used in Controller to validate the session token
+
+    fun validatePasswordStrength(password: String) {
+        if (password.length < 8) {
+            throw IllegalArgumentException("Password must be at least 8 characters long")
+        }
+        if (!password.any { it.isDigit() }) {
+            throw IllegalArgumentException("Password must contain at least one digit")
+        }
+        if (!password.any { it.isUpperCase() }) {
+            throw IllegalArgumentException("Password must contain at least one uppercase letter")
+        }
+        // TODO: Add more rules maybe?
+    }
+
+
+    @Transactional
+    fun registerUser(username: String, password: String, confirmPassword: String, email: String): User {
+        if (password != confirmPassword) {
+            throw IllegalArgumentException("Passwords do not match")
+        }
+        if (userRepository.findByUsername(username) != null) {
+            throw IllegalArgumentException("Username $username is already taken")
+        }
+        if (userRepository.findByEmail(email) != null) {
+            throw IllegalArgumentException("Email $email is already in use")
+        }
+
+        validatePasswordStrength(password)
+
+        val user = User(username = username, passwordHash = "", email = email)
+        user.setPassword(password)  // Hash the password before saving
+        return userRepository.save(user)
+    }
+
+    fun authenticate(login: String, rawPassword: String): Boolean {
+        // Check if the input is an email or username
+        val user = if (login.contains("@")) {
+            // If the input contains '@', treat it as an email
+            userRepository.findByEmail(login)
+                ?: throw IllegalArgumentException("User with email $login not found")
+        } else {
+            // Otherwise, treat it as a username
+            userRepository.findByUsername(login)
+                ?: throw IllegalArgumentException("User with username $login not found")
+        }
+
+        return user.checkPassword(rawPassword)  // Check hashed password
+    }
+
+    // Retrieve a user by their username
+    fun getUserByUsername(username: String): User? {
+        return userRepository.findByUsername(username)
+            ?: throw IllegalArgumentException("User with username $username not found")
+    }
+
+    fun getUserByUserID(userID: Long): User? {
+        return userRepository.findById(userID)
+            .orElseThrow { IllegalArgumentException("User with userID $userID not found") }
+    }
+
+    // Retrieve all users
+    fun getAllUsers(): List<User> {
+        return userRepository.findAll()
+    }
+
+    // Delete a user by their username
+    @Transactional
+    fun deleteUser(userID: Long) {
+        if (!userRepository.existsById(userID)) {
+            throw IllegalArgumentException("User with userID $userID does not exist")
+        }
+        userRepository.deleteById(userID)
+    }
+
+    // Edit a user's details (more efficient update instead of delete and save)
+    @Transactional
+    fun changeEmail(userID: Long, newEmail: String): User {
+        val existingUser = userRepository.findById(userID)
+            .orElseThrow { IllegalArgumentException("User with userID $userID not found") }
+
+        if (userRepository.findByEmail(newEmail) != null) {
+            throw IllegalArgumentException("Email $newEmail is already in use")
+        }
+
+        existingUser.email = newEmail
+        return userRepository.save(existingUser)
+    }
+
+    @Transactional
+    fun changeUsername(userID: Long, newUsername: String): User {
+        val existingUser = userRepository.findById(userID)
+            .orElseThrow { IllegalArgumentException("User with userID $userID not found") }
+
+        if (userRepository.findByUsername(newUsername) != null) {
+            throw IllegalArgumentException("Username $newUsername is already taken")
+        }
+
+        existingUser.username = newUsername
+        return userRepository.save(existingUser)
+    }
+
+    @Transactional
+    fun changePassword(userID: Long, newPassword: String, confirmPassword: String): User {
+        if (newPassword != confirmPassword) {
+            throw IllegalArgumentException("Passwords do not match")
+        }
+        validatePasswordStrength(newPassword)
+
+        val existingUser = userRepository.findById(userID)
+            .orElseThrow { IllegalArgumentException("User with userID $userID not found") }
+
+        existingUser.setPassword(newPassword)  // Hash the new password
+        return userRepository.save(existingUser)
+    }
+
+
+    // Check if a user exists by their username
+    fun userExists(userID: Long): Boolean {
+        return userRepository.existsById(userID)
+    }
+}
+
+
+
+---------------------------------------------------------------------
