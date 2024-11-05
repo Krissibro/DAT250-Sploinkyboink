@@ -1,0 +1,74 @@
+\section{Technology Assessment}
+\label{sec:technology}
+
+
+Introduce in (sufficient) depth the key concepts and architecture of the chosen software technology. As part if this, you may consider using a running example to introduce the technology.
+
+This part and other parts of the report probably needs to refer to
+figures. Figure~\ref{fig:framework} from \cite{brown:96} just
+illustrates how figure can be included in the report.
+
+\begin{figure}[thb]
+	\centering
+	\includegraphics[scale=0.5]{figs/framework.png}
+	\caption{Software technology evaluation framework.}
+	\label{fig:framework}
+\end{figure}
+
+\subsection{Descriptive Modeling}
+
+write where the technology comes from, its history, its context and what problem it solves.
+Consider drawing a graph like in \cite{brown:96}.
+
+We will now look into our different technologies more in depth.
+
+\textbf{Backend:}
+
+The reason we chose Kotlin with Spring Boot for this application is that Kotlin is compatible with Java and has many good features. Spring MVC also makes deploying a web application practical. Here are some of the features that Kotlin offers:
+
+\begin{itemize}
+    \item \textbf{Conciseness and Readability:} Kotlin syntax is more concise compared to Java, reducing redundant code. This makes the code easier to read and work with.
+    
+    \item \textbf{Null Safety:} Kotlin's type system helps eliminate null pointer exceptions, a common source of bugs in Java. Kotlin distinguishes between nullable and non-nullable types.
+    
+    \item \textbf{Interoperability:} Kotlin is fully interoperable with Java, allowing you to use existing Java libraries and frameworks without any issues.
+    
+    \item \textbf{Coroutines for Asynchronous Programming:} Kotlin's coroutines simplify asynchronous programming, making it easier to handle tasks that involve waiting for resources or events, such as network requests.
+    
+    \item \textbf{Extension Functions:} Kotlin allows you to extend existing classes with new functionality without modifying their code. This promotes cleaner code organization and better separation of concerns.
+    
+    \item \textbf{Data Classes:} Kotlin's data classes provide a simple way to create classes that are primarily used to hold data. They automatically generate useful methods like \texttt{equals()}, \texttt{hashCode()}, and \texttt{toString()}, simplifying data handling.
+    
+    \item \textbf{Higher-Order Functions and Lambdas:} Kotlin supports functional programming features, such as higher-order functions and lambda expressions, which can lead to more expressive and flexible code.
+\end{itemize}
+
+
+\subsection{Experiment Design}
+
+Write you hypotheses about what benefits the technology bring and how you can support or reject them via experiments.
+
+\subsection{Experiment Evaluation}
+
+Write about the results of your experiments, either via personal experience reports, quantitative benchmarks, a demostrator case study or a combination of multiple approaches.
+
+
+For some reports you may have to include a table with experimental
+results are other kinds of tables that for instance compares
+technologies. Table~\ref{tab:results} gives an example of how to create a table.
+
+\begin{table}[bth]
+	\centering
+	\begin{tabular}{llrrrrrr}
+		Config & Property & States & Edges & Peak & E-Time & C-Time & T-Time
+		\\ \hline \hline
+		22-2 & A   &    7,944  &   22,419  &  6.6  \%  &  7 ms & 42.9\% &  485.7\% \\
+		22-2 & A   &    7,944  &   22,419  &  6.6  \%  &  7 ms & 42.9\% &  471.4\% \\
+		30-2 & B   &   14,672  &   41,611  &  4.9  \%  & 14 ms & 42.9\% &  464.3\% \\
+		30-2 & C   &   14,672  &   41,611  &  4.9  \%  & 15 ms & 40.0\% &  420.0\% \\ \hline
+		10-3 & D   &   24,052  &   98,671  & 19.8  \%  & 35 ms & 31.4\% &  285.7\% \\
+		10-3 & E   &   24,052  &   98,671  & 19.8  \%  & 35 ms & 34.3\% &  308.6\% \\
+		\hline \hline
+	\end{tabular}
+	\caption{Selected experimental results on the communication protocol example.}
+	\label{tab:results}
+\end{table}
