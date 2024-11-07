@@ -1,7 +1,6 @@
 export interface User {
     userID: number;
     username: string;
-    email: string;
 }
 
 export interface Vote {
