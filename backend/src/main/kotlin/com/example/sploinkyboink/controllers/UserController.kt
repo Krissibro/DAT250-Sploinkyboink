@@ -3,14 +3,12 @@ package com.example.sploinkyboink.controllers
 import com.example.sploinkyboink.entities.User
 import com.example.sploinkyboink.services.JwtService
 import com.example.sploinkyboink.services.UserService
-import io.ktor.http.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
-import com.auth0.jwt.JWT
-import jakarta.servlet.http.HttpServletRequest
+
 
 @RestController
 @RequestMapping("/sploinkyboinkend")    // Aka "/api"

@@ -13,8 +13,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class JwtAuthenticationFilter(
-    private val jwtService: JwtService,
-    private val userService: UserService
+    private val jwtService: JwtService
     ) : OncePerRequestFilter() {
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain) {

@@ -34,6 +34,8 @@ dependencies {
     implementation("io.ktor:ktor-server-auth:3.0.0")
     implementation("io.ktor:ktor-server-auth-jwt:3.0.0")
 
+    //Logger
+    implementation("org.slf4j:slf4j-api:2.0.16")
 
 
     //  Kotlin
