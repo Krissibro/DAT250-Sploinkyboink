@@ -14,7 +14,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 class SecurityConfig (
     @Autowired private val jwtService: JwtService
-
 ){
 
     @Bean
@@ -23,7 +22,7 @@ class SecurityConfig (
             .csrf { it.disable() }
             .authorizeHttpRequests { auth ->
                 auth
-                    .requestMatchers("/sploinkyboinkend/login","/sploinkyboinkend/users").permitAll()
+                    .requestMatchers("/sploinkyboinkend/login","/sploinkyboinkend/register", "/sploinkyboinkend/logout").permitAll()
                     .anyRequest().authenticated()
 
             }

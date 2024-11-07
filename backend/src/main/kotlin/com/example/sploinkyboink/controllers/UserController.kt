@@ -18,7 +18,7 @@ class UserController(
 ) {
 
     // Register a new user
-    @PostMapping("/users")
+    @PostMapping("/register")
     fun createUser(
         @RequestParam username: String,
         @RequestParam password: String,
