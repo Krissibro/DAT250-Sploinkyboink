@@ -12,6 +12,24 @@ class UserController(
     private val userService: UserService
 ) {
 
+    // Authentication endpoint
+    @PostMapping("/authenticate")
+    fun authenticateUser(
+        @RequestParam login: String,
+        @RequestParam password: String
+    ): ResponseEntity<String> {
+        return try {
+            val isAuthenticated = userService.authenticate(login, password)
+            if (isAuthenticated) {
+                ResponseEntity("Authentication successful", HttpStatus.OK)
+            } else {
+                ResponseEntity("Invalid credentials", HttpStatus.UNAUTHORIZED)
+            }
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity(e.message, HttpStatus.NOT_FOUND)
+        }
+    }
+
     // Register a new user
     @PostMapping("/users")
     fun createUser(

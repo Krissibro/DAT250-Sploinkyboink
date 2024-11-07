@@ -1,11 +1,11 @@
 <script lang="ts">
-    import { currentUser } from '../../stores/user';
+    import { currentUser } from '$stores/user';
     import { goto } from '$app/navigation';
 
     let question = '';
     let optionsText = '';
     let message = '';
-    let user;
+    let user : any;
 
     $: user = $currentUser;
 
@@ -26,7 +26,7 @@
         params.append('question', question);
         voteOptions.forEach((option) => params.append('voteOptions', option));
 
-        const res = await fetch('/api/polls', {
+        const res = await fetch('/sploinkyboinkend/polls', {
             method: 'POST',
             body: params,
             headers: {

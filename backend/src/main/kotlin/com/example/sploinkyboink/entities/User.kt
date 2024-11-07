@@ -10,7 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 @JsonIgnoreProperties(ignoreUnknown = true, value = ["hibernateLazyInitializer", "handler"])
 data class User(
     @Id
-    val userID: Long = 0,
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val userID: Long? = null,
 
     @Column(nullable = false, unique = true)
     var username: String,
