@@ -1,19 +1,24 @@
 package com.example.sploinkyboink.controllers
 
 import com.example.sploinkyboink.entities.User
+import com.example.sploinkyboink.services.JwtService
 import com.example.sploinkyboink.services.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import jakarta.servlet.http.Cookie
+import jakarta.servlet.http.HttpServletResponse
+
 
 @RestController
 @RequestMapping("/sploinkyboinkend")    // Aka "/api"
 class UserController(
-    private val userService: UserService
+    private val userService: UserService,
+    private val jwtService: JwtService
 ) {
 
     // Register a new user
-    @PostMapping("/users")
+    @PostMapping("/register")
     fun createUser(
         @RequestParam username: String,
         @RequestParam password: String,
@@ -26,6 +31,40 @@ class UserController(
         } catch (e: IllegalArgumentException) {
             ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
         }
+    }
+
+    // Logging in a user
+    @PostMapping("/login")
+    fun loginUser(
+        @RequestParam username: String,
+        @RequestParam password: String,
+        response: HttpServletResponse
+    ): ResponseEntity<String> {
+        try {
+            val authenticated = userService.authenticate(username, password)
+            if (authenticated) {
+                val token = jwtService.generateToken(username)
+                val cookie = Cookie("jwt", token)
+                cookie.isHttpOnly= true
+
+                response.addCookie(cookie)
+                return ResponseEntity.ok("Login successful")
+            }
+            return ResponseEntity("Invalid credentials", HttpStatus.UNAUTHORIZED)
+        }catch (e: IllegalArgumentException) {
+            return ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+        }
+
+    }
+
+    //  Logging out a user
+    @PostMapping("/logout")
+    fun logout(response: HttpServletResponse): ResponseEntity<Any> {
+
+        val cookie = Cookie("jwt", "")
+        cookie.maxAge = 0
+        response.addCookie(cookie)
+        return ResponseEntity("Logout successful", HttpStatus.OK)
     }
 
     // Get all users
