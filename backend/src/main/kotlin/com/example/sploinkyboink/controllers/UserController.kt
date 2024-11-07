@@ -46,7 +46,10 @@ class UserController(
             val authenticated = userService.authenticate(username, password)
             if (authenticated) {
                 val token = jwtService.generateToken(username)
-                response.addHeader("Authorization", "Bearer $token")
+                val cookie = Cookie("jwt", token)
+                cookie.isHttpOnly= true
+
+                response.addCookie(cookie)
                 return ResponseEntity.ok("Login successful")
             }
             return ResponseEntity("Invalid credentials", HttpStatus.UNAUTHORIZED)
