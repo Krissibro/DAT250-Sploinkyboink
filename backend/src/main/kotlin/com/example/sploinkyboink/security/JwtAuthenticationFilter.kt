@@ -1,8 +1,6 @@
 package com.example.sploinkyboink.security
 
-import com.auth0.jwt.JWT
 import com.example.sploinkyboink.services.JwtService
-import com.example.sploinkyboink.services.UserService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
