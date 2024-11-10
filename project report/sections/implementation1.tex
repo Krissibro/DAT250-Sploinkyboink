@@ -15,11 +15,10 @@ refer to it. How to create a figure was shown in Section~\ref{sec:technology}.
 
 \lstinputlisting[language=java]{code/BoksVolum.java}
 
-
 \subsection{Backend}
 
 We will now look into how the Kotlin code is organized. We use Kotlin with Spring Boot as the backend. The code is organized into three main services: EventService, PollService, and UserService. 
- 
+
 \begin{tikzpicture}[node distance=1.5cm]
 
 % Define UML class styles
@@ -34,41 +33,48 @@ We will now look into how the Kotlin code is organized. We use Kotlin with Sprin
 \node[class, below of=voteController] (eventListener) {EventListener};
 
 % Define second layer nodes (Services)
-\node[class, right of=sploinkyboinkApplication, xshift=3cm] (pollService) {PollService};
+\node[class, right=4cm of pollController] (pollService) {PollService};
 \node[class, below of=pollService] (userService) {UserService};
 \node[class, below of=userService] (voteService) {VoteService};
 \node[class, below of=voteService] (eventService) {EventService};
 
 % Define third layer nodes (Repositories)
-\node[class, right of=pollService, xshift=3cm] (pollRepository) {PollRepo};
+\node[class, right=4cm of pollService] (pollRepository) {PollRepo};
 \node[class, below of=pollRepository] (userRepository) {UserRepo};
 \node[class, below of=userRepository] (voteRepository) {VoteRepo};
 \node[class, below of=voteRepository] (eventRepository) {EventRepo};
 
-% Define fourth layer nodes (Security)
-\node[class, right of=pollRepository, xshift=3cm] (jwtAuthFilter) {JWT Filter};
-\node[class, below of=jwtAuthFilter] (securityConfig) {Security Config};
-
-% Define fifth layer nodes (Configurations)
+% Define fourth layer nodes (Security and Configurations)
+\node[class, below=1cm of eventRepository] (securityConfig) {Security Config};
 \node[class, below of=securityConfig] (rabbitMQConfig) {RabbitMQ Config};
 
-% Relationships (arrows)
-\draw[arrow] (pollController) -- (pollService);
-\draw[arrow] (userController) -- (userService);
-\draw[arrow] (voteController) -- (voteService);
-\draw[arrow] (eventListener) -- (eventService);
+% Relationships (horizontal arrows)
+\draw[arrow] (pollController.east) -- (pollService.west);
+\draw[arrow] (userController.east) -- (userService.west);
+\draw[arrow] (voteController.east) -- (voteService.west);
+\draw[arrow] (eventListener.east) -- (eventService.west);
 
-\draw[arrow] (pollService) -- (pollRepository);
-\draw[arrow] (userService) -- (userRepository);
-\draw[arrow] (voteService) -- (voteRepository);
-\draw[arrow] (eventService) -- (eventRepository);
+\draw[arrow] (pollService.east) -- (pollRepository.west);
+\draw[arrow] (userService.east) -- (userRepository.west);
+\draw[arrow] (voteService.east) -- (voteRepository.west);
+\draw[arrow] (eventService.east) -- (eventRepository.west);
 
-\draw[arrow] (jwtAuthFilter) -- (securityConfig);
-\draw[arrow] (securityConfig) -- (rabbitMQConfig);
+% Security and Configurations (arrows)
+\draw[arrow] (securityConfig.south) -- (rabbitMQConfig.north);
 
 \end{tikzpicture}
 
 \vspace{1cm}
+
+% External explanations
+\noindent
+\textbf{SploinkyboinkApp:} The main application class for the Sploinkyboink application.\\
+\textbf{PollController, UserController, VoteController, EventListener:} Classes that handle HTTP requests related to polls, users, votes, and events, respectively.\\
+\textbf{PollService, UserService, VoteService, EventService:} Business logic classes for polls, users, votes, and events.\\
+\textbf{PollRepo, UserRepo, VoteRepo, EventRepo:} Data access classes for interacting with the database for polls, users, votes, and events.\\
+\textbf{Security Config:} Configures security settings and authentication for the application.\\
+\textbf{RabbitMQ Config:} Configures RabbitMQ for message processing.
+
 
 The backend consists of several components, organized into layers for efficient interaction and separation of concerns. Here's a breakdown of the system’s components:
 

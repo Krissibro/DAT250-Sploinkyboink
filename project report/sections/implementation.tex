@@ -15,11 +15,10 @@ refer to it. How to create a figure was shown in Section~\ref{sec:technology}.
 
 \lstinputlisting[language=java]{code/BoksVolum.java}
 
-
 \subsection{Backend}
 
-We will now look into how the Kotlin code is organized. We use Kotlin with Spring Boot as the backend. The code is organized into three main services: EventService, PollService, and UserService. 
-
+We will now look into how the Kotlin code is organized. We use Kotlin with Spring Boot as the backend. The code is organized into three main services: EventService, PollService, and UserService. These handle the business logic. We also have class JwtService,  which provides token management for authentication.
+ 
 \begin{tikzpicture}[node distance=1.5cm]
 
 % Define UML class styles
@@ -81,7 +80,7 @@ We will now look into how the Kotlin code is organized. We use Kotlin with Sprin
 \textbf{RabbitMQ Config:} Configures RabbitMQ for message processing.
 
 
-Here’s a high-level overview of what each service does:
+Here is a high-level overview of what each service does:
 \begin{itemize}
     \item \textbf{EventService:}
     \begin{itemize}
