@@ -19,7 +19,7 @@
 
 <div class="bg-light-navy p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 border border-slate-700 hover:border-slate-500">
     <div class="mb-4">
-        <h2 class="text-2xl font-semibold text-lightest-slate hover:text-white">
+        <h2 class="text-2xl font-semibold text-lightest-slate hover:text-white break-words">
             <a href={`/polls/${poll.pollID}`} class="hover:underline">{poll.question}</a>
         </h2>
     </div>
