@@ -19,6 +19,8 @@ refer to it. How to create a figure was shown in Section~\ref{sec:technology}.
 
 We will now look into how the Kotlin code is organized. We use Kotlin with Spring Boot as the backend. The code is organized into three main services: EventService, PollService, and UserService. These handle the business logic. We also have class JwtService,  which provides token management for authentication.
  
+\vspace{1cm}
+
 \begin{tikzpicture}[node distance=1.5cm]
 
 % Define UML class styles
@@ -69,50 +71,22 @@ We will now look into how the Kotlin code is organized. We use Kotlin with Sprin
 
 \vspace{1cm}
 
-% External explanations
-\noindent
-\textbf{SploinkyboinkApp:} The main application class for the Sploinkyboink application.\\
-\textbf{PollController, UserController, VoteController, EventListener:} Classes that handle HTTP requests related to polls, users, votes, and events, respectively.\\
-\textbf{PollService, UserService, VoteService, EventService:} Business logic classes for polls, users, votes, and events.\\
-\textbf{PollRepo, UserRepo, VoteRepo, EventRepo:} Data access classes for interacting with the database for polls, users, votes, and events.\\
-\textbf{JWT Filter:} Filters HTTP requests for JWT authentication.\\
-\textbf{Security Config:} Configures security settings and authentication for the application.\\
-\textbf{RabbitMQ Config:} Configures RabbitMQ for message processing.
-
-
-Here is a high-level overview of what each service does:
 \begin{itemize}
-    \item \textbf{EventService:}
-    \begin{itemize}
-        \item \textbf{Logging Events:} This service is responsible for logging various events related to polls and votes. It saves events to a database and sends messages to a RabbitMQ queue.
-        \item \textbf{Event Types:} It handles specific types of events such as:
-        \begin{itemize}	
-            \item \textbf{VoteEvent:} When a user votes on a poll.
-            \item \textbf{PollCreated:} When a new poll is created.
-            \item \textbf{PollEdited:} When an existing poll is edited.
-        \end{itemize}
-        The events include details such as the poll ID, the question, options, and timestamp.
-    \end{itemize}
-
-    \item \textbf{PollService:}
-    \begin{itemize}
-        \item \textbf{Poll Management:} This service manages the lifecycle of polls, including creating, retrieving, editing, and deleting polls.
-        \item \textbf{Voting Logic:} It also manages voting on polls, ensuring that users can only vote once, that polls are active, and allowing users to edit or delete their votes.
-        \item \textbf{Results Calculation:} It calculates and retrieves the results of the polls based on the votes received.
-    \end{itemize}
-
-    \item \textbf{UserService:}
-    \begin{itemize}
-        \item \textbf{User Management:} This service handles user registration, authentication, and management. It ensures that users' usernames and emails are unique and validates passwords against defined criteria.
-        \item \textbf{CRUD Operations:} It provides functionality to create, read, update, and delete user information.
-    \end{itemize}
-
-    \item \textbf{Achievements of the Code:}
-    \begin{itemize}
-        \item \textbf{Polling Functionality:} The application allows users to create, manage, and participate in polls, capturing user votes and managing their options.
-        \item \textbf{Event Tracking:} It tracks important actions within the application, such as when polls are created or edited, and when votes are cast, providing a basis for auditing or analytics.
-        \item \textbf{User Management:} It provides security by validation of users.
-        \item \textbf{Integration with Messaging:} By integrating RabbitMQ, it supports event-driven architecture, allowing for scalability and decoupling of services.
-    \end{itemize}
+    \item \textbf{EventService}: Manages event logging, such as user votes and poll creation/editing.
+    \item \textbf{PollService}: Handles poll management and voting logic.
+    \item \textbf{UserService}: Manages user registration, authentication, and user data operations.
+    \item \textbf{JwtService}: Provides token management for authentication.
+    \item \textbf{Repositories}:The application uses repositories for data access (\texttt{PollRepo}, \texttt{UserRepo}, \texttt{VoteRepo}, \texttt{EventRepo}) and includes JWT filters for security, with RabbitMQ configured for message handling.
 \end{itemize}
+
+\vspace{0.5cm}
+
+\textbf{Achieved functionalities}
+\begin{itemize}
+    \item \textbf{Polling Functionality}: Users can create, manage, and participate in polls, with their votes accurately captured and stored.
+    \item \textbf{Event Tracking}: Tracks important user actions, enabling auditing or analytics.
+    \item \textbf{User Management}: Ensures secure user authentication and management through validation mechanisms.
+    \item \textbf{Integration with Messaging}: RabbitMQ integration supports a scalable, event-driven architecture, enabling the decoupling of services and enhancing overall application performance.
+\end{itemize}
+
 
