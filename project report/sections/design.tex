@@ -83,5 +83,80 @@ The architecture of the FeedApp is designed to be modular and scalable, with sep
     \end{itemize}
 \end{itemize}
 
+\subsection{Backend}
+
+We will now look into how the Kotlin code is organized. We use Kotlin with Spring Boot as the backend. The code is organized into three main services: EventService, PollService, and UserService. These handle the business logic. We also have class JwtService,  which provides token management for authentication.
+ 
+\vspace{1cm}
+
+\vspace{1cm}
+
+\begin{tikzpicture}[node distance=1.5cm]
+
+% Define UML class styles
+\tikzstyle{class} = [rectangle, draw=black, fill=blue!10, text centered, minimum height=0.8cm, minimum width=2.5cm]
+\tikzstyle{arrow} = [->, thick, draw=black]
+
+% Define nodes (classes)
+\node[class] (SploinkyboinkApplication) {SploinkyboinkApp};
+\node[class, below of=SploinkyboinkApplication] (PollController) {PollController};
+\node[class, below of=PollController] (UserController) {UserController};
+\node[class, below of=UserController] (EventListener) {EventListener};
+
+% Define second layer nodes (Services)
+\node[class, right of=SploinkyboinkApplication, xshift=3cm] (PollService) {PollService};
+\node[class, below of=PollService] (UserService) {UserService};
+\node[class, below of=UserService] (EventService) {EventService};
+
+% Define third layer nodes (Repositories)
+\node[class, right of=PollService, xshift=3cm] (PollRepository) {PollRepo};
+\node[class, below of=PollRepository] (UserRepository) {UserRepo};
+\node[class, below of=UserRepository] (EventRepository) {EventRepo};
+\node[class, right of=PollRepository, xshift=3cm] (VoteRepository) {VoteRepo};
+
+% Define fourth layer nodes (Security)
+\node[class, right of=VoteRepository, xshift=3cm] (JwtAuthFilter) {JWT Filter};
+\node[class, below of=JwtAuthFilter] (SecurityConfig) {Security Config};
+
+% Define fifth layer nodes (Configurations)
+\node[class, below of=SecurityConfig] (RabbitMQConfig) {RabbitMQ Config};
+
+% Relationships (arrows)
+\draw[arrow] (PollController) -- (PollService);
+\draw[arrow] (UserController) -- (UserService);
+\draw[arrow] (EventListener) -- (EventService);
+
+\draw[arrow] (PollService) -- (PollRepository);
+\draw[arrow] (PollService) -- (VoteRepository);
+\draw[arrow] (UserService) -- (UserRepository);
+\draw[arrow] (EventService) -- (EventRepository);
+
+\draw[arrow] (JwtAuthFilter) -- (SecurityConfig);
+\draw[arrow] (SecurityConfig) -- (RabbitMQConfig);
+
+\end{tikzpicture}
+
+\vspace{1cm}
+
+
+\begin{itemize}
+    \item \textbf{EventService}: Manages event logging, such as user votes and poll creation/editing.
+    \item \textbf{PollService}: Handles poll management and voting logic.
+    \item \textbf{UserService}: Manages user registration, authentication, and user data operations.
+    \item \textbf{JwtService}: Provides token management for authentication.
+    \item \textbf{Repositories}:The application uses repositories for data access (\texttt{PollRepo}, \texttt{UserRepo}, \texttt{VoteRepo}, \texttt{EventRepo}) and includes JWT filters for security, with RabbitMQ configured for message handling.
+\end{itemize}
+
+\vspace{0.5cm}
+
+\textbf{Achieved functionalities}
+\begin{itemize}
+    \item \textbf{Polling Functionality}: Users can create, manage, and participate in polls, with their votes accurately captured and stored.
+    \item \textbf{Event Tracking}: Tracks important user actions, enabling auditing or analytics.
+    \item \textbf{User Management}: Ensures secure user authentication and management through validation mechanisms.
+    \item \textbf{Integration with Messaging}: RabbitMQ integration supports a scalable, event-driven architecture, enabling the decoupling of services and enhancing overall application performance.
+\end{itemize}
+
+
 
 
