@@ -21,19 +21,8 @@ illustrates how figure can be included in the report.
 write where the technology comes from, its history, its context and what problem it solves.
 Consider drawing a graph like in \cite{brown:96}.
 
-We will now look into our different technologies more in depth.
 
-\subsection{Origins and History of Kotlin}
-
-Kotlin, developed by JetBrains (the Czech software company behind IntelliJ IDEA), is named after Kotlin Island in the Gulf of Finland, near St. Petersburg. JetBrains introduced Kotlin in 2011 as a modern language addressing limitations encountered with Java.
-
-\subsection{Key Historical Milestones}
-
-Kotlin was officially announced by JetBrains in 2011, with the first stable release (Kotlin 1.0) arriving in 2016, quickly gaining traction among Android developers. In 2017, Google endorsed Kotlin as an official language for Android development, a significant boost in adoption. In 2020, JetBrains and Google launched the Kotlin Foundation, solidifying its role in JVM and Android development. Kotlin’s ongoing development focuses on multi-platform capabilities, broadening its use beyond JVM and Android to include web, iOS, and server applications.
-
-\subsection{Context and Ecosystem}
-
-Kotlin is a statically typed language that compiles to Java bytecode, running on the Java Virtual Machine (JVM), which allows compatibility with Java libraries and frameworks. Designed for safety, conciseness, and interoperability with Java, Kotlin is particularly valuable in three contexts:
+Kotlin, developed by JetBrains (the Czech software company behind IntelliJ IDEA), is named after Kotlin Island in the Gulf of Finland, near St. Petersburg. JetBrains introduced Kotlin in 2011 as a modern language addressing limitations encountered with Java. The first stable release (Kotlin 1.0) arrived in 2016 and gained quickly gaining traction among Android developers. In 2017, Google endorsed Kotlin as an official language for Android development, a significant boost in adoption. In 2020, JetBrains and Google launched the Kotlin Foundation, solidifying its role in JVM and Android development. Kotlin’s ongoing development focuses on multi-platform capabilities, broadening its use beyond JVM and Android to include web, iOS, and server applications. Kotlin is a statically typed language that compiles to Java bytecode, running on the Java Virtual Machine (JVM), which allows compatibility with Java libraries and frameworks. Designed for safety, conciseness, and interoperability with Java, Kotlin is particularly valuable in three contexts:
 
 \begin{itemize}
     \item \textbf{Android Development}: Kotlin’s concise syntax and enhanced safety features make it a preferred choice in Android development.
@@ -41,7 +30,59 @@ Kotlin is a statically typed language that compiles to Java bytecode, running on
     \item \textbf{Multi-Platform Development}: Kotlin Multiplatform and Kotlin/Native enable shared codebases across platforms, including mobile, web, and desktop applications.
 \end{itemize}
 
-\subsection{Advantages with Kotlin}
+\begin{tikzpicture}[node distance=2cm]
+
+\hspace*{-1.5cm}  % Shifts everything 1.5 cm to the left
+
+% Define block styles
+\tikzstyle{block} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!20]
+\tikzstyle{problem} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=red!20]
+\tikzstyle{context} = [ellipse, minimum width=4cm, minimum height=1cm, text centered, draw=black, fill=yellow!20]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+\tikzstyle{usecase} = [rectangle, rounded corners, minimum width=3.5cm, minimum height=1cm, text centered, draw=black, fill=green!20]
+
+% Nodes
+\node (problem1) [problem,] {Problem 1: Verbose Code};
+\node (problem2) [problem, below of=problem1] {Problem 2: Null Safety};
+\node (problem3) [problem, below of=problem2] {Problem 3: Complex Asynchronous Code};
+\node (context) [context, right of=problem2, xshift=4cm] {Context: Java Development};
+\node (kotlin) [block, below of=context, yshift=-1cm] {Kotlin};
+
+% Spread out the blue boxes
+\node (feature1) [block, below of=kotlin, xshift=-4cm] {Concise Syntax};
+\node (feature2) [block, below of=kotlin] {Null Safety};
+\node (feature3) [block, below of=kotlin, xshift=4cm] {Coroutines};
+
+% Spread out the benefits
+\node (benefit1) [block, below of=feature1] {Reduced Boilerplate};
+\node (benefit2) [block, below of=feature2] {Enhanced Safety};
+\node (benefit3) [block, below of=feature3] {Improved Concurrency};
+
+% Use cases (stacked vertically)
+\node (usecase1) [usecase, above of=context, xshift=6cm] {Android Development};
+\node (usecase2) [usecase, below of=usecase1] {Server-Side Development};
+\node (usecase3) [usecase, below of=usecase2] {Multi-Platform Development};
+
+% Arrows
+\draw [arrow] (problem1) -- (kotlin);
+\draw [arrow] (problem2) -- (kotlin);
+\draw [arrow] (problem3) -- (kotlin);
+\draw [arrow] (context) -- (kotlin);
+\draw [arrow] (kotlin) -- (feature1);
+\draw [arrow] (feature1) -- (benefit1);
+\draw [arrow] (kotlin) -- (feature2);
+\draw [arrow] (feature2) -- (benefit2);
+\draw [arrow] (kotlin) -- (feature3);
+\draw [arrow] (feature3) -- (benefit3);
+
+% Arrows from use cases to context (yellow oval)
+\draw [arrow] (usecase1) -- (context);
+\draw [arrow] (usecase2) -- (context);
+\draw [arrow] (usecase3) -- (context);
+
+\end{tikzpicture}
+
+\vspace{1cm}
 
 Kotlin is addressing some of Java's limitations. Kotlin is a good programming language in many ways:
 \\
