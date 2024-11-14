@@ -23,72 +23,73 @@ Consider drawing a graph like in \cite{brown:96}.
 
 We will now look into our different technologies more in depth.
 
-\subsection{Origins and History of Kotlin} 
+\subsection{Origins and History of Kotlin}
 
-Source: \href{https://chatgpt.com/share/672e6c5a-aa64-8007-93e5-aefa60cbe9fc}{ChatGPT}
-\\
-\\
-Kotlin was developed by JetBrains, the Czech software development company behind popular IDEs like IntelliJ IDEA. The name is derived from Kotlin Island, a Russian island in the Gulf of Finland, near St. Petersburg 
-\href{https://en.wikipedia.org/wiki/Kotlin_(programming_language)}{Wikipedia}. JetBrains introduced Kotlin in 2011 as a modern programming language to address the limitations they experienced while working primarily with Java.
+Kotlin, developed by JetBrains (the Czech software company behind IntelliJ IDEA), is named after Kotlin Island in the Gulf of Finland, near St. Petersburg. JetBrains introduced Kotlin in 2011 as a modern language addressing limitations encountered with Java.
 
 \subsection{Key Historical Milestones}
-\begin{itemize}
-    \item \textbf{2011}: Kotlin was officially announced by JetBrains.
-    \item \textbf{2016}: The first stable version, Kotlin 1.0, was released after five years of development, gaining traction especially among Android developers.
-    \item \textbf{2017}: Kotlin was adopted by Google as an official language for Android development, marking a significant milestone and boosting its popularity in the Android ecosystem.
-    \item \textbf{2020}: JetBrains launched the Kotlin Foundation in collaboration with Google, further solidifying Kotlin's role in Android and JVM development.
-    \item \textbf{Ongoing Development}: Kotlin continues to evolve, with recent versions focusing on multi-platform capabilities, enabling Kotlin to be used beyond JVM and Android (e.g., web, iOS, and server-side applications).
-\end{itemize}
+
+Kotlin was officially announced by JetBrains in 2011, with the first stable release (Kotlin 1.0) arriving in 2016, quickly gaining traction among Android developers. In 2017, Google endorsed Kotlin as an official language for Android development, a significant boost in adoption. In 2020, JetBrains and Google launched the Kotlin Foundation, solidifying its role in JVM and Android development. Kotlin’s ongoing development focuses on multi-platform capabilities, broadening its use beyond JVM and Android to include web, iOS, and server applications.
 
 \subsection{Context and Ecosystem}
 
-Kotlin is a statically typed programming language that compiles to Java bytecode and runs on the Java Virtual Machine (JVM), making it compatible with Java libraries and frameworks. Kotlin’s design emphasizes safety, conciseness, and interoperability with Java, which has made it particularly appealing in the following contexts:
+Kotlin is a statically typed language that compiles to Java bytecode, running on the Java Virtual Machine (JVM), which allows compatibility with Java libraries and frameworks. Designed for safety, conciseness, and interoperability with Java, Kotlin is particularly valuable in three contexts:
 
 \begin{itemize}
-    \item \textbf{Android Development}: Kotlin is widely adopted in the Android ecosystem because it offers more concise syntax and better safety features than Java.
-    \item \textbf{Server-Side Development}: Kotlin’s compatibility with Java allows it to integrate well with JVM-based server frameworks like Spring Boot.
-    \item \textbf{Multi-Platform Development}: Kotlin/Native and Kotlin Multiplatform are expanding Kotlin's reach to other platforms, enabling shared codebases across mobile, web, and desktop applications.
+    \item \textbf{Android Development}: Kotlin’s concise syntax and enhanced safety features make it a preferred choice in Android development.
+    \item \textbf{Server-Side Development}: Kotlin’s seamless integration with JVM-based frameworks like Spring Boot facilitates its use in server applications.
+    \item \textbf{Multi-Platform Development}: Kotlin Multiplatform and Kotlin/Native enable shared codebases across platforms, including mobile, web, and desktop applications.
 \end{itemize}
 
-\subsection{Problems Kotlin Solves}
+\subsection{Advantages with Kotlin}
 
-\begin{itemize}
-    \item \textbf{Verbosity in Java}: Java's verbosity can lead to long, repetitive code, especially for basic operations. Kotlin addresses this by introducing a more concise syntax that reduces boilerplate code.
-    \item \textbf{Null Safety}: NullPointerExceptions (NPEs) are common in Java and can lead to runtime crashes. Kotlin provides built-in null safety, preventing many common NPEs by making developers explicitly handle nullable types.
-    \item \textbf{Interoperability with Java}: Kotlin is fully interoperable with Java, allowing developers to gradually integrate Kotlin code into existing Java applications. This is ideal for teams looking to modernize their codebases without a full rewrite.
-    \item \textbf{Improved Asynchronous Programming}: Kotlin’s coroutines offer a more streamlined way of handling asynchronous programming compared to Java’s standard concurrency options, making it easier to write non-blocking, concurrent code.
-    \item \textbf{Multi-Platform Support}: Kotlin's multi-platform capabilities reduce duplication by allowing shared business logic across different environments, which is particularly beneficial for teams developing applications on multiple platforms.
-\end{itemize}
+Kotlin is addressing some of Java's limitations. Kotlin is a good programming language in many ways:
+\\
+\textbf{Conciseness and Readability}: Kotlin’s streamlined syntax reduces repetitive code, improving readability and maintainability. This conciseness also minimizes potential sources of error and makes the codebase easier to work with.
 
-\subsection{Visual Representation}
+\textbf{Null Safety}: Kotlin’s type system helps prevent NullPointerExceptions by distinguishing between nullable and non-nullable types. This feature significantly reduces bugs related to null handling, a frequent issue in Java.
 
-To visually illustrate Kotlin’s development and position relative to Java, we could represent Kotlin’s growth, with nodes highlighting key milestones like first stable release (2016), Google adoption for Android (2017), and expansion into multiplatform (ongoing).
+\textbf{Interoperability with Java}: Kotlin’s full compatibility with Java allows teams to gradually integrate Kotlin into existing Java applications. This flexibility is advantageous for modernization efforts without requiring a complete code rewrite.
 
+\textbf{Asynchronous Programming with Coroutines}: Kotlin’s coroutines offer a simplified approach to asynchronous programming, enabling more efficient, non-blocking code execution ideal for network requests or tasks involving resource waits.
 
-\subsection{Backend:}
+\textbf{Multi-Platform Support}: Kotlin’s multiplatform capabilities allow for shared business logic across platforms, reducing code duplication and streamlining development for applications targeting Android, iOS, web, and server environments.
 
-The reason we chose Kotlin with Spring Boot for this application is that Kotlin is compatible with Java and has many good features. Spring MVC also makes deploying a web application practical. Here are some of the features that Kotlin offers:
+\textbf{Functional Programming Features}: Kotlin includes extension functions, higher-order functions, and lambdas, allowing more expressive, modular code. These features support functional programming, further enhancing code flexibility and promoting cleaner architecture.
 
-\begin{itemize}
-    \item \textbf{Conciseness and Readability:} Kotlin syntax is more concise compared to Java, reducing redundant code. This makes the code easier to read and work with.
-    
-    \item \textbf{Null Safety:} Kotlin's type system helps eliminate null pointer exceptions, a common source of bugs in Java. Kotlin distinguishes between nullable and non-nullable types.
-    
-    \item \textbf{Interoperability:} Kotlin is fully interoperable with Java, allowing you to use existing Java libraries and frameworks without any issues.
-    
-    \item \textbf{Coroutines for Asynchronous Programming:} Kotlin's coroutines simplify asynchronous programming, making it easier to handle tasks that involve waiting for resources or events, such as network requests.
-    
-    \item \textbf{Extension Functions:} Kotlin allows you to extend existing classes with new functionality without modifying their code. This promotes cleaner code organization and better separation of concerns.
-    
-    \item \textbf{Data Classes:} Kotlin's data classes provide a simple way to create classes that are primarily used to hold data. They automatically generate useful methods like \texttt{equals()}, \texttt{hashCode()}, and \texttt{toString()}, simplifying data handling.
-    
-    \item \textbf{Higher-Order Functions and Lambdas:} Kotlin supports functional programming features, such as higher-order functions and lambda expressions, which can lead to more expressive and flexible code.
-\end{itemize}
+\textbf{Data Classes}: Kotlin’s data classes simplify the creation of classes primarily used for holding data by automatically generating common methods like \texttt{equals()}, \texttt{hashCode()}, and \texttt{toString()}, streamlining data handling.
 
 
 \subsection{Experiment Design}
 
 Write you hypotheses about what benefits the technology bring and how you can support or reject them via experiments.
+
+\maketitle
+
+\section*{Improved Development Speed and Code Conciseness}
+
+\textbf{Hypothesis:} Using Kotlin will reduce development time due to its concise syntax. This is expected to simplify tasks such as user, poll, and vote management.
+
+\textbf{Experiment:} Compare the implementation time for key functionalities (e.g., user creation, poll management, and vote handling) between Kotlin and Java. Measure the lines of code required to implement the same logic in both languages and track developer productivity through task completion rates.
+
+\section*{Enhanced Safety with Null Safety}
+
+\textbf{Hypothesis:} Kotlin’s null safety features will reduce runtime exceptions related to null pointer errors, especially in scenarios where entities (like User, Poll, or Vote) might not exist, which would otherwise cause crashes in Java.
+
+\textbf{Experiment:} Introduce null values in critical parts of the business logic (e.g., missing users or votes) and measure the number of runtime exceptions in both Kotlin and Java. Monitor the resilience of the application in handling missing data.
+
+\section*{Simplified Asynchronous Voting Process}
+
+\textbf{Hypothesis:} Kotlin coroutines will streamline asynchronous handling of voting logic, improving response time and scalability during high voting activity.
+
+\textbf{Experiment:} Implement the voting logic using Kotlin coroutines, then simulate high volumes of voting requests. Compare the application’s response times and memory usage with a similar Java implementation using standard concurrency methods.
+
+\section*{Cross-Platform Code Sharing Potential}
+
+\textbf{Hypothesis:} Kotlin Multiplatform would enable code sharing for the voting logic between a potential mobile client and backend, reducing duplicated logic and ensuring consistency across platforms.
+
+\textbf{Experiment:} Set up a prototype of a shared code module containing core voting functions for both the backend and an Android client. Measure code duplication and maintenance requirements, assessing potential consistency improvements.
+
 
 \subsection{Experiment Evaluation}
 

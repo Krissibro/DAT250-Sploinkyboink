@@ -51,7 +51,7 @@ The domain model of the FeedApp consists of several key entities that represent 
 The diagram above illustrates the relationships between the entities, with associations such as a user creating a poll, casting a vote, and generating events.
 
 \subsection{Architecture and Applied Technologies}
-The architecture of the FeedApp is designed to be modular and scalable, with separate services responsible for managing user data, polls, votes, and events. The application follows a microservice architecture with decoupled services for scalability and maintainability.
+The architecture of the FeedApp is designed to be modular and scalable, with separate services responsible for managing user data, polls, votes, and events. 
 
 \begin{itemize}
     \item \textbf{Backend Framework and Language:} 
@@ -82,6 +82,25 @@ The architecture of the FeedApp is designed to be modular and scalable, with sep
         \item \textbf{Docker:} The entire application, including the backend, frontend, and database, is containerized using Docker for easy deployment and scalability.
     \end{itemize}
 \end{itemize}
+
+\begin{tikzpicture}[node distance=3cm, auto, font=\small]
+
+    % Define the blocks for each component
+    \node (frontend) [draw, rectangle, fill=green!10, text centered, minimum height=2cm, minimum width=3cm, align=center] {Frontend \\ Svelte(Kit)};
+    \node (backend) [draw, rectangle, fill=green!10, below of=frontend, text centered, minimum height=2cm, minimum width=3cm, align=center] {Backend \\ Spring Boot (Kotlin)};
+    \node (persistence) [draw, rectangle, fill=green!10, below of=backend, text centered, minimum height=2cm, minimum width=3cm, align=center] {Persistence \\ Spring JPA \\ PostgreSQL, MongoDB};
+    \node (messaging) [draw, rectangle, fill=green!10, right of=backend, xshift=4cm, text centered, minimum height=2cm, minimum width=3cm, align=center] {Messaging \\ RabbitMQ};
+    \node (container) [draw, rectangle, fill=green!10, below of=persistence, text centered, minimum height=2cm, minimum width=3cm, align=center] {Containerization \\ Docker};
+
+    % Draw arrows to show the flow of interaction
+    \draw[->, thick] (frontend) -- (backend) node[midway, left, xshift=-0.5cm] {HTTP requests};
+    \draw[->, thick] (backend) -- (persistence) node[midway, left, xshift=-0.5cm] {Data access};
+    \draw[->, thick] (backend) -- (messaging) node[midway, below, yshift=-0.3cm] {Message queues};
+    \draw[->, thick] (persistence) -- (container) node[midway, left, xshift=-0.5cm] {Data storage};
+    \draw[->, thick] (messaging) -- (container) node[midway, below, yshift=-0.5cm, xshift=2cm] {Message processing};
+
+\end{tikzpicture}
+
 
 \subsection{Backend}
 
