@@ -22,13 +22,15 @@ write where the technology comes from, its history, its context and what problem
 Consider drawing a graph like in \cite{brown:96}.
 
 
-Kotlin, developed by JetBrains (the Czech software company behind IntelliJ IDEA), is named after Kotlin Island in the Gulf of Finland, near St. Petersburg. JetBrains introduced Kotlin in 2011 as a modern language addressing limitations encountered with Java. The first stable release (Kotlin 1.0) arrived in 2016 and gained quickly gaining traction among Android developers. In 2017, Google endorsed Kotlin as an official language for Android development, a significant boost in adoption. In 2020, JetBrains and Google launched the Kotlin Foundation, solidifying its role in JVM and Android development. Kotlin’s ongoing development focuses on multi-platform capabilities, broadening its use beyond JVM and Android to include web, iOS, and server applications. Kotlin is a statically typed language that compiles to Java bytecode, running on the Java Virtual Machine (JVM), which allows compatibility with Java libraries and frameworks. Designed for safety, conciseness, and interoperability with Java, Kotlin is particularly valuable in three contexts:
+Kotlin, developed by JetBrains (the Czech software company behind IntelliJ IDEA), is named after Kotlin Island in the Gulf of Finland, near St. Petersburg. JetBrains introduced Kotlin in 2011 as a modern language addressing limitations encountered with Java. The first stable release (Kotlin 1.0) arrived in 2016 and gained traction among Android developers quickly. In 2017, Google endorsed Kotlin as an official language for Android development, a significant boost in adoption. In 2020, JetBrains and Google launched the Kotlin Foundation, solidifying its role in JVM and Android development. Kotlin’s ongoing development focuses on multi-platform capabilities, broadening its use beyond JVM and Android to include web, iOS, and server applications. Kotlin is a statically typed language that compiles to Java bytecode, running on the Java Virtual Machine (JVM), which allows compatibility with Java libraries and frameworks. Designed for safety, conciseness, and interoperability with Java, Kotlin is particularly valuable in three contexts:
 
 \begin{itemize}
     \item \textbf{Android Development}: Kotlin’s concise syntax and enhanced safety features make it a preferred choice in Android development.
     \item \textbf{Server-Side Development}: Kotlin’s seamless integration with JVM-based frameworks like Spring Boot facilitates its use in server applications.
     \item \textbf{Multi-Platform Development}: Kotlin Multiplatform and Kotlin/Native enable shared codebases across platforms, including mobile, web, and desktop applications.
 \end{itemize}
+
+
 
 \begin{tikzpicture}[node distance=2cm]
 
@@ -42,11 +44,11 @@ Kotlin, developed by JetBrains (the Czech software company behind IntelliJ IDEA)
 \tikzstyle{usecase} = [rectangle, rounded corners, minimum width=3.5cm, minimum height=1cm, text centered, draw=black, fill=green!20]
 
 % Nodes
-\node (problem1) [problem,] {Problem 1: Verbose Code};
+\node (problem1) [problem] {Problem 1: Verbose Code};
 \node (problem2) [problem, below of=problem1] {Problem 2: Null Safety};
 \node (problem3) [problem, below of=problem2] {Problem 3: Complex Asynchronous Code};
 \node (context) [context, right of=problem2, xshift=4cm] {Context: Java Development};
-\node (kotlin) [block, below of=context, yshift=-1cm] {Kotlin};
+\node (kotlin) [block, below of=context, yshift=-1cm, minimum width=4cm, minimum height=1.25cm, font=\large] {Kotlin};
 
 % Spread out the blue boxes
 \node (feature1) [block, below of=kotlin, xshift=-4cm] {Concise Syntax};
@@ -84,7 +86,7 @@ Kotlin, developed by JetBrains (the Czech software company behind IntelliJ IDEA)
 
 \vspace{1cm}
 
-Kotlin is addressing some of Java's limitations. Kotlin is a good programming language in many ways:
+Kotlin is addressing some of Java's limitations. Kotlin as a programming language has many strengths:
 \\
 \textbf{Conciseness and Readability}: Kotlin’s streamlined syntax reduces repetitive code, improving readability and maintainability. This conciseness also minimizes potential sources of error and makes the codebase easier to work with.
 
