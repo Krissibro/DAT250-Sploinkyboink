@@ -91,10 +91,9 @@ Kotlin is addressing some of Java's limitations. Kotlin as a programming languag
 \textbf{Conciseness and Readability}: Kotlin’s streamlined syntax reduces repetitive code, improving readability and maintainability. This conciseness also minimizes potential sources of error and makes the codebase easier to work with.
 
 \textbf{Null Safety}: Kotlin’s type system helps prevent NullPointerExceptions by distinguishing between nullable and non-nullable types. This feature significantly reduces bugs related to null handling, a frequent issue in Java.
+\textbf{Asynchronous Programming with Coroutines}: Kotlin’s coroutines offer a simplified approach to asynchronous programming, enabling more efficient, non-blocking code execution ideal for network requests or tasks involving resource waits.
 
 \textbf{Interoperability with Java}: Kotlin’s full compatibility with Java allows teams to gradually integrate Kotlin into existing Java applications. This flexibility is advantageous for modernization efforts without requiring a complete code rewrite.
-
-\textbf{Asynchronous Programming with Coroutines}: Kotlin’s coroutines offer a simplified approach to asynchronous programming, enabling more efficient, non-blocking code execution ideal for network requests or tasks involving resource waits.
 
 \textbf{Multi-Platform Support}: Kotlin’s multiplatform capabilities allow for shared business logic across platforms, reducing code duplication and streamlining development for applications targeting Android, iOS, web, and server environments.
 
@@ -159,3 +158,106 @@ technologies. Table~\ref{tab:results} gives an example of how to create a table.
 	\caption{Selected experimental results on the communication protocol example.}
 	\label{tab:results}
 \end{table}
+
+
+\section*{1. Concise Syntax}
+
+\textbf{Hypothesis}: Kotlin's syntax will be more concise and less error-prone compared to Java’s verbose syntax.
+
+\textbf{Experiment Example}:
+\begin{itemize}
+    \item \textbf{Kotlin} (Data class):
+    \begin{verbatim}
+    data class Person(val name: String, val age: Int)
+    \end{verbatim}
+    
+    \item \textbf{Java} (Full class):
+    \begin{verbatim}
+    public class Person {
+        private String name;
+        private int age;
+
+        public Person(String name, int age) {
+            this.name = name;
+            this.age = age;
+        }
+
+        public String getName() { return name; }
+        public int getAge() { return age; }
+        @Override public String toString() { return "Person{name='" + name + "', age=" + age + '}'; }
+    }
+    \end{verbatim}
+\end{itemize}
+
+\textbf{Conclusion}: Kotlin's \texttt{data class} reduces the need for boilerplate code (like getters, setters, and \texttt{toString()}), making the code more concise and error-resistant. Java’s verbose approach introduces potential for mistakes and increases code length.
+
+\section*{2. Null Safety}
+
+\textbf{Hypothesis}: Kotlin’s null safety features will reduce runtime errors due to null dereferencing compared to Java’s manual null checks.
+
+\textbf{Experiment Example}:
+\begin{itemize}
+    \item \textbf{Kotlin} (Null safety):
+    \begin{verbatim}
+    fun greet(name: String?) {
+        println("Hello, ${name ?: "Guest"}!")
+    }
+    greet(null)  // Output: Hello, Guest!
+    \end{verbatim}
+    
+    \item \textbf{Java} (Manual null check):
+    \begin{verbatim}
+    public void greet(String name) {
+        if (name == null) {
+            name = "Guest";
+        }
+        System.out.println("Hello, " + name);
+    }
+    greet(null);  // Output: Hello, Guest!
+    \end{verbatim}
+\end{itemize}
+
+\textbf{Conclusion}: Kotlin’s \texttt{null} safety ensures that nullability is explicitly handled using \texttt{?} and \texttt{?:}, reducing runtime errors. Java’s manual null checks are error-prone and can be easily missed, leading to potential \texttt{NullPointerException} risks.
+
+\section*{3. Coroutines (Asynchronous Programming)}
+
+\textbf{Hypothesis}: Kotlin’s coroutines will provide a more efficient and readable way to handle asynchronous tasks than Java’s traditional threading model.
+
+\textbf{Experiment Example}:
+\begin{itemize}
+    \item \textbf{Kotlin} (Coroutines):
+    \begin{verbatim}
+    import kotlinx.coroutines.*
+
+    suspend fun fetchData() {
+        delay(1000)
+        println("Data fetched")
+    }
+
+    fun main() = runBlocking {
+        launch { fetchData() }
+    }
+    \end{verbatim}
+    
+    \item \textbf{Java} (Threads):
+    \begin{verbatim}
+    public class Main {
+        public static void fetchData() {
+            try {
+                Thread.sleep(1000);
+                System.out.println("Data fetched");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public static void main(String[] args) {
+            Thread thread = new Thread(() -> fetchData());
+            thread.start();
+        }
+    }
+    \end{verbatim}
+\end{itemize}
+
+\textbf{Conclusion}: Kotlin coroutines simplify asynchronous code, making it more readable and reducing boilerplate. Java’s thread-based approach requires more code and is harder to manage due to explicit thread handling and synchronization.
+
