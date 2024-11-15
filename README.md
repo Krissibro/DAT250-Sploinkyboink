@@ -14,7 +14,7 @@ In the root of your project, start all services (backend, frontend, and PostgreS
 
 ```bash
 docker-compose up --build
-```
+``` 
 
 This command will:
 
@@ -23,7 +23,6 @@ This command will:
 * Expose the backend on port 8080 and the frontend on port 5173.
 
 Once everything is set up, you can access the backend at http://localhost:8080 and the frontend at http://localhost:5173.
-
 
 #### Useful gradle commands:
 
@@ -41,6 +40,8 @@ Clean the project to ensure consistency in the build process:
 ```bash 
 ./gradlew clean
 ```
+
+####
 
 ## Poll System Business Logic 
 

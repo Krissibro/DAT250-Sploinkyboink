@@ -25,9 +25,18 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.security:spring-security-crypto")
+    implementation("org.springframework.boot:spring-boot-starter-security")
 
     // Jackson
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+    //JWT
+    implementation("io.ktor:ktor-server-auth:3.0.0")
+    implementation("io.ktor:ktor-server-auth-jwt:3.0.0")
+
+    //Logger
+    implementation("org.slf4j:slf4j-api:2.0.16")
+
 
     //  Kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
