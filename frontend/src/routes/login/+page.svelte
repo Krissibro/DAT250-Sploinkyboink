@@ -9,14 +9,16 @@
     let message = '';
     let user;
 
+
     $: user = $currentUser;
 
     async function loginUser() {
         const params = new URLSearchParams();
-        params.append('login', login);
+        params.append('username', login);
         params.append('password', password);
 
-        const res = await fetch('/sploinkyboinkend/authenticate', {
+
+        const res = await fetch('/sploinkyboinkend/login', {
             method: 'POST',
             body: params,
             headers: {

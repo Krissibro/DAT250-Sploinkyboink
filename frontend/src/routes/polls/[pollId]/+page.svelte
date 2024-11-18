@@ -21,7 +21,10 @@
         if (userVote) {
             hasVoted = true;
             existingVoteOption = userVote.voteOption;
+
+            if(!selectedOption){
             selectedOption = existingVoteOption;
+            }
         } else {
             hasVoted = false;
             existingVoteOption = '';

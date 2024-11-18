@@ -14,6 +14,9 @@ COPY package*.json ./
 # Install only production dependencies if this is for production
 RUN NODE_ENV=production npm ci
 
+# Install esbuild for linux-x64
+RUN npm install esbuild
+
 # Copy the rest of the application files after installing dependencies
 COPY . .
 

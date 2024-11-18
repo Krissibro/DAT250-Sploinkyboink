@@ -3,6 +3,12 @@
     import { goto } from '$app/navigation';
 
     function logout() {
+       fetch('/sploinkyboinkend/logout', {
+            method : 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+         });
         currentUser.reset();
         goto('/');
     }

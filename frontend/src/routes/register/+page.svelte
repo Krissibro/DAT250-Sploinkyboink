@@ -20,7 +20,7 @@
         params.append('password', password);
         params.append('confirmPassword', confirmPassword);
 
-        const res = await fetch('/sploinkyboinkend/users', {
+        const res = await fetch('/sploinkyboinkend/register', {
             method: 'POST',
             body: params,
             headers: {
