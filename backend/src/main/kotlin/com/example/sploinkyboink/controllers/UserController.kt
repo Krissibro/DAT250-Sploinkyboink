@@ -16,8 +16,7 @@ class UserController(
     private val userService: UserService,
     private val jwtService: JwtService
 ) {
-
-
+  
     // Register a new user
     @PostMapping("/register")
     fun createUser(
