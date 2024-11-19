@@ -12,7 +12,7 @@ services:
       - rabbitmq
     environment:
       - POSTGRES_DATABASE_URL=jdbc:postgresql://postgres_database:5432/PollApp
-      - MONGO_DATABASE_URL=mongodb://mongodb_database:27017/events
+      - MONGODB_DATABASE_URL=mongodb://mongodb_database:27017/events
       - RABBITMQ_HOSTNAME=rabbitmq
 
   frontend:
