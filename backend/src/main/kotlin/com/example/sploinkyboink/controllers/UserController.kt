@@ -21,15 +21,23 @@ class UserController(
     @PostMapping("/register")
     fun createUser(
         @RequestParam username: String,
+        @RequestParam email: String,
         @RequestParam password: String,
         @RequestParam confirmPassword: String,
-        @RequestParam email: String
+        response: HttpServletResponse
     ): ResponseEntity<String> {
-        return try {
+         try {
             userService.registerUser(username, password, confirmPassword, email)
-            ResponseEntity("User created", HttpStatus.CREATED)
+             val token = jwtService.generateToken(username)
+             val cookie = Cookie("jwt", token)
+             cookie.isHttpOnly= true
+             cookie.path = "/"
+
+             response.addCookie(cookie)
+             return ResponseEntity("User created", HttpStatus.CREATED)
+
         } catch (e: IllegalArgumentException) {
-            ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+            return ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
         }
     }
 
@@ -40,17 +48,18 @@ class UserController(
         @RequestParam password: String,
         response: HttpServletResponse
     ): ResponseEntity<String> {
-        try {
+         try {
             val authenticated = userService.authenticate(username, password)
             if (authenticated) {
                 val token = jwtService.generateToken(username)
                 val cookie = Cookie("jwt", token)
                 cookie.isHttpOnly= true
+                cookie.path = "/"
 
                 response.addCookie(cookie)
                 return ResponseEntity.ok("Login successful")
             }
-            return ResponseEntity("Invalid credentials", HttpStatus.UNAUTHORIZED)
+             return ResponseEntity("Invalid credentials", HttpStatus.UNAUTHORIZED)
         }catch (e: IllegalArgumentException) {
             return ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
         }

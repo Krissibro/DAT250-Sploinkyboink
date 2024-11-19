@@ -14,6 +14,9 @@ COPY package*.json ./
 # Install all dependencies (both production and development)
 RUN npm ci
 
+# Install esbuild for linux-x64
+RUN npm install esbuild
+
 # Copy the rest of the application files after installing dependencies
 COPY . .
 

@@ -15,7 +15,6 @@ data class Poll(
 
     @ManyToOne(fetch = FetchType.LAZY)  // Map to the User entity
     @JoinColumn(name = "user_id", nullable = false)  // Reference to the User table
-    @JsonIgnore
     val byUser: User?,
 
     var question: String,

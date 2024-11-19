@@ -1,11 +1,12 @@
 <script lang="ts">
-    import { currentUser } from '$stores/user';
+    import { currentUser } from "$stores/user";
     import { goto } from '$app/navigation';
 
     let question = '';
     let optionsText = '';
+    let validUntil = '';
     let message = '';
-    let user : any;
+    let user: any;
 
     $: user = $currentUser;
 
@@ -22,9 +23,10 @@
         const voteOptions = optionsText.split('\n').map((s) => s.trim()).filter(Boolean);
 
         const params = new URLSearchParams();
-        params.append('username', user.username);
+        params.append('userID', user.userID.toString());
         params.append('question', question);
         voteOptions.forEach((option) => params.append('voteOptions', option));
+        params.append('validUntil', new Date(validUntil).toISOString());
 
         const res = await fetch('/sploinkyboinkend/polls', {
             method: 'POST',
@@ -63,10 +65,14 @@
                 <label class="block text-lightest-slate mb-2">Options (one per line):</label>
                 <textarea bind:value={optionsText} required class="w-full p-2 rounded bg-lightest-navy text-white border border-slate focus:outline-none focus:border-white" rows="5"></textarea>
             </div>
+            <div class="mb-4">
+                <label class="block text-lightest-slate mb-2">Valid Until:</label>
+                <input type="datetime-local" bind:value={validUntil} required class="w-full p-2 rounded bg-lightest-navy text-white border border-slate focus:outline-none focus:border-white" />
+            </div>
             <button type="submit" class="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded">Create Poll</button>
         </form>
     {:else}
-        <p class="text-slate mb-4">You must be logged in to create a poll. <a href="/users" class="text-blue-400 hover:underline">Create User</a></p>
+        <p class="text-slate mb-4">You must be logged in to create a poll. <a href="/register" class="text-blue-400 hover:underline">Register</a></p>
     {/if}
 
     {#if message}
