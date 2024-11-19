@@ -83,17 +83,16 @@ Kotlin, developed by JetBrains (the Czech software company behind IntelliJ IDEA)
 \draw [arrow] (usecase3) -- (context);
 
 \end{tikzpicture}
-
 \vspace{1cm}
 
-Kotlin is addressing some of Java's limitations. Kotlin as a programming language has many strengths:
+\noindent Kotlin is addressing some of Java's limitations. Kotlin as a programming language has many strengths:
 \\
 \textbf{Conciseness and Readability}: Kotlin’s streamlined syntax reduces repetitive code, improving readability and maintainability. This conciseness also minimizes potential sources of error and makes the codebase easier to work with.
 \\
 \textbf{Null Safety}: Kotlin’s type system helps prevent NullPointerExceptions by distinguishing between nullable and non-nullable types. This feature significantly reduces bugs related to null handling, a frequent issue in Java.
 \\
 \textbf{Asynchronous Programming with Coroutines}: Kotlin’s coroutines offer a simplified approach to asynchronous programming, enabling more efficient, non-blocking code execution ideal for network requests or tasks involving resource waits.
-\\\
+\\
 \textbf{Interoperability with Java}: Kotlin’s full compatibility with Java allows teams to gradually integrate Kotlin into existing Java applications. This flexibility is advantageous for modernization efforts without requiring a complete code rewrite.
 \\
 \textbf{Multi-Platform Support}: Kotlin’s multiplatform capabilities allow for shared business logic across platforms, reducing code duplication and streamlining development for applications targeting Android, iOS, web, and server environments.
@@ -103,86 +102,107 @@ Kotlin is addressing some of Java's limitations. Kotlin as a programming languag
 \textbf{Data Classes}: Kotlin’s data classes simplify the creation of classes primarily used for holding data by automatically generating common methods like \texttt{equals()}, \texttt{hashCode()}, and \texttt{toString()}, streamlining data handling.
 
 
-\subsection{Experiments: Is Kotlin bettter suited for the PollApp than Java? }
-
-Write you hypotheses about what benefits the technology bring and how you can support or reject them via experiments.
+\subsection{Experiments: Is Kotlin bettter suited in developement than Java? }
 
 In this section, we present a series of hypotheses regarding the potential benefits of using Kotlin over Java, along with experimental designs that could help validate or refute these assumptions. We are comparing Kotlin and Java code to see the differences between the languages. The concepts discussed in the examples will also apply to our PollApp.
-
 \\
 \\
-\textbf{Hypothesis 1: Using Kotlin will provide better development speed and code conciseness than Java.} Kotlin’s syntax is designed to be more compact and expressive, which should reduce the time required to implement core functionalities such as user, poll, and vote management. To test this hypothesis, we can compare the time it takes to implement key features in both Kotlin and Java, while also measuring the number of lines of code required to achieve the same outcomes. We come up with a simple example for a class we call person, and compare the lines of code (LOC) to the same class implemented in Java. Our PollApp uses many classes, so a simple class structure is very beneficial:
-
+\textbf{Hypothesis 1: Using Kotlin will provide better development speed and code conciseness than Java.} 
+\\
+\\
+Kotlin’s syntax is designed to be more compact and expressive, which should reduce the time required to implement core functionalities such as user, poll, and vote management. To test this hypothesis, we can compare the time it takes to implement key features in both Kotlin and Java, while also measuring the number of lines of code required to achieve the same outcomes. We come up with a simple example for a class we call person, and compare the lines of code (LOC) to the same class implemented in Java. Our PollApp uses many classes, so a simple class structure is very beneficial:
+\\
+\\
 \textbf{Experiment Example}:
-\begin{itemize}
-    \item \textbf{Kotlin} (Data class):
-    \begin{verbatim}
-    data class Person(val name: String, val age: Int)
-    \end{verbatim}
-    
-    \item \textbf{Java} (Full class):
-    \begin{verbatim}
-    public class Person {
-        private String name;
-        private int age;
+\begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}]
+    \begin{itemize}
+	\vspace{0.5cm}
+        \item \textbf{Kotlin} (Data class):
+        \begin{lstlisting}[style=kotlin]
+data class Person(val name: String, val age: Int)
+        \end{lstlisting}
+        
+        \item \textbf{Java} (Full class):
+        \begin{lstlisting}[style=java]
+public class Person {
+    private String name;
+    private int age;
 
-        public Person(String name, int age) {
-            this.name = name;
-            this.age = age;
-        }
-
-        public String getName() { return name; }
-        public int getAge() { return age; }
-        @Override public String toString() { 
-   	        return "Person{name='" + name + "', age=" + age + '}'; 
-        }
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
     }
-    \end{verbatim}
-\end{itemize}
 
-\textbf{Evaluation}: We see from the examples that Java are using significant more lines of code than Kotlin to achieve the same functionality.  Kotlin's \texttt{data class} reduces the need for boilerplate code (like getters, setters, and \texttt{toString()}), making the code more concise and error-resistant. Java’s verbose approach introduces potential for mistakes and increases code length.
-\\
-\\
-\textbf{Conclusion}: The hypothesis holds. 
-\\
-\\
-\textbf{Hypothesis 2: Using Kotlin will result in fewer runtime exceptions related to null pointer errors compared to Java}:  Null pointer errors can happen in situations where entities like users, polls, or votes do not exist even though they are expected to. These kinds of errors are common in Java, where null checks must be manually implemented. To evaluate this, we could introduce null values in critical parts of the business logic (e.g., missing users or votes) and compare the frequency of runtime exceptions between Kotlin and Java. By observing how each language handles missing data, we can assess Kotlin’s ability to enhance application stability. We will not test this in our case, but we will provide a small example that highlights why Java are more prone to null pointer errors than Kotlin.
+    public String getName() { return name; }
 
+    public int getAge() { return age; }
+
+    @Override public String toString() { 
+        return "Person{name='" + name + "', age=" + age + '}'; 
+    }
+}
+        \end{lstlisting}
+    \end{itemize}
+\end{tcolorbox}
+\vspace{1cm}
+
+\noindent \textbf{Evaluation}: We see from the examples that Java are using significant more lines of code than Kotlin to achieve the same functionality. Kotlin uses only one line, while Java uses 17 lines of code when we include the empty lines in between. This is a significant difference. Kotlin's \texttt{data class} reduces the need for boilerplate code (like getters, setters, and \texttt{toString()}), making the code more concise and error-resistant. Java’s verbose approach introduces potential for mistakes and increases the overall code length.
+\\
+\\
+\textbf{Conclusion}: Hypothesis 1 holds. 
+\\
+\\
+\textbf{Hypothesis 2: Using Kotlin will result in fewer runtime exceptions related to null pointer errors compared to Java.} 
+\\
+\\ 
+We will provide a small example that highlights why Java are more prone to null pointer errors than Kotlin. Null pointer errors can happen in situations where entities like users, polls, or votes do not exist even though they are expected to. These kinds of errors are common in Java, where null checks must be manually implemented. To evaluate this, we could introduce null values in critical parts of the business logic (e.g., missing users or votes) and compare the frequency of runtime exceptions between Kotlin and Java. By observing how each language handles missing data, we can assess Kotlin’s ability to enhance application stability. We will not test this in our project, but it is good to know that there are more ways to test the null safety of different programming languages.
+\\
+\\
 \textbf{Experiment Example}:
-\begin{itemize}
-    \item \textbf{Kotlin} (Null safety):
-    \begin{verbatim}
-    fun greet(name: String?) {
-        println("Hello, ${name ?: "Guest"}!")
-    }
-    greet(null)  // Output: Hello, Guest!
-    \end{verbatim}
-    
-    \item \textbf{Java} (Manual null check):
-    \begin{verbatim}
-    public void greet(String name) {
+\begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}]
+    \begin{itemize}
+	\vspace{0.5cm}
+        \item \textbf{Kotlin} (Null safety):
+        \begin{lstlisting}[style=kotlin]
+fun greet(name: String?) {
+      println("Hello, ${name ?: "Guest"}!")
+}
+greet(null)  // Output: Hello, Guest!
+        \end{lstlisting}
+        
+        \item \textbf{Java} (Manual null check):
+        \begin{lstlisting}[style=java]
+public void greet(String name) {
         if (name == null) {
             name = "Guest";
         }
         System.out.println("Hello, " + name);
-    }
-    greet(null);  // Output: Hello, Guest!
-    \end{verbatim}
-\end{itemize}
+}
+greet(null);  // Output: Hello, Guest!
+        \end{lstlisting}
+    \end{itemize}
+\end{tcolorbox}
 
-\textbf{Evaluation}: From the examples we see that Kotlin is designed so that it does not need to handle null checks manually. Kotlin’s \texttt{null} safety ensures that nullability is explicitly handled using \texttt{?} and \texttt{?:}, reducing runtime errors. Java’s manual null checks are error-prone and can be easily missed, leading to potential \texttt{NullPointerException} risks.
+
+\noindent \textbf{Evaluation}: From the examples we see that Kotlin is designed so that it does not need to handle null checks manually. Kotlin’s \texttt{null} safety ensures that nullability is explicitly handled using \texttt{?} and \texttt{?:}, reducing runtime errors. Java’s manual null checks are error-prone and can be easily missed, leading to potential \texttt{NullPointerException} risks.
 \\
 \\
-\textbf{Conclusion}: The hypothesis holds. 
+\textbf{Conclusion}: Hypothesis 2 holds.
 \\
 \\
-\textbf{Hypothesis 3: Kotlin's coroutines offer a more efficient and readable approach to handling asynchronous tasks compared to Java}: Kotlin's coroutines are expected to improve response times and scalability when handling a high volume of voting requests. To test this, we would implement the voting logic using Kotlin coroutines and then simulate high traffic scenarios, comparing the application’s performance with a similar Java implementation using traditional concurrency methods like threads. Key metrics such as response time and memory usage would be tracked to determine which language offers better scalability under load. In our case we choose to have another code example to prove our hypothesis instead. 
+\textbf{Hypothesis 3: Kotlin's coroutines offer a more efficient and readable approach to handling asynchronous tasks compared to Java.}
+\\
+\\ 
+Also in this case we choose to have another code example to give evidence for why we think our hypothesis is true. Kotlin's coroutines are expected to improve response times and scalability when handling a high volume of voting requests.  If we would test the concurrency handling in a different way, we would implement the voting logic using Kotlin coroutines and then simulate high traffic scenarios. In that case we would be comparing the application’s performance with a similar Java implementation using traditional concurrency methods like threads. Key metrics such as response time and memory usage would be tracked to determine which language offers better scalability under load. We will not do this, but it is good to know that there are more ways to test concurrency handling.
+\\
 \\
 \\
 \textbf{Experiment Example}:
-\begin{itemize}
-    \item \textbf{Kotlin} (Coroutines):
-    \begin{verbatim}
+\begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}]
+    \begin{itemize}
+	\vspace{0.5cm}
+        \item \textbf{Kotlin} (Null Coroutines):
+        \begin{lstlisting}[style=kotlin]
     import kotlinx.coroutines.*
 
     suspend fun fetchData() {
@@ -193,11 +213,11 @@ In this section, we present a series of hypotheses regarding the potential benef
     fun main() = runBlocking {
         launch { fetchData() }
     }
-    \end{verbatim}
-    
-    \item \textbf{Java} (Threads):
-    \begin{verbatim}
-    public class Main {
+        \end{lstlisting}
+        
+        \item \textbf{Java} (Threads):
+        \begin{lstlisting}[style=java]
+ public class Main {
         public static void fetchData() {
             try {
                 Thread.sleep(1000);
@@ -211,53 +231,24 @@ In this section, we present a series of hypotheses regarding the potential benef
             Thread thread = new Thread(() -> fetchData());
             thread.start();
         }
-    }
-    \end{verbatim}
-\end{itemize}
+ }
+        \end{lstlisting}
+    \end{itemize}
+\end{tcolorbox}
 
-\textbf{Conclusion}: Kotlin coroutines simplify asynchronous code, making it more readable and reducing boilerplate. Java’s thread-based approach requires more code and is harder to manage due to explicit thread handling and synchronization.
-
+\noindent \textbf{Evaluation}: Kotlin coroutines simplify asynchronous code, making it more readable and reducing boilerplate code. Java’s thread-based approach requires more code and is harder to manage due to explicit thread handling and synchronization. We did not use this feature in our PollApp, but it could be very useful in other created apps.
 \\
 \\
+\textbf{Conclusion}: Hypothesis 3 holds.
+\\
+\\
+
 Finally, we hypothesize that Kotlin Multiplatform could reduce code duplication and improve consistency across platforms by enabling shared code between the backend and a mobile client. To experiment with this, we could develop a prototype that shares core voting functions between the backend and an Android client. By measuring the amount of duplicated code and assessing the maintenance requirements for each platform, we can evaluate the potential benefits of using Kotlin Multiplatform in terms of consistency and ease of maintenance.
 \\
 \\
-The hypothesis regarding Kotlin’s concise syntax posits that Kotlin’s data class feature will allow for more compact and error-resistant code compared to Java's verbose approach. For instance, in Kotlin, a simple data class can be defined in just one line, eliminating the need for boilerplate code such as getters, setters, and a \texttt{toString()} method. Java, on the other hand, requires the full definition of a class with explicit methods for each of these actions, which increases the likelihood of errors and results in more lines of code.
-\\
-\\
-In terms of null safety, Kotlin offers built-in mechanisms that handle nullability explicitly through the use of the \texttt{?} operator and the \texttt{?:} Elvis operator, which reduces the risk of \texttt{NullPointerException} errors that are common in Java when manual null checks are missed. This feature ensures that nullability is addressed in a clear and safe manner, whereas Java requires developers to implement their own null checks, which can be error-prone and overlooked.
-
-Kotlin’s coroutines also promise a more efficient and readable way to handle asynchronous tasks compared to Java’s thread-based model. With coroutines, asynchronous code is written in a sequential manner, avoiding the complexity of managing threads and synchronization. In contrast, Java requires the explicit creation of threads and the management of their execution, which introduces additional boilerplate code and complexity. As such, Kotlin’s coroutines simplify asynchronous programming and improve the overall readability of the code.
-
-Through these experiments, we can assess the various advantages Kotlin offers over Java, particularly in terms of development speed, code safety, asynchronous handling, and cross-platform code sharing.
 
 
-\maketitle
-
-\section*{Improved Development Speed and Code Conciseness}
-
-\textbf{Hypothesis:} Using Kotlin will reduce development time due to its concise syntax. This is expected to simplify tasks such as user, poll, and vote management.
-
-\textbf{Experiment:} Compare the implementation time for key functionalities (e.g., user creation, poll management, and vote handling) between Kotlin and Java. Measure the lines of code required to implement the same logic in both languages and track developer productivity through task completion rates.
-
-\section*{Enhanced Safety with Null Safety}
-
-\textbf{Hypothesis:} Kotlin’s null safety features will reduce runtime exceptions related to null pointer errors, especially in scenarios where entities (like User, Poll, or Vote) might not exist, which would otherwise cause crashes in Java.
-
-\textbf{Experiment:} Introduce null values in critical parts of the business logic (e.g., missing users or votes) and measure the number of runtime exceptions in both Kotlin and Java. Monitor the resilience of the application in handling missing data.
-
-\section*{Simplified Asynchronous Voting Process}
-
-\textbf{Hypothesis:} Kotlin coroutines will streamline asynchronous handling of voting logic, improving response time and scalability during high voting activity.
-
-\textbf{Experiment:} Implement the voting logic using Kotlin coroutines, then simulate high volumes of voting requests. Compare the application’s response times and memory usage with a similar Java implementation using standard concurrency methods.
-
-\section*{Cross-Platform Code Sharing Potential}
-
-\textbf{Hypothesis:} Kotlin Multiplatform would enable code sharing for the voting logic between a potential mobile client and backend, reducing duplicated logic and ensuring consistency across platforms.
-
-\textbf{Experiment:} Set up a prototype of a shared code module containing core voting functions for both the backend and an Android client. Measure code duplication and maintenance requirements, assessing potential consistency improvements.
-
+Through these experiments, we can assess the various advantages Kotlin offers over Java, particularly in terms of development speed, code safety and asynchronous handling.
 
 \subsection{Experiment Evaluation}
 
@@ -284,106 +275,3 @@ technologies. Table~\ref{tab:results} gives an example of how to create a table.
 	\caption{Selected experimental results on the communication protocol example.}
 	\label{tab:results}
 \end{table}
-
-
-\section*{1. Concise Syntax}
-
-\textbf{Hypothesis}: Kotlin's syntax will be more concise and less error-prone compared to Java’s verbose syntax.
-
-\textbf{Experiment Example}:
-\begin{itemize}
-    \item \textbf{Kotlin} (Data class):
-    \begin{verbatim}
-    data class Person(val name: String, val age: Int)
-    \end{verbatim}
-    
-    \item \textbf{Java} (Full class):
-    \begin{verbatim}
-    public class Person {
-        private String name;
-        private int age;
-
-        public Person(String name, int age) {
-            this.name = name;
-            this.age = age;
-        }
-
-        public String getName() { return name; }
-        public int getAge() { return age; }
-        @Override public String toString() { return "Person{name='" + name + "', age=" + age + '}'; }
-    }
-    \end{verbatim}
-\end{itemize}
-
-\textbf{Conclusion}: Kotlin's \texttt{data class} reduces the need for boilerplate code (like getters, setters, and \texttt{toString()}), making the code more concise and error-resistant. Java’s verbose approach introduces potential for mistakes and increases code length.
-
-\section*{2. Null Safety}
-
-\textbf{Hypothesis}: Kotlin’s null safety features will reduce runtime errors due to null dereferencing compared to Java’s manual null checks.
-
-\textbf{Experiment Example}:
-\begin{itemize}
-    \item \textbf{Kotlin} (Null safety):
-    \begin{verbatim}
-    fun greet(name: String?) {
-        println("Hello, ${name ?: "Guest"}!")
-    }
-    greet(null)  // Output: Hello, Guest!
-    \end{verbatim}
-    
-    \item \textbf{Java} (Manual null check):
-    \begin{verbatim}
-    public void greet(String name) {
-        if (name == null) {
-            name = "Guest";
-        }
-        System.out.println("Hello, " + name);
-    }
-    greet(null);  // Output: Hello, Guest!
-    \end{verbatim}
-\end{itemize}
-
-\textbf{Conclusion}: Kotlin’s \texttt{null} safety ensures that nullability is explicitly handled using \texttt{?} and \texttt{?:}, reducing runtime errors. Java’s manual null checks are error-prone and can be easily missed, leading to potential \texttt{NullPointerException} risks.
-
-\section*{3. Coroutines (Asynchronous Programming)}
-
-\textbf{Hypothesis}: Kotlin’s coroutines will provide a more efficient and readable way to handle asynchronous tasks than Java’s traditional threading model.
-
-\textbf{Experiment Example}:
-\begin{itemize}
-    \item \textbf{Kotlin} (Coroutines):
-    \begin{verbatim}
-    import kotlinx.coroutines.*
-
-    suspend fun fetchData() {
-        delay(1000)
-        println("Data fetched")
-    }
-
-    fun main() = runBlocking {
-        launch { fetchData() }
-    }
-    \end{verbatim}
-    
-    \item \textbf{Java} (Threads):
-    \begin{verbatim}
-    public class Main {
-        public static void fetchData() {
-            try {
-                Thread.sleep(1000);
-                System.out.println("Data fetched");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        public static void main(String[] args) {
-            Thread thread = new Thread(() -> fetchData());
-            thread.start();
-        }
-    }
-    \end{verbatim}
-\end{itemize}
-
-\textbf{Conclusion}: Kotlin coroutines simplify asynchronous code, making it more readable and reducing boilerplate. Java’s thread-based approach requires more code and is harder to manage due to explicit thread handling and synchronization.
-
