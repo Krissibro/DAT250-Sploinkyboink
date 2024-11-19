@@ -11,8 +11,8 @@ RUN chmod +x /wait-for-it.sh
 # Copy only package.json and package-lock.json initially
 COPY package*.json ./
 
-# Install only production dependencies if this is for production
-RUN NODE_ENV=production npm ci
+# Install all dependencies (both production and development)
+RUN npm ci
 
 # Install esbuild for linux-x64
 RUN npm install esbuild
@@ -21,7 +21,7 @@ RUN npm install esbuild
 COPY . .
 
 # Expose the port Vite will run on
-EXPOSE 3000
+EXPOSE 5173
 
 # Use wait-for-it.sh to wait for backend to be ready before starting the frontend
 CMD ["/wait-for-it.sh", "backend:8080", "--timeout=60", "--", "npm", "run", "dev", "--", "--host"]
