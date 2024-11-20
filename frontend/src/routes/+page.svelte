@@ -13,8 +13,11 @@
     // Utility function to generate page numbers
     const getPageNumbers = () => {
         const pages = [];
-        for (let i = 0; i < pagination.totalPages; i++) {
-            pages.push(i);
+        // Display at most 5 pages at a time
+        for (let i = pagination.page - 2; i < pagination.page + 3; i++) {
+            if (i >= 0 && i < pagination.totalPages) {
+                pages.push(i);
+            }
         }
         return pages;
     };
