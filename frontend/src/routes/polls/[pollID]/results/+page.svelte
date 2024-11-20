@@ -13,8 +13,6 @@
 <div class="container mx-auto p-4">
     <h1 class="text-3xl font-bold mb-6 text-lightest-slate">Poll Results</h1>
 
-    <h2 class="text-2xl font-semibold mb-4 text-lightest-slate">{data.question}</h2>
-
     {#if totalVotes > 0}
         <p class="text-slate mb-4">Total Votes: {totalVotes}</p>
         <div class="space-y-4">
@@ -24,9 +22,15 @@
                         <span class="text-lightest-slate">{option}</span>
                         <span class="text-slate">{((count / totalVotes) * 100).toFixed(1)}% ({count} votes)</span>
                     </div>
-                    <div class="w-full bg-slate-700 rounded-full h-4">
-                        <div class="bg-blue-600 h-4 rounded-full" style="width: {(count / totalVotes) * 100}%"></div>
-                    </div>
+                    {#if count !== 0}
+                        <div class="w-full bg-slate-700 rounded-full h-4">
+                            <div class="bg-blue-600 h-4 rounded-full" style="width: {(count / totalVotes) * 100}%"></div>
+                        </div>
+                    {:else}
+                        <div class="w-full bg-slate-700 rounded-full h-4">
+                            <div class="bg-transparent border border-dashed border-blue-500 h-4 rounded-full opacity-40"></div>
+                        </div>
+                    {/if}
                 </div>
             {/each}
         </div>
@@ -34,3 +38,4 @@
         <p class="text-slate">No votes have been cast yet.</p>
     {/if}
 </div>
+
