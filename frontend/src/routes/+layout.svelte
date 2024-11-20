@@ -15,5 +15,9 @@
 
 </script>
 
+<head>
+    <title>Sploinkyboink</title>
+</head>
+
 <NavBar />
 <slot />
