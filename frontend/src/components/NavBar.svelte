@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { currentUser } from '../stores/user';
+    import { currentUser } from '$stores/user';
     import { goto } from '$app/navigation';
 
     function logout() {

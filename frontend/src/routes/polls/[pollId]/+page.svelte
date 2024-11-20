@@ -3,7 +3,7 @@
     import { currentUser } from '$stores/user';
     import { goto } from '$app/navigation';
 
-    export let data: { poll: Poll };
+    export let data;
     let selectedOption = '';
     let message = '';
     let user : any;
@@ -16,8 +16,8 @@
         return !!user;
     }
 
-    $: if (isLoggedIn() && data.poll.votes) {
-        const userVote = data.poll.votes.find(vote => vote.user.userID === user.userID);
+    $: if (isLoggedIn() && data.data?.votes) {
+        const userVote = data.data?.votes.find(vote => vote.user.userID === user.userID);
         if (userVote) {
             hasVoted = true;
             existingVoteOption = userVote.voteOption;
@@ -42,7 +42,7 @@
         params.append(hasVoted ? 'newVoteOption' : 'voteOption', selectedOption);
 
         const method = hasVoted ? 'PUT' : 'POST';
-        const res = await fetch(`/sploinkyboinkend/polls/${data.poll.pollID}/vote`, {
+        const res = await fetch(`/sploinkyboinkend/polls/${data.data?.pollID}/vote`, {
             method,
             body: params,
             headers: {
@@ -53,7 +53,7 @@
         if (res.ok) {
             message = hasVoted ? 'Vote updated successfully' : 'Vote registered successfully';
             // Refresh the page to reflect changes
-            await goto(`/polls/${data.poll.pollID}`, { replaceState: true });
+            await goto(`/polls/${data.data?.pollID}`, { replaceState: true });
         } else {
             const errorText = await res.text();
             message = `Error: ${errorText}`;
@@ -69,7 +69,7 @@
         const params = new URLSearchParams();
         params.append('userID', user.userID.toString());
 
-        const res = await fetch(`/sploinkyboinkend/polls/${data.poll.pollID}/vote`, {
+        const res = await fetch(`/sploinkyboinkend/polls/${data.data?.pollID}/vote`, {
             method: 'DELETE',
             body: params,
             headers: {
@@ -80,7 +80,7 @@
         if (res.ok) {
             message = 'Vote deleted successfully';
             // Refresh the page to reflect changes
-            await goto(`/polls/${data.poll.pollID}`, { replaceState: true });
+            await goto(`/polls/${data.data?.pollID}`, { replaceState: true });
         } else {
             const errorText = await res.text();
             message = `Error: ${errorText}`;
@@ -88,21 +88,25 @@
     }
 
     async function viewResults() {
-        await goto(`/polls/${data.poll.pollID}/results`);
+        await goto(`/polls/${data.data?.pollID}/results`);
     }
 </script>
 
 <div class="container mx-auto p-4">
     <div class="bg-light-navy p-6 rounded shadow">
-        <h1 class="text-3xl font-bold mb-4 text-lightest-slate">{data.poll.question}</h1>
-        <p class="text-slate mb-2">Created by: {data.poll.byUser?.username || "Unknown"}</p>
-        <p class="text-slate mb-2">Published at: {new Date(data.poll.publishedAt).toLocaleString()}</p>
-        <p class="text-slate mb-4">Valid until: {new Date(data.poll.validUntil).toLocaleString()}</p>
+        {#if data}
+            <h1 class="text-3xl font-bold mb-4 text-lightest-slate">{data.data?.question}</h1>
+            <p class="text-slate mb-2">Created by: {data.data?.byUser?.username || "Unknown"}</p>
+            <p class="text-slate mb-2">Published at: {new Date(data.data?.publishedAt || "Unknown date").toLocaleString()}</p>
+            <p class="text-slate mb-4">Valid until: {new Date(data.data?.validUntil || "Unknown date of expiry").toLocaleString()}</p>
+        {:else}
+            <p>Loading poll data...</p>
+        {/if}
 
         {#if isLoggedIn()}
             <form on:submit|preventDefault={submitVote}>
                 <fieldset class="mb-4">
-                    {#each data.poll.voteOptions as option}
+                    {#each (data.data?.voteOptions || []) as option}
                         <label class="block text-lightest-slate mb-2">
                             <input type="radio" name="voteOption" value={option} bind:group={selectedOption} class="mr-2" />
                             {option}
