@@ -1,21 +1,6 @@
 \section{Technology Assessment}
 \label{sec:technology}
 
-
-
-Introduce in (sufficient) depth the key concepts and architecture of the chosen software technology. As part if this, you may consider using a running example to introduce the technology.
-
-This part and other parts of the report probably needs to refer to
-figures. Figure~\ref{fig:framework} from \cite{brown:96} just
-illustrates how figure can be included in the report.
-
-\begin{figure}[thb]
-	\centering
-	\includegraphics[scale=0.5]{figs/framework.png}
-	\caption{Software technology evaluation framework.}
-	\label{fig:framework}
-\end{figure}
-
 \subsection{Descriptive Modeling}
 
 Kotlin, developed by JetBrains (the Czech software company behind IntelliJ IDEA), is named after Kotlin Island in the Gulf of Finland, near St. Petersburg. JetBrains introduced Kotlin in 2011 as a modern language addressing limitations encountered with Java. The first stable release (Kotlin 1.0) arrived in 2016 and gained traction among Android developers quickly. In 2017, Google endorsed Kotlin as an official language for Android development, a significant boost in adoption. In 2020, JetBrains and Google launched the Kotlin Foundation, solidifying its role in JVM and Android development. Kotlin’s ongoing development focuses on multi-platform capabilities, broadening its use beyond JVM and Android to include web, iOS, and server applications. Kotlin is a statically typed language that compiles to Java bytecode, running on the Java Virtual Machine (JVM), which allows compatibility with Java libraries and frameworks. Designed for safety, conciseness, and interoperability with Java, Kotlin is particularly valuable in three contexts:
@@ -110,16 +95,15 @@ Kotlin’s syntax is designed to be more compact and expressive, which should re
 \\
 \\
 \textbf{Experiment Example}:
-\begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}]
+\begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}, boxrule=0.5mm, width=0.8\textwidth]
     \begin{itemize}
-	\vspace{0.5cm}
-        \item \textbf{Kotlin} (Data class):
-        \begin{lstlisting}[style=kotlin]
+        \item \textbf{\tiny Kotlin} (\tiny Data class):
+        \begin{lstlisting}[style=kotlin, basicstyle=\tiny\ttfamily]
 data class Person(val name: String, val age: Int)
         \end{lstlisting}
         
-        \item \textbf{Java} (Full class):
-        \begin{lstlisting}[style=java]
+        \item \textbf{\tiny Java} (\tiny Full class):
+        \begin{lstlisting}[style=java, basicstyle=\tiny\ttfamily]
 public class Person {
     private String name;
     private int age;
@@ -140,12 +124,10 @@ public class Person {
         \end{lstlisting}
     \end{itemize}
 \end{tcolorbox}
+
 \vspace{1cm}
 
-\noindent \textbf{Evaluation}: We see from the examples that Java are using significant more lines of code than Kotlin to achieve the same functionality. Kotlin uses only one line, while Java uses 17 lines of code when we include the empty lines in between. This is a significant difference. Kotlin's \texttt{data class} reduces the need for boilerplate code (like getters, setters, and \texttt{toString()}), making the code more concise and error-resistant. Java’s verbose approach introduces potential for mistakes and increases the overall code length.
-\\
-\\
-\textbf{Conclusion}: Hypothesis 1 holds. 
+\noindent \textbf{Evaluation}: We see from the examples that Java are using significant more lines of code than Kotlin to achieve the same functionality. Kotlin uses only one line, while Java uses 17 lines of code when we include the empty lines in between. This is a significant difference. Kotlin's \texttt{data class} reduces the need for boilerplate code (like getters, setters, and \texttt{toString()}), making the code more concise and error-resistant. Java’s verbose approach introduces potential for mistakes and increases the overall code length. Hypothesis 1 holds. 
 \\
 \\
 \textbf{Hypothesis 2: Using Kotlin will result in fewer runtime exceptions related to null pointer errors compared to Java.} 
@@ -155,19 +137,18 @@ We will provide a small example that highlights why Java are more prone to null 
 \\
 \\
 \textbf{Experiment Example}:
-\begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}]
+\begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}, boxrule=0.5mm, width=0.8\textwidth, sharp corners=south]
     \begin{itemize}
-	\vspace{0.5cm}
-        \item \textbf{Kotlin} (Null safety):
-        \begin{lstlisting}[style=kotlin]
+        \item \textbf{\tiny Kotlin} (\tiny Null safety):
+        \begin{lstlisting}[style=kotlin, basicstyle=\tiny\ttfamily]
 fun greet(name: String?) {
       println("Hello, ${name ?: "Guest"}!")
 }
 greet(null)  // Output: Hello, Guest!
         \end{lstlisting}
         
-        \item \textbf{Java} (Manual null check):
-        \begin{lstlisting}[style=java]
+        \item \textbf{\tiny Java} (\tiny Manual null check):
+        \begin{lstlisting}[style=java, basicstyle=\tiny\ttfamily]
 public void greet(String name) {
         if (name == null) {
             name = "Guest";
@@ -180,10 +161,8 @@ greet(null);  // Output: Hello, Guest!
 \end{tcolorbox}
 
 
-\noindent \textbf{Evaluation}: From the examples we see that Kotlin is designed so that it does not need to handle null checks manually. Kotlin’s \texttt{null} safety ensures that nullability is explicitly handled using \texttt{?} and \texttt{?:}, reducing runtime errors. Java’s manual null checks are error-prone and can be easily missed, leading to potential \texttt{NullPointerException} risks.
-\\
-\\
-\textbf{Conclusion}: Hypothesis 2 holds.
+
+\noindent \textbf{Evaluation}: From the examples we see that Kotlin is designed so that it does not need to handle null checks manually. Kotlin’s \texttt{null} safety ensures that nullability is explicitly handled using \texttt{?} and \texttt{?:}, reducing runtime errors. Java’s manual null checks are error-prone and can be easily missed, leading to potential \texttt{NullPointerException} risks. Hypothesis 2 holds.
 \\
 \\
 \textbf{Hypothesis 3: Kotlin's coroutines offer a more efficient and readable approach to handling asynchronous tasks compared to Java.}
@@ -194,49 +173,45 @@ Also in this case we choose to have another code example to give evidence for wh
 \\
 \\
 \textbf{Experiment Example}:
-\begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}]
+\begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}, boxrule=0.5mm, width=0.8\textwidth, sharp corners=south]
     \begin{itemize}
-	\vspace{0.5cm}
-        \item \textbf{Kotlin} (Null Coroutines):
-        \begin{lstlisting}[style=kotlin]
-    import kotlinx.coroutines.*
+        \item \textbf{\tiny Kotlin} (\tiny Null Coroutines):
+        \begin{lstlisting}[style=kotlin, basicstyle=\tiny\ttfamily]
+import kotlinx.coroutines.*
 
-    suspend fun fetchData() {
-        delay(1000)
-        println("Data fetched")
-    }
+suspend fun fetchData() {
+    delay(1000)
+    println("Data fetched")
+}
 
-    fun main() = runBlocking {
-        launch { fetchData() }
-    }
+fun main() = runBlocking {
+    launch { fetchData() }
+}
         \end{lstlisting}
         
-        \item \textbf{Java} (Threads):
-        \begin{lstlisting}[style=java]
- public class Main {
-        public static void fetchData() {
-            try {
-                Thread.sleep(1000);
-                System.out.println("Data fetched");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        \item \textbf{\tiny Java} (\tiny Threads):
+        \begin{lstlisting}[style=java, basicstyle=\tiny\ttfamily]
+public class Main {
+    public static void fetchData() {
+        try {
+            Thread.sleep(1000);
+            System.out.println("Data fetched");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+    }
 
-        public static void main(String[] args) {
-            Thread thread = new Thread(() -> fetchData());
-            thread.start();
-        }
- }
+    public static void main(String[] args) {
+        Thread thread = new Thread(() -> fetchData());
+        thread.start();
+    }
+}
         \end{lstlisting}
     \end{itemize}
 \end{tcolorbox}
 
-\noindent \textbf{Evaluation}: Kotlin coroutines simplify asynchronous code, making it more readable and reducing boilerplate code. Java’s thread-based approach requires more code and is harder to manage due to explicit thread handling and synchronization. We did not use this feature in our PollApp, but it could be very useful in other created apps.
 
-\vspace{1em}
-
-\textbf{Conclusion}: Hypothesis 3 holds.
+\noindent \textbf{Evaluation}: Kotlin coroutines simplify asynchronous code, making it more readable and reducing boilerplate code. Java’s thread-based approach requires more code and is harder to manage due to explicit thread handling and synchronization. We did not use this feature in our PollApp, but it could be very useful in other created apps. Hypothesis 3 holds.
 
 \vspace{1em}
 
@@ -249,10 +224,10 @@ Also in this case we choose to have another code example to give evidence for wh
 \vspace{1em}
 
 \noindent \textbf{Experiment Example:}  
-\begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}]
+\begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}, boxrule=0.5mm, width=0.8\textwidth, sharp corners=south]
     \begin{itemize}
-        \item \textbf{Kotlin} (Using Extension Functions):
-        \begin{lstlisting}[style=kotlin]
+        \item \textbf{\tiny Kotlin} (\tiny Using Extension Functions):
+        \begin{lstlisting}[style=kotlin, basicstyle=\tiny\ttfamily]
 fun String.capitalizeFirstLetter(): String {
     return this.replaceFirstChar { it.uppercase() }
 }
@@ -263,8 +238,8 @@ fun main() {
 }
         \end{lstlisting}
         
-        \item \textbf{Java} (Using a Utility Class):
-        \begin{lstlisting}[style=java]
+        \item \textbf{\tiny Java} \tiny (Using a Utility Class):
+        \begin{lstlisting}[style=java, basicstyle=\tiny\ttfamily]
 public class StringUtils {
     public static String capitalizeFirstLetter(String input) {
         if (input == null || input.isEmpty()) return input;
@@ -285,11 +260,7 @@ public class Main {
 \vspace{1em}
 
 \noindent \textbf{Evaluation:}  
-The Kotlin approach allows the method to be called directly on the \texttt{String} object as if it were part of the class, improving readability and making the code feel more natural. In Java, a separate utility class is required, leading to a more cumbersome and less intuitive syntax. Additionally, Kotlin’s solution integrates seamlessly with the language’s functional programming features. Kotlin's extension functions make code more modular and intuitive by enabling developers to add functionality to existing classes without modifying them or creating external helper classes. This reduces boilerplate and enhances code reusability.
-
-\vspace{1em}
-
-\noindent \textbf{Conclusion:}  Hypothesis 4 holds. 
+The Kotlin approach allows the method to be called directly on the \texttt{String} object as if it were part of the class, improving readability and making the code feel more natural. In Java, a separate utility class is required, leading to a more cumbersome and less intuitive syntax. Additionally, Kotlin’s solution integrates seamlessly with the language’s functional programming features. Kotlin's extension functions make code more modular and intuitive by enabling developers to add functionality to existing classes without modifying them or creating external helper classes. This reduces boilerplate and enhances code reusability. Hypothesis 4 holds.
 
 \vspace{1em}
 
@@ -302,10 +273,10 @@ The Kotlin approach allows the method to be called directly on the \texttt{Strin
 \vspace{1em}
 
 \noindent \textbf{Experiment Example}:
-\begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}]
+\begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}, boxrule=0.5mm, width=0.8\textwidth, sharp corners=south]
     \begin{itemize}
-        \item \textbf{Kotlin}:
-        \begin{lstlisting}[style=kotlin]
+        \item \textbf{\tiny Kotlin}:
+        \begin{lstlisting}[style=kotlin, basicstyle=\tiny\ttfamily]
     import java.util.HashMap
 
     fun main() {
@@ -319,18 +290,13 @@ The Kotlin approach allows the method to be called directly on the \texttt{Strin
         println(map["Bananas"] ?: "No bananas found")
     }
         \end{lstlisting}
-
     \end{itemize}
 \end{tcolorbox}
 
-\vspace{1em}
-
-\noindent \textbf{Evaluation}: The Kotlin example demonstrates how Java libraries can be used directly, with benefits like null-safe operations (\texttt{?:} operator) and concise syntax. Kotlin's integration with Java's mature ecosystem, supported by resources and community, enhances its practicality for real-world applications.  Kotlin’s interoperability with Java simplifies migration and allows developers to leverage the strengths of both languages effectively.
 
 \vspace{1em}
 
-\noindent \textbf{Conclusion}: Hypothesis 5 holds. 
-
+\noindent \textbf{Evaluation}: The Kotlin example demonstrates how Java libraries can be used directly, with benefits like null-safe operations (\texttt{?:} operator) and concise syntax. Kotlin's integration with Java's mature ecosystem, supported by resources and community, enhances its practicality for real-world applications.  Kotlin’s interoperability with Java simplifies migration and allows developers to leverage the strengths of both languages effectively. Hypothesis 5 holds. 
 
 \vspace{1em}
 
