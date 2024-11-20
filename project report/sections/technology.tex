@@ -18,10 +18,6 @@ illustrates how figure can be included in the report.
 
 \subsection{Descriptive Modeling}
 
-write where the technology comes from, its history, its context and what problem it solves.
-Consider drawing a graph like in \cite{brown:96}.
-
-
 Kotlin, developed by JetBrains (the Czech software company behind IntelliJ IDEA), is named after Kotlin Island in the Gulf of Finland, near St. Petersburg. JetBrains introduced Kotlin in 2011 as a modern language addressing limitations encountered with Java. The first stable release (Kotlin 1.0) arrived in 2016 and gained traction among Android developers quickly. In 2017, Google endorsed Kotlin as an official language for Android development, a significant boost in adoption. In 2020, JetBrains and Google launched the Kotlin Foundation, solidifying its role in JVM and Android development. Kotlin’s ongoing development focuses on multi-platform capabilities, broadening its use beyond JVM and Android to include web, iOS, and server applications. Kotlin is a statically typed language that compiles to Java bytecode, running on the Java Virtual Machine (JVM), which allows compatibility with Java libraries and frameworks. Designed for safety, conciseness, and interoperability with Java, Kotlin is particularly valuable in three contexts:
 
 \begin{itemize}
@@ -104,7 +100,7 @@ Kotlin, developed by JetBrains (the Czech software company behind IntelliJ IDEA)
 
 \subsection{Experiments: Is Kotlin bettter suited in developement than Java? }
 
-In this section, we present a series of hypotheses regarding the potential benefits of using Kotlin over Java, along with experimental designs that could help validate or refute these assumptions. We are comparing Kotlin and Java code to see the differences between the languages. The concepts discussed in the examples will also apply to our PollApp.
+In this section, we present a series of hypotheses regarding the potential benefits of using Kotlin over Java, along with experimental designs that could help validate or refute these assumptions. We are comparing Kotlin and Java code to see the differences between the languages. Some of the concepts discussed in the examples will also apply to our PollApp. 
 \\
 \\
 \textbf{Hypothesis 1: Using Kotlin will provide better development speed and code conciseness than Java.} 
@@ -237,41 +233,138 @@ Also in this case we choose to have another code example to give evidence for wh
 \end{tcolorbox}
 
 \noindent \textbf{Evaluation}: Kotlin coroutines simplify asynchronous code, making it more readable and reducing boilerplate code. Java’s thread-based approach requires more code and is harder to manage due to explicit thread handling and synchronization. We did not use this feature in our PollApp, but it could be very useful in other created apps.
-\\
-\\
+
+\vspace{1em}
+
 \textbf{Conclusion}: Hypothesis 3 holds.
-\\
-\\
 
-Finally, we hypothesize that Kotlin Multiplatform could reduce code duplication and improve consistency across platforms by enabling shared code between the backend and a mobile client. To experiment with this, we could develop a prototype that shares core voting functions between the backend and an Android client. By measuring the amount of duplicated code and assessing the maintenance requirements for each platform, we can evaluate the potential benefits of using Kotlin Multiplatform in terms of consistency and ease of maintenance.
-\\
-\\
+\vspace{1em}
+
+\noindent \textbf{Hypothesis 4: Kotlin's extension functions enable developers to write cleaner, more modular, and reusable code compared to Java.}
+
+\vspace{1em}
+
+\noindent To test this hypothesis, we compare how Kotlin and Java handle extending the functionality of an existing class, such as adding a method to capitalize the first letter of a string. Kotlin achieves this through extension functions, while Java requires either inheritance or a utility class.
+
+\vspace{1em}
+
+\noindent \textbf{Experiment Example:}  
+\begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}]
+    \begin{itemize}
+        \item \textbf{Kotlin} (Using Extension Functions):
+        \begin{lstlisting}[style=kotlin]
+fun String.capitalizeFirstLetter(): String {
+    return this.replaceFirstChar { it.uppercase() }
+}
+
+fun main() {
+    val text = "kotlin is fun"
+    println(text.capitalizeFirstLetter())  // Output: "Kotlin is fun"
+}
+        \end{lstlisting}
+        
+        \item \textbf{Java} (Using a Utility Class):
+        \begin{lstlisting}[style=java]
+public class StringUtils {
+    public static String capitalizeFirstLetter(String input) {
+        if (input == null || input.isEmpty()) return input;
+        return input.substring(0, 1).toUpperCase() + input.substring(1);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        String text = "java is powerful";
+        System.out.println(StringUtils.capitalizeFirstLetter(text));  // Output: "Java is powerful"
+    }
+}
+        \end{lstlisting}
+    \end{itemize}
+\end{tcolorbox}
+
+\vspace{1em}
+
+\noindent \textbf{Evaluation:}  
+The Kotlin approach allows the method to be called directly on the \texttt{String} object as if it were part of the class, improving readability and making the code feel more natural. In Java, a separate utility class is required, leading to a more cumbersome and less intuitive syntax. Additionally, Kotlin’s solution integrates seamlessly with the language’s functional programming features. Kotlin's extension functions make code more modular and intuitive by enabling developers to add functionality to existing classes without modifying them or creating external helper classes. This reduces boilerplate and enhances code reusability.
+
+\vspace{1em}
+
+\noindent \textbf{Conclusion:}  Hypothesis 4 holds. 
+
+\vspace{1em}
+
+\noindent \textbf{Hypothesis 5: Kotlin has seamless interoperability with Java in addtition to better features.}
+
+\vspace{1em}
+
+\noindent In this case, we choose to provide a code example demonstrating Kotlin's ability to directly use Java libraries and classes without additional configuration. In the previous examples we have shown how Kotlin has better features than Java. Kotlin's interoperability allows developers to leverage the extensive Java ecosystem while benefiting from Kotlin's concise syntax and null safety features. If we were to test this hypothesis, we would compare the ease of using a popular Java library in both Java and Kotlin. Key metrics such as code readability, development speed, and error prevention would be analyzed. The Kotlin example in this case uses the java library to import Hash Map.
+
+\vspace{1em}
+
+\noindent \textbf{Experiment Example}:
+\begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}]
+    \begin{itemize}
+        \item \textbf{Kotlin}:
+        \begin{lstlisting}[style=kotlin]
+    import java.util.HashMap
+
+    fun main() {
+        // Using Java's HashMap class in Kotlin
+        val map = HashMap<String, Int>()
+        map["Apples"] = 5
+        map["Oranges"] = 3
+
+        // Using null-safe operations
+        println(map["Apples"] ?: "No apples found")
+        println(map["Bananas"] ?: "No bananas found")
+    }
+        \end{lstlisting}
+
+    \end{itemize}
+\end{tcolorbox}
+
+\vspace{1em}
+
+\noindent \textbf{Evaluation}: The Kotlin example demonstrates how Java libraries can be used directly, with benefits like null-safe operations (\texttt{?:} operator) and concise syntax. Kotlin's integration with Java's mature ecosystem, supported by resources and community, enhances its practicality for real-world applications.  Kotlin’s interoperability with Java simplifies migration and allows developers to leverage the strengths of both languages effectively.
+
+\vspace{1em}
+
+\noindent \textbf{Conclusion}: Hypothesis 5 holds. 
 
 
-Through these experiments, we can assess the various advantages Kotlin offers over Java, particularly in terms of development speed, code safety and asynchronous handling.
+\vspace{1em}
 
 \subsection{Experiment Evaluation}
 
-Write about the results of your experiments, either via personal experience reports, quantitative benchmarks, a demostrator case study or a combination of multiple approaches.
+Through these experiments, we can assess the various advantages Kotlin offers over Java. 
+\vspace{1em}
 
+\noindent \textbf{Comparison Table}
 
-For some reports you may have to include a table with experimental
-results are other kinds of tables that for instance compares
-technologies. Table~\ref{tab:results} gives an example of how to create a table.
+\vspace{1em}
 
-\begin{table}[bth]
-	\centering
-	\begin{tabular}{llrrrrrr}
-		Config & Property & States & Edges & Peak & E-Time & C-Time & T-Time
-		\\ \hline \hline
-		22-2 & A   &    7,944  &   22,419  &  6.6  \%  &  7 ms & 42.9\% &  485.7\% \\
-		22-2 & A   &    7,944  &   22,419  &  6.6  \%  &  7 ms & 42.9\% &  471.4\% \\
-		30-2 & B   &   14,672  &   41,611  &  4.9  \%  & 14 ms & 42.9\% &  464.3\% \\
-		30-2 & C   &   14,672  &   41,611  &  4.9  \%  & 15 ms & 40.0\% &  420.0\% \\ \hline
-		10-3 & D   &   24,052  &   98,671  & 19.8  \%  & 35 ms & 31.4\% &  285.7\% \\
-		10-3 & E   &   24,052  &   98,671  & 19.8  \%  & 35 ms & 34.3\% &  308.6\% \\
-		\hline \hline
-	\end{tabular}
-	\caption{Selected experimental results on the communication protocol example.}
-	\label{tab:results}
+\begin{table}[ht]
+\centering
+\resizebox{\textwidth}{!}{ % Resize the table to fit the page width
+\begin{tabular}{|>{\raggedright\arraybackslash}p{2.5cm}|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}p{3.5cm}|}
+\hline
+\textbf{Feature}            & \textbf{Kotlin Advantage}                 & \textbf{Java Approach}            & \textbf{Key Metric}           & \textbf{Result}                          \\ \hline
+Concise Syntax              & Data classes reduce boilerplate          & Requires manual getters/setters   & Lines of Code (LOC)           & Kotlin reduced LOC significantly \\ \hline
+Null-Safety                    & Type system enforces null handling       & Relies on manual null checks      & Null Pointer Exceptions (NPE) & Kotlin eliminated potential NPEs \\ \hline
+Coroutines                    & Scalable concurrency with lightweight tasks & Thread-based model              & Memory Usage, Response Time  & Kotlin showed better scalability and speed \\ \hline
+Standard Library           & Built-in utilities (e.g., \texttt{let}, \texttt{apply}) & Requires external libraries     & Developer Effort (subjective) & Kotlin provided simpler, cleaner code \\ \hline
+Java Ecosystem Access & Seamless library integration             & Native use                       & Ecosystem Compatibility      & Kotlin leveraged all Java libraries easily \\ \hline
+\end{tabular}
+}
+\caption{Comparison of Kotlin and Java}
+\label{tab:comparison}
 \end{table}
+
+
+\vspace{1em}
+
+\noindent \textbf{Final conclusion}: Kotlin’s concise syntax reduces boilerplate, its standard library simplifies common operations, and coroutines enable efficient, scalable concurrency. Its null-safety prevents runtime errors, and its full interoperability with Java leverages existing libraries and ecosystems. These advantages make Kotlin a modern, practical choice for development.
+
+
+\end{document}
+
