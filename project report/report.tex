@@ -11,11 +11,13 @@
 \usepackage{tkz-graph}
 \usepackage{pgf-umlcd}
 \usetikzlibrary{shapes.geometric, arrows, positioning, shapes.misc}
-\usepackage{listings}
-\usepackage{color}
 \usepackage{hyperref}
 \usepackage{soul}
+\usepackage{tcolorbox}  
 \usepackage{xcolor}
+\usepackage{listings}
+\usepackage{color}
+
 \sethlcolor{lime!30}
 
 
@@ -40,6 +42,47 @@
   breakatwhitespace=true,
   tabsize=3
 }
+
+% Define Kotlin syntax highlighting
+\lstdefinelanguage{Kotlin}{
+  keywords={class, fun, val, var, data, override, return},
+  sensitive=true,
+  comment=[l]//,
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  alsoletter={.},  % Allow dots in keywords like `fun`, `val`
+}
+
+\lstdefinestyle{kotlin}{
+  language=Kotlin,
+  backgroundcolor=\color{lightgray}, % light gray background for code
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{green},
+  stringstyle=\color{red},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  stepnumber=1,
+  numbersep=5pt,
+  frame=single, % adds a frame around the code
+  rulecolor=\color{black},
+}
+
+\lstdefinestyle{java}{
+  language=Java,
+  backgroundcolor=\color{lightgray}, % light gray background for code
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{green},
+  stringstyle=\color{red},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  stepnumber=1,
+  numbersep=5pt,
+  frame=single, % adds a frame around the code
+  rulecolor=\color{black},
+}
+	
 \begin{document}
 
 \title{DAT250 FeedApp Report}
