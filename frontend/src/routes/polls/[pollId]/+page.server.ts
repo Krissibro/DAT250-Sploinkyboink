@@ -4,11 +4,11 @@ import type { Poll } from '$lib/types';
 export const load: PageServerLoad = async ({ params, fetch }) => {
     const { pollId } = params;
     const res = await fetch(`/sploinkyboinkend/polls/${pollId}`);
-    const data = await res.json();
-    const poll: Poll = data.content;
+    const data: Poll = await res.json();
+    console.log('Fetched data:', data);
 
-    if (poll) {
-        return { poll };
+    if (data) {
+        return { data };
     } else {
         return {
             status: 404,
