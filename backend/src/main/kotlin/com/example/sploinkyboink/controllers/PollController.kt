@@ -48,6 +48,13 @@ class PollController(
         return ResponseEntity(activePolls, HttpStatus.OK)
     }
 
+    @GetMapping("/polls/{pollId}")
+    fun getPoll(
+        @PathVariable pollId: String
+    ): ResponseEntity<Poll> {
+        return ResponseEntity(pollService.getPollById(pollId), HttpStatus.OK)
+    }
+
     @PostMapping("/polls/{pollID}/vote")
     fun voteOnPoll(
         @PathVariable pollID: String,
