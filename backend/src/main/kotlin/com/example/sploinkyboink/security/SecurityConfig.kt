@@ -27,7 +27,7 @@ class SecurityConfig (
             .csrf {it.disable()}
             .authorizeHttpRequests { auth ->
                 auth
-                    .requestMatchers("/sploinkyboinkend/login","/sploinkyboinkend/register", "/sploinkyboinkend/logout", "/sploinkyboinkend/polls/active" ,"/sploinkyboinkend/polls").permitAll()
+                    .requestMatchers("/sploinkyboinkend/login","/sploinkyboinkend/register", "/sploinkyboinkend/logout","/sploinkyboinkend/polls/*").permitAll()
                     .anyRequest().authenticated()
             }
             .sessionManagement{it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)}
