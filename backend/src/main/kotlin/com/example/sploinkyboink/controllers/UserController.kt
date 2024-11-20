@@ -57,7 +57,7 @@ class UserController(
                 cookie.path = "/"
 
                 response.addCookie(cookie)
-                return ResponseEntity.ok("Login successful")
+                return ResponseEntity("Login successful", HttpStatus.OK)
             }
              return ResponseEntity("Invalid credentials", HttpStatus.UNAUTHORIZED)
         }catch (e: IllegalArgumentException) {
@@ -66,12 +66,27 @@ class UserController(
 
     }
 
+    @GetMapping("/isLoggedIn")
+    fun isLoggedIn(@CookieValue ("jwt") jwt: String?): ResponseEntity<Any> {
+        try {
+            if (jwt == null) {
+                return ResponseEntity("User must be logged in.",HttpStatus.UNAUTHORIZED)
+            }
+            return ResponseEntity("User is logged in", HttpStatus.OK)
+        }catch (e: IllegalArgumentException) {
+            return ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+        }
+    }
+
     //  Logging out a user
     @PostMapping("/logout")
     fun logout(response: HttpServletResponse): ResponseEntity<Any> {
 
         val cookie = Cookie("jwt", "")
+        cookie.isHttpOnly = true
+        cookie.path = "/"
         cookie.maxAge = 0
+
         response.addCookie(cookie)
         return ResponseEntity("Logout successful", HttpStatus.OK)
     }
