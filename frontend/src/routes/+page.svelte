@@ -1,33 +1,28 @@
-<!-- src/routes/+page.svelte -->
-
 <script lang="ts">
     import type { Poll } from '$lib/types';
     import PollCard from '../components/PollCard.svelte';
     import { goto } from '$app/navigation';
-    import { onMount } from 'svelte';
 
     export let data: { polls: Poll[]; pagination: any };
 
-    const { polls, pagination } = data;
+    $: polls = data.polls;
+    $: pagination = data.pagination;
 
-    // Utility function to generate page numbers
-    const getPageNumbers = () => {
-        const pages = [];
-        // Display at most 5 pages at a time
-        for (let i = pagination.page - 2; i < pagination.page + 3; i++) {
+    // Reactive declaration for page numbers
+    let pageNumbers: number[] = [];
+    $: {
+        pageNumbers = [];
+        for (let i = pagination.page - 2; i <= pagination.page + 2; i++) {
             if (i >= 0 && i < pagination.totalPages) {
-                pages.push(i);
+                pageNumbers.push(i); // Convert to 1-based page numbers
             }
         }
-        return pages;
-    };
+    }
 
-    // State to handle loading
     let isLoading = false;
 
-    // Function to navigate to a specific page
     const navigateToPage = async (page: number) => {
-        if (page === pagination.page) return; // Avoid redundant navigation
+        if (page === pagination.page) return;
         isLoading = true;
         try {
             await goto(`/?page=${page}`, { replaceState: false });
@@ -38,6 +33,7 @@
         }
     };
 </script>
+
 
 <div class="container mx-auto p-4">
     <h1 class="text-3xl font-bold mb-6 text-lightest-slate">Active Polls</h1>
@@ -62,12 +58,12 @@
             {/if}
 
             <!-- Page Number Buttons -->
-            {#each getPageNumbers() as i}
+            {#each pageNumbers as pageNumber}
                 <button
-                        on:click={() => navigateToPage(i)}
-                        class="px-4 py-2 mx-1 {pagination.page === i ? 'bg-slate-700' : 'bg-light-navy'} text-lightest-slate rounded hover:bg-slate-700 disabled:bg-gray-600"
-                        disabled={pagination.page === i || isLoading}>
-                    {i + 1}
+                    on:click={() => navigateToPage(pageNumber)}
+                    class="px-4 py-2 mx-1 {pagination.page === pageNumber ? 'bg-slate-700' : 'bg-light-navy'} text-lightest-slate rounded hover:bg-slate-700 disabled:bg-gray-600"
+                    disabled={pagination.page === pageNumber || isLoading}>
+                    {pageNumber + 1}
                 </button>
             {/each}
 

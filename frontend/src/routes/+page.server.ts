@@ -6,7 +6,7 @@ import type { Poll } from '$lib/types';
 export const load: PageServerLoad = async ({ url, fetch }) => {
     // Extract 'page' from query parameters; default to 0 if not provided
     const pageParam = parseInt(url.searchParams.get('page') || '0', 10);
-    const sizeParam = 1; // You can make this dynamic if needed
+    const sizeParam = 12; // You can make this dynamic if needed
 
     // Fetch paginated polls from the backend
     const res = await fetch(`/sploinkyboinkend/polls/active?page=${pageParam}&size=${sizeParam}`);
