@@ -98,12 +98,12 @@ Kotlin’s syntax is designed to be more compact and expressive, which should re
 \begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}, boxrule=0.5mm, width=0.8\textwidth, sharp corners=south]
     \begin{itemize}
     \vspace{0.2cm}
-        \item \textbf{\scriptsize Kotlin} (\scriptsize Data class):
+        \item \textbf{\scriptsize Kotlin} \scriptsize (Data class):
         \begin{lstlisting}[style=kotlin, basicstyle=\scriptsize\ttfamily]
 data class Person(val name: String, val age: Int)
         \end{lstlisting}
         
-        \item \textbf{\scriptsize Java} (\scriptsize Full class):
+        \item \textbf{\scriptsize Java} \scriptsize (Full class):
         \begin{lstlisting}[style=java, basicstyle=\scriptsize\ttfamily]
 public class Person {
     private String name;
@@ -141,7 +141,7 @@ We will provide a small example that highlights why Java are more prone to null 
 \begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}, boxrule=0.5mm, width=0.8\textwidth, sharp corners=south]
     \begin{itemize}
     \vspace{0.2cm}
-        \item \textbf{\scriptsize Kotlin} (\scriptsize Null safety):
+        \item \textbf{\scriptsize Kotlin} \scriptsize (Null safety):
         \begin{lstlisting}[style=kotlin, basicstyle=\scriptsize\ttfamily]
 fun greet(name: String?) {
       println("Hello, ${name ?: "Guest"}!")
@@ -149,7 +149,7 @@ fun greet(name: String?) {
 greet(null)  // Output: Hello, Guest!
         \end{lstlisting}
         
-        \item \textbf{\scriptsize Java} (\scriptsize Manual null check):
+        \item \textbf{\scriptsize Java} \scriptsize (Manual null check):
         \begin{lstlisting}[style=java, basicstyle=\scriptsize\ttfamily]
 public void greet(String name) {
         if (name == null) {
@@ -177,7 +177,7 @@ To validate this hypothesis, we present an example demonstrating the use of Kotl
 \begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}, boxrule=0.5mm, width=0.8\textwidth, sharp corners=south]
     \begin{itemize}
     \vspace{0.2cm}
-        \item \textbf{\scriptsize Kotlin} (\scriptsize Null Coroutines):
+        \item \textbf{\scriptsize Kotlin} \scriptsize (Null Coroutines):
         \begin{lstlisting}[style=kotlin, basicstyle=\scriptsize\ttfamily]
 import kotlinx.coroutines.*
 
@@ -191,7 +191,7 @@ fun main() = runBlocking {
 }
         \end{lstlisting}
         
-        \item \textbf{\scriptsize Java} (\scriptsize Threads):
+        \item \textbf{\scriptsize Java} \scriptsize (Threads):
         \begin{lstlisting}[style=java, basicstyle=\scriptsize\ttfamily]
 public class Main {
     public static void fetchData() {
