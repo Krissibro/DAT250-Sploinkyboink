@@ -1,0 +1,290 @@
+\section{Technology Assessment}
+\label{sec:technology}
+
+\subsection{Descriptive Modeling}
+
+Kotlin, developed by JetBrains (the Czech software company behind IntelliJ IDEA), is named after Kotlin Island in the Gulf of Finland, near St. Petersburg. JetBrains introduced Kotlin in 2011 as a modern language addressing limitations encountered with Java. The first stable release (Kotlin 1.0) arrived in 2016 and gained traction among Android developers quickly. In 2017, Google endorsed Kotlin as an official language for Android development, a significant boost in adoption. In 2020, JetBrains and Google launched the Kotlin Foundation, solidifying its role in JVM and Android development. Kotlin’s ongoing development focuses on multi-platform capabilities, broadening its use beyond JVM and Android to include web, iOS, and server applications. Kotlin is a statically typed language that compiles to Java bytecode, running on the Java Virtual Machine (JVM), which allows compatibility with Java libraries and frameworks. Designed for safety, conciseness, and interoperability with Java, Kotlin is particularly valuable in three contexts:
+
+\begin{itemize}
+    \item \textbf{Android Development}: Kotlin’s concise syntax and enhanced safety features make it a preferred choice in Android development.
+    \item \textbf{Server-Side Development}: Kotlin’s seamless integration with JVM-based frameworks like Spring Boot facilitates its use in server applications.
+    \item \textbf{Multi-Platform Development}: Kotlin Multiplatform and Kotlin/Native enable shared codebases across platforms, including mobile, web, and desktop applications.
+\end{itemize}
+
+\begin{tikzpicture}[node distance=1.5cm]
+
+\hspace*{-1.5cm}  % Shifts everything 1.5 cm to the left
+
+% Define block styles
+\tikzstyle{block} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!20]
+\tikzstyle{problem} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=red!20]
+\tikzstyle{context} = [ellipse, minimum width=4cm, minimum height=1cm, text centered, draw=black, fill=yellow!20]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+\tikzstyle{usecase} = [rectangle, rounded corners, minimum width=3.5cm, minimum height=1cm, text centered, draw=black, fill=green!20]
+
+% Nodes
+\node (problem1) [problem] {Problem 1: Verbose Code};
+\node (problem2) [problem, below of=problem1] {Problem 2: Null Safety};
+\node (problem3) [problem, below of=problem2] {Problem 3: Complex Asynchronous Code};
+\node (context) [context, right of=problem2, xshift=4cm] {Context: Java Development};
+\node (kotlin) [block, below of=context, yshift=-1cm, minimum width=4cm, minimum height=1.25cm, font=\large] {Kotlin};
+
+% Spread out the blue boxes
+\node (feature1) [block, below of=kotlin, xshift=-4cm] {Concise Syntax};
+\node (feature2) [block, below of=kotlin] {Null Safety};
+\node (feature3) [block, below of=kotlin, xshift=4cm] {Coroutines};
+
+% Spread out the benefits
+\node (benefit1) [block, below of=feature1] {Reduced Boilerplate};
+\node (benefit2) [block, below of=feature2] {Enhanced Safety};
+\node (benefit3) [block, below of=feature3] {Improved Concurrency};
+
+% Use cases (stacked vertically)
+\node (usecase1) [usecase, above of=context, xshift=6cm] {Android Development};
+\node (usecase2) [usecase, below of=usecase1] {Server-Side Development};
+\node (usecase3) [usecase, below of=usecase2] {Multi-Platform Development};
+
+% Arrows
+\draw [arrow] (problem1) -- (context);
+\draw [arrow] (problem2) -- (context);
+\draw [arrow] (problem3) -- (context);
+\draw [arrow] (context) -- (kotlin);
+\draw [arrow] (kotlin) -- (feature1);
+\draw [arrow] (feature1) -- (benefit1);
+\draw [arrow] (kotlin) -- (feature2);
+\draw [arrow] (feature2) -- (benefit2);
+\draw [arrow] (kotlin) -- (feature3);
+\draw [arrow] (feature3) -- (benefit3);
+
+% Arrows from use cases to context (yellow oval)
+\draw [arrow] (usecase1) -- (context);
+\draw [arrow] (usecase2) -- (context);
+\draw [arrow] (usecase3) -- (context);
+
+\end{tikzpicture}
+\vspace{1cm}
+
+\noindent \textbf{Key features of Kotlin}
+\\
+\noindent Kotlin is addressing some of Java's limitations. Kotlin as a programming language has many strengths:
+\\
+\textbf{Conciseness and Readability}: Kotlin’s streamlined syntax reduces repetitive code, improving readability and maintainability. This conciseness also minimizes potential sources of error and makes the codebase easier to work with.
+\\
+\textbf{Null Safety}: Kotlin’s type system helps prevent NullPointerExceptions by distinguishing between nullable and non-nullable types. This feature significantly reduces bugs related to null handling, a frequent issue in Java.
+\\
+\textbf{Asynchronous Programming with Coroutines}: Kotlin’s coroutines offer a simplified approach to asynchronous programming, enabling more efficient, non-blocking code execution ideal for network requests or tasks involving resource waits.
+\\
+\textbf{Interoperability with Java}: Kotlin’s full compatibility with Java allows teams to gradually integrate Kotlin into existing Java applications. This flexibility is advantageous for modernization efforts without requiring a complete code rewrite.
+\\
+\textbf{Multi-Platform Support}: Kotlin’s multiplatform capabilities allow for shared business logic across platforms, reducing code duplication and streamlining development for applications targeting Android, iOS, web, and server environments.
+\\
+\textbf{Functional Programming Features}: Kotlin's extension functions, higher-order functions, and lambdas enable expressive, modular, and functional programming. They enhance flexibility, promote cleaner architecture, and allow adding functionality to existing classes without modifying them or relying on helper classes.
+\\
+\textbf{Data Classes}: Kotlin’s data classes simplify the creation of classes primarily used for holding data by automatically generating common methods like \texttt{equals()}, \texttt{hashCode()}, and \texttt{toString()}, streamlining data handling.
+
+
+\subsection{Experiments: Is Kotlin bettter suited in developement than Java? }
+
+In this section, we present a series of hypotheses regarding the potential benefits of using Kotlin over Java, along with experimental designs that could help validate or refute these assumptions. We are comparing Kotlin and Java code to see the differences between the languages. Some of the concepts discussed in the examples will also apply to our PollApp. 
+\\
+\\
+\textbf{Hypothesis 1: Using Kotlin will provide better development speed and code conciseness than Java.} 
+\\
+\\
+Kotlin’s syntax is designed to be more compact and expressive, which should reduce the time required to implement core functionalities such as user, poll, and vote management. To test this hypothesis, we can compare the time it takes to implement key features in both Kotlin and Java, while also measuring the number of lines of code required to achieve the same outcomes. We come up with a simple example for a class we call person, and compare the lines of code (LOC) to the same class implemented in Java. Our PollApp uses many classes, so a simple class structure is very beneficial:
+\\
+\\
+\textbf{Experiment Example}:
+\begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}, boxrule=0.5mm, width=0.8\textwidth, sharp corners=south]
+    \begin{itemize}
+    \vspace{0.2cm}
+        \item \textbf{\scriptsize Kotlin} \scriptsize (Data class):
+        \begin{lstlisting}[style=kotlin, basicstyle=\scriptsize\ttfamily]
+data class Person(val name: String, val age: Int)
+        \end{lstlisting}
+        
+        \item \textbf{\scriptsize Java} \scriptsize (Full class):
+        \begin{lstlisting}[style=java, basicstyle=\scriptsize\ttfamily]
+public class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() { return name; }
+
+    public int getAge() { return age; }
+
+    @Override public String toString() { 
+        return "Person{name='" + name + "', age=" + age + '}'; 
+    }
+}
+        \end{lstlisting}
+    \end{itemize}
+\end{tcolorbox}
+
+\vspace{1cm}
+
+\noindent \textbf{Evaluation}: We see from the examples that Java are using significant more lines of code than Kotlin to achieve the same functionality. Kotlin uses only one line, while Java uses 17 lines of code when we include the empty lines in between. This is a significant difference. Kotlin's \texttt{data class} reduces the need for boilerplate code (like getters, setters, and \texttt{toString()}), making the code more concise and error-resistant. Java’s verbose approach introduces potential for mistakes and increases the overall code length.  Hypothesis 1 holds. 
+\\
+\\
+\textbf{Hypothesis 2: Using Kotlin will result in fewer runtime exceptions related to null pointer errors compared to Java.} 
+\\
+\\ 
+We will provide a small example that highlights why Java are more prone to null pointer errors than Kotlin. Null pointer errors can happen in situations where entities like users, polls, or votes do not exist even though they are expected to. These kinds of errors are common in Java, where null checks must be manually implemented. To evaluate this, we could introduce null values in critical parts of the business logic (e.g., missing users or votes) and compare the frequency of runtime exceptions between Kotlin and Java. By observing how each language handles missing data, we can assess Kotlin’s ability to enhance application stability. We will not test this in our project, but it is good to know that there are more ways to test the null safety of different programming languages.
+\\
+\\
+\textbf{Experiment Example}:
+
+\begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}, boxrule=0.5mm, width=0.8\textwidth, sharp corners=south]
+    \begin{itemize}
+    \vspace{0.2cm}
+        \item \textbf{\scriptsize Kotlin} \scriptsize (Null safety):
+        \begin{lstlisting}[style=kotlin, basicstyle=\scriptsize\ttfamily]
+fun greet(name: String?) {
+      println("Hello, ${name ?: "Guest"}!")
+}
+greet(null)  // Output: Hello, Guest!
+        \end{lstlisting}
+        
+        \item \textbf{\scriptsize Java} \scriptsize (Manual null check):
+        \begin{lstlisting}[style=java, basicstyle=\scriptsize\ttfamily]
+public void greet(String name) {
+        if (name == null) {
+            name = "Guest";
+        }
+        System.out.println("Hello, " + name);
+}
+greet(null);  // Output: Hello, Guest!
+        \end{lstlisting}
+    \end{itemize}
+\end{tcolorbox}
+
+\noindent \textbf{Evaluation}: From the examples we see that Kotlin is designed so that it does not need to handle null checks manually. Kotlin’s \texttt{null} safety ensures that nullability is explicitly handled using \texttt{?} and \texttt{?:}, reducing runtime errors. Java’s manual null checks are error-prone and can be easily missed, leading to potential \texttt{NullPointerException} risks. Hypothesis 2 holds.
+\\
+\\
+\textbf{Hypothesis 3: Kotlin's coroutines offer a more efficient, responsive, scalable and readable approach to handling asynchronous tasks compared to Java.}
+\\
+\\ 
+To validate this hypothesis, we present an example demonstrating the use of Kotlin coroutines and Java threads for handling asynchronous tasks. While we did not implement this exact feature in our PollApp, it highlights the potential benefits of using coroutines in scenarios involving high concurrency, like handling voting requests. In a different testing scenario, we would compare Kotlin’s coroutine-based voting logic with a similar Java implementation using traditional threads. We would simulate high traffic and track key metrics such as response time and memory usage to evaluate scalability under load. We use this example because it shows us very concretely how concurrency is managed in a simple way. 
+\\
+\\
+\\
+\textbf{Experiment Example}:
+
+\begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}, boxrule=0.5mm, width=0.8\textwidth, sharp corners=south]
+    \begin{itemize}
+    \vspace{0.2cm}
+        \item \textbf{\scriptsize Kotlin} \scriptsize (Null Coroutines):
+        \begin{lstlisting}[style=kotlin, basicstyle=\scriptsize\ttfamily]
+import kotlinx.coroutines.*
+
+suspend fun fetchData() {
+    delay(1000)
+    println("Data fetched")
+}
+
+fun main() = runBlocking {
+    launch { fetchData() }
+}
+        \end{lstlisting}
+        
+        \item \textbf{\scriptsize Java} \scriptsize (Threads):
+        \begin{lstlisting}[style=java, basicstyle=\scriptsize\ttfamily]
+public class Main {
+    public static void fetchData() {
+        try {
+            Thread.sleep(1000);
+            System.out.println("Data fetched");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        Thread thread = new Thread(() -> fetchData());
+        thread.start();
+    }
+}
+        \end{lstlisting}
+    \end{itemize}
+\end{tcolorbox}
+
+\noindent \textbf{Evaluation}: Kotlin coroutines simplify asynchronous code, making it more readable and reducing boilerplate code. Java’s thread-based approach requires more code and is harder to manage due to explicit thread handling and synchronization. Coroutines are lightweight, allowing many concurrent tasks with minimal memory usage, whereas Java threads consume more resources. Coroutines scale efficiently since they are managed by a dispatcher and don't block threads, resulting in faster response times compared to Java threads, which block during operations like Thread.sleep(). Additionally, coroutines are simpler to manage and more readable than Java threads, making them a more efficient choice for asynchronous data handling in performance-sensitive applications. Hypothesis 3 holds.
+
+\vspace{1em}
+
+
+\noindent \textbf{Hypothesis 4: Kotlin has seamless interoperability with Java in addtition to better features.}
+
+\vspace{1em}
+
+\noindent In this case, we choose to provide a code example demonstrating Kotlin's ability to directly use Java libraries and classes without additional configuration. In the previous examples we have shown how Kotlin has better features than Java. The Kotlin example in this case uses the java library to import Hash Map.
+
+\vspace{1em}
+
+\noindent \textbf{Experiment Example}:
+
+\begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}, boxrule=0.5mm, width=0.8\textwidth, sharp corners=south]
+    \begin{itemize}
+        \item \textbf{\scriptsize Kotlin}:
+        \begin{lstlisting}[style=kotlin, basicstyle=\scriptsize\ttfamily]
+    import java.util.HashMap
+
+    fun main() {
+        // Using Java's HashMap class in Kotlin
+        val map = HashMap<String, Int>()
+        map["Apples"] = 5
+        map["Oranges"] = 3
+
+        // Using null-safe operations
+        println(map["Apples"] ?: "No apples found")
+        println(map["Bananas"] ?: "No bananas found")
+    }
+        \end{lstlisting}
+    \end{itemize}
+\end{tcolorbox}
+
+\vspace{1em}
+
+\noindent \textbf{Evaluation}: The Kotlin example demonstrates how Java libraries can be used directly, with benefits like null-safe operations (\texttt{?:} operator) and concise syntax. Kotlin's integration with Java's mature ecosystem, supported by resources and community, enhances its practicality for real-world applications.  Kotlin’s interoperability with Java simplifies migration and allows developers to leverage the strengths of both languages effectively. Hypothesis 4 holds. 
+
+
+\vspace{1em}
+
+\subsection{Experiment Evaluation}
+
+Through these experiments, we can assess the various advantages Kotlin offers over Java. 
+\vspace{1em}
+
+\noindent \textbf{Comparison Table}
+
+\vspace{1em}
+
+\begin{table}[ht]
+\centering
+\resizebox{\textwidth}{!}{ % Resize the table to fit the page width
+\begin{tabular}{|>{\raggedright\arraybackslash}p{2.5cm}|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}p{3.5cm}|}
+\hline
+\textbf{Feature}            & \textbf{Kotlin Advantage}                 & \textbf{Java Approach}            & \textbf{Key Metrics}           & \textbf{Result}                          \\ \hline
+Concise Syntax              & Data classes reduce boilerplate          & Requires manual getters/setters   & Lines of Code (LOC)      & Kotlin reduced LOC from 17 to 1 \\ \hline
+Null-Safety                    & Type system enforces null handling       & Relies on manual null checks      & Null Pointer Exceptions (NPE) & Kotlin eliminated potential NPEs \\ \hline
+Coroutines                    & Better handling of asynchronous code & Thread-based model            & Memory Usage, Response Time, Scalability  &  Kotlin had readable and efficient coroutines for handling concurrency \\ \hline
+Java Ecosystem Access & Seamless library integration             & Native use                       & Ecosystem Compatibility      & Kotlin leveraged HashMap from the Java.util library \\ \hline
+\end{tabular}
+}
+\caption{Comparison of Kotlin and Java}
+\label{tab:comparison}
+\end{table}
+
+
+\vspace{1em}
+
+\noindent \textbf{Final Conclusion}: Kotlin stands out as a modern, practical language that enhances developer productivity and system efficiency. Its concise syntax minimizes boilerplate, while its built-in null-safety ensures greater reliability by preventing runtime errors. Coroutines enable highly efficient, scalable concurrency, making it well-suited for handling large volumes of concurrent tasks. Additionally, Kotlin’s rich standard library simplifies common operations, and its full interoperability with Java ensures seamless integration with existing ecosystems. These strengths make Kotlin an excellent choice for both new projects and for modernizing existing codebases.
+
+
+\end{document}
+

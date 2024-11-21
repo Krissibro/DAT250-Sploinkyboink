@@ -1,0 +1,130 @@
+\documentclass[11pt]{article}
+
+\usepackage{a4wide}
+\usepackage{mathptm}
+\usepackage{xspace}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{tikz}
+\usepackage{tkz-graph}
+\usepackage{pgf-umlcd}
+\usetikzlibrary{shapes.geometric, arrows, positioning, shapes.misc}
+\usepackage{hyperref}
+\usepackage{soul}
+\usepackage{tcolorbox}  
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{booktabs} % Add the booktabs package for \toprule, \midrule, \bottomrule
+\usepackage{geometry} % For page size adjustments (optional)
+\usepackage{longtable} % To support tables that can break across pages (optional)
+\usepackage{array} % For better column alignment
+
+
+\sethlcolor{lime!30}
+
+
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+% Define Kotlin syntax highlighting
+\lstdefinelanguage{Kotlin}{
+  keywords={class, fun, val, var, data, override, return},
+  sensitive=true,
+  comment=[l]//,
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  alsoletter={.},  % Allow dots in keywords like `fun`, `val`
+}
+
+\lstdefinestyle{kotlin}{
+  language=Kotlin,
+  backgroundcolor=\color{lightgray}, % light gray background for code
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{green},
+  stringstyle=\color{red},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  stepnumber=1,
+  numbersep=5pt,
+  frame=single, % adds a frame around the code
+  rulecolor=\color{black},
+}
+
+\lstdefinestyle{java}{
+  language=Java,
+  backgroundcolor=\color{lightgray}, % light gray background for code
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{green},
+  stringstyle=\color{red},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  stepnumber=1,
+  numbersep=5pt,
+  frame=single, % adds a frame around the code
+  rulecolor=\color{black},
+}
+	
+\begin{document}
+
+\title{DAT250 FeedApp Report}
+
+\author{Kristoffer, Håvard, Brian and Audun}
+
+\maketitle
+
+\begin{abstract}
+
+\hl{10-15 lines with the software technology and the highlights from the project that has been undertaken.}
+
+
+
+ This poll application allows users to create polls, vote on them, and view results. Users can submit a question with multiple answer options, vote for their preferred option, and see the current vote counts displayed in real time. This app features a frontend for user interaction and a backend that processes votes and manages poll data in a database.  The frameworks this app is using are Spring Boot and Kotlin for the backend and SvelteKit for the frontend. We implemented data persistence with PostgreSQL and MongoDB, managed messaging with RabbitMQ, and containerized the application with Docker. We aimed to have a user-friendly interface, making it easy for users to register and create and manage polls.
+  
+
+  
+
+\end{abstract}
+
+%\input{commands}	
+
+\input{sections/introduction}
+
+\input{sections/design}
+
+\input{sections/technology}
+
+
+\input{sections/implementation}
+
+
+
+\input{sections/conclusion}
+
+\bibliographystyle{plain}
+\bibliography{report.bib}
+
+\end{document}

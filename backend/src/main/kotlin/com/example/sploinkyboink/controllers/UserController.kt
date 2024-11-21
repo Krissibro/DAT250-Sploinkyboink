@@ -1,31 +1,94 @@
 package com.example.sploinkyboink.controllers
 
 import com.example.sploinkyboink.entities.User
+import com.example.sploinkyboink.services.JwtService
 import com.example.sploinkyboink.services.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import jakarta.servlet.http.Cookie
+import jakarta.servlet.http.HttpServletResponse
+
 
 @RestController
 @RequestMapping("/sploinkyboinkend")    // Aka "/api"
 class UserController(
-    private val userService: UserService
+    private val userService: UserService,
+    private val jwtService: JwtService
 ) {
-
+  
     // Register a new user
-    @PostMapping("/users")
+    @PostMapping("/register")
     fun createUser(
         @RequestParam username: String,
+        @RequestParam email: String,
         @RequestParam password: String,
         @RequestParam confirmPassword: String,
-        @RequestParam email: String
+        response: HttpServletResponse
     ): ResponseEntity<String> {
-        return try {
+         try {
             userService.registerUser(username, password, confirmPassword, email)
-            ResponseEntity("User created", HttpStatus.CREATED)
+             val token = jwtService.generateToken(username)
+             val cookie = Cookie("jwt", token)
+             cookie.isHttpOnly= true
+             cookie.path = "/"
+
+             response.addCookie(cookie)
+             return ResponseEntity("User created", HttpStatus.CREATED)
+
         } catch (e: IllegalArgumentException) {
-            ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+            return ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
         }
+    }
+
+    // Logging in a user
+    @PostMapping("/login")
+    fun loginUser(
+        @RequestParam username: String,
+        @RequestParam password: String,
+        response: HttpServletResponse
+    ): ResponseEntity<String> {
+         try {
+            val authenticated = userService.authenticate(username, password)
+            if (authenticated) {
+                val token = jwtService.generateToken(username)
+                val cookie = Cookie("jwt", token)
+                cookie.isHttpOnly= true
+                cookie.path = "/"
+
+                response.addCookie(cookie)
+                return ResponseEntity("Login successful", HttpStatus.OK)
+            }
+             return ResponseEntity("Invalid credentials", HttpStatus.UNAUTHORIZED)
+        }catch (e: IllegalArgumentException) {
+            return ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+        }
+
+    }
+
+    @GetMapping("/isLoggedIn")
+    fun isLoggedIn(@CookieValue ("jwt") jwt: String?): ResponseEntity<Any> {
+        try {
+            if (jwt == null) {
+                return ResponseEntity("User must be logged in.",HttpStatus.UNAUTHORIZED)
+            }
+            return ResponseEntity("User is logged in", HttpStatus.OK)
+        }catch (e: IllegalArgumentException) {
+            return ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    //  Logging out a user
+    @PostMapping("/logout")
+    fun logout(response: HttpServletResponse): ResponseEntity<Any> {
+
+        val cookie = Cookie("jwt", "")
+        cookie.isHttpOnly = true
+        cookie.path = "/"
+        cookie.maxAge = 0
+
+        response.addCookie(cookie)
+        return ResponseEntity("Logout successful", HttpStatus.OK)
     }
 
     // Get all users

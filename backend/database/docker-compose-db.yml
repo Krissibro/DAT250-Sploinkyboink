@@ -15,8 +15,8 @@ services:
   mongodb_database:
     image: mongo:latest
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: joe-biden-bazinga-blast
+      MONGODB_INITDB_ROOT_USERNAME: root
+      MONGODB_INITDB_ROOT_PASSWORD: joe-biden-bazinga-blast
     ports:
       - "27017:27017"
     volumes:

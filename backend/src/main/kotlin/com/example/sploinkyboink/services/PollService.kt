@@ -91,7 +91,12 @@ class PollService(
         }
 
         // Group the votes by the vote option, count occurrences, and map the results
-        return poll.votes.groupingBy { it.voteOption }.eachCount().mapValues { it.value.toLong() }.toMutableMap()
+        val allOptions = poll.voteOptions.associateWith { 0L }.toMutableMap()
+        val countedVotes = poll.votes.groupingBy { it.voteOption }.eachCount().mapValues { it.value.toLong() }
+
+        // Merge counted votes into the options map
+        allOptions.putAll(countedVotes)
+        return allOptions
     }
 
 
