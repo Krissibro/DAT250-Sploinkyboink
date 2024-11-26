@@ -1,3 +1,5 @@
+name: sploinkyboink-backend-stuff
+
 services:
   postgres_database:
     image: postgres:latest
