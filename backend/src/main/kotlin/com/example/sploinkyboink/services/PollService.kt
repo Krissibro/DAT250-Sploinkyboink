@@ -61,6 +61,11 @@ class PollService(
     // Delete a poll
     @Transactional
     fun deletePoll(pollID: String) {
+        // Verify poll existence
+        val poll = pollRepository.findById(pollID).orElseThrow {
+            IllegalArgumentException("Poll not found")
+        }
+        // Proceed to delete
         pollRepository.deleteById(pollID)
     }
 
@@ -155,13 +160,13 @@ class PollService(
     // Delete a user's vote from a poll
     @Transactional
     fun deleteVote(pollID: String, userID: Long) {
-        val poll = getPollById(pollID)
-        val existingVote = poll.votes.find { it.user == userService.getUserByUserID(userID) }
-            ?: throw IllegalArgumentException("No existing vote to delete")
-
-        poll.votes.remove(existingVote)
-        voteRepository.delete(existingVote)
-
+        val poll = pollRepository.findById(pollID).orElseThrow {
+            IllegalArgumentException("Poll not found")
+        }
+        val user = userService.getUserByUserID(userID) ?: throw IllegalArgumentException("User not found")
+        val vote = poll.votes.find { it.user.userID == userID } ?: throw IllegalArgumentException("No existing vote to delete")
+        voteRepository.delete(vote)
+        poll.votes.remove(vote)
         eventService.sendVoteEvent(poll)
     }
 }
