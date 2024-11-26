@@ -90,6 +90,10 @@ class UserServiceTest {
 
     @Test
     fun `test change email email already in use`() {
+        val userID = 1L
+        val existingUser = User(userID, "user", "oldemail@example.com", "hash")
+
+        `when`(userRepository.findById(userID)).thenReturn(java.util.Optional.of(existingUser))
         `when`(userRepository.findByEmail("usedemail@example.com")).thenReturn(User(2L, "otheruser", "usedemail@example.com", "hash"))
 
         val exception = assertThrows(IllegalArgumentException::class.java) {
