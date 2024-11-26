@@ -1,5 +1,3 @@
-// File: src/test/kotlin/com/example/sploinkyboink/UserServiceTest.kt
-
 package com.example.sploinkyboink
 
 import com.example.sploinkyboink.entities.User
@@ -10,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.any
-import org.mockito.ArgumentMatchers.eq
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.*

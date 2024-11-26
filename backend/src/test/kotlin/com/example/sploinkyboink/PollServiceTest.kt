@@ -1,5 +1,3 @@
-// File: src/test/kotlin/com/example/sploinkyboink/PollServiceTest.kt
-
 package com.example.sploinkyboink
 
 import com.example.sploinkyboink.entities.Poll
@@ -19,7 +17,6 @@ import org.mockito.Mockito.*
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
-import org.mockito.kotlin.eq
 import java.time.Instant
 import java.util.Optional
 
@@ -350,7 +347,7 @@ class PollServiceTest {
                 lastModifiedAt = Instant.now()
             )
             poll.votes.add(existingVote)
-            mockPollRepositoryFindById(poll.pollID!!, poll)
+            mockPollRepositoryFindById(poll.pollID, poll)
 
             val updatedPoll = poll.copy(
                 question = updatedQuestion,
@@ -361,7 +358,7 @@ class PollServiceTest {
             mockPollRepositorySave(updatedPoll)
 
             // Act
-            val result = pollService.editPoll(poll.pollID!!, updatedQuestion, updatedOptions, updatedValidUntil)
+            val result = pollService.editPoll(poll.pollID, updatedQuestion, updatedOptions, updatedValidUntil)
 
             // Assert
             assertNotNull(result)
@@ -371,7 +368,7 @@ class PollServiceTest {
             assertEquals(0, result.votes.size) // Votes for removed options should be deleted
 
             // Verify interactions
-            verify(pollRepository, times(1)).findById(poll.pollID!!)
+            verify(pollRepository, times(1)).findById(poll.pollID)
             verify(pollRepository, times(1)).save(any())
             verify(eventService, times(1)).sendPollEditedEvent(result)
         }
@@ -404,15 +401,15 @@ class PollServiceTest {
         @Test
         fun `should delete poll successfully`() {
             // Arrange
-            mockPollRepositoryFindById(poll.pollID!!, poll)
-            doNothing().`when`(pollRepository).deleteById(poll.pollID!!)
+            mockPollRepositoryFindById(poll.pollID, poll)
+            doNothing().`when`(pollRepository).deleteById(poll.pollID)
 
             // Act
-            pollService.deletePoll(poll.pollID!!)
+            pollService.deletePoll(poll.pollID)
 
             // Assert
-            verify(pollRepository, times(1)).findById(poll.pollID!!)
-            verify(pollRepository, times(1)).deleteById(poll.pollID!!)
+            verify(pollRepository, times(1)).findById(poll.pollID)
+            verify(pollRepository, times(1)).deleteById(poll.pollID)
             // If your service sends an event on deletion, verify it here
         }
 
@@ -450,16 +447,16 @@ class PollServiceTest {
                 lastModifiedAt = Instant.now()
             )
             poll.votes.add(existingVote)
-            mockPollRepositoryFindById(poll.pollID!!, poll)
+            mockPollRepositoryFindById(poll.pollID, poll)
             mockUserService(userID, user)
             doNothing().`when`(voteRepository).delete(existingVote)
 
             // Act
-            pollService.deleteVote(poll.pollID!!, userID)
+            pollService.deleteVote(poll.pollID, userID)
 
             // Assert
             assertFalse(poll.votes.contains(existingVote))
-            verify(pollRepository, times(1)).findById(poll.pollID!!)
+            verify(pollRepository, times(1)).findById(poll.pollID)
             verify(userService, times(1)).getUserByUserID(userID)
             verify(voteRepository, times(1)).delete(existingVote)
             verify(eventService, times(1)).sendVoteEvent(poll)
@@ -469,17 +466,17 @@ class PollServiceTest {
         fun `should throw exception when deleting non-existent vote`() {
             // Arrange
             val userID = user.userID!!
-            mockPollRepositoryFindById(poll.pollID!!, poll)
+            mockPollRepositoryFindById(poll.pollID, poll)
             mockUserService(userID, user)
 
             // Act & Assert
             val exception = assertThrows<IllegalArgumentException> {
-                pollService.deleteVote(poll.pollID!!, userID)
+                pollService.deleteVote(poll.pollID, userID)
             }
             assertEquals("No existing vote to delete", exception.message)
 
             // Verify interactions
-            verify(pollRepository, times(1)).findById(poll.pollID!!)
+            verify(pollRepository, times(1)).findById(poll.pollID)
             verify(userService, times(1)).getUserByUserID(userID)
             verify(voteRepository, never()).delete(any())
             verify(eventService, never()).sendVoteEvent(any())
