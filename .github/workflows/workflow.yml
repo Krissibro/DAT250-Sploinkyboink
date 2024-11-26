@@ -1,5 +1,5 @@
 name: Sploinkyboink CI
-run-name: ${{ github.actor }} pushed to main, testing.
+run-name: ${{ github.actor }} pushed, testing.
 
 on:
   push:
