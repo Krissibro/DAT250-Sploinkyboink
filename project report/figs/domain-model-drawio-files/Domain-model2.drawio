@@ -1,0 +1,34 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36" version="24.7.17">
+  <diagram name="Page-1" id="lH1NiNcE4W4nlqMhrEIs">
+    <mxGraphModel dx="2497" dy="872" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="7k4Nm1JUsRb4ZL0qA64T-32" value="Poll" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-570" y="150" width="210" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="7k4Nm1JUsRb4ZL0qA64T-33" value="&lt;p style=&quot;font-size: 14px; margin: 0px 0px 0px 4px; line-height: 1.6;&quot;&gt;pollID: String&lt;/p&gt;&lt;p style=&quot;font-size: 14px; margin: 0px 0px 0px 4px; line-height: 1.6;&quot;&gt;byUser: User?&lt;br&gt;validUntil: Instant&lt;br&gt;voteOptions: List&amp;lt;String&amp;gt;&lt;br&gt;question: String&lt;br&gt;lastModifiedAt: Instant?&lt;br&gt;votes: Set&amp;lt;Vote&amp;gt;&lt;br&gt;publishedAt: Instant?&lt;/p&gt;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;" vertex="1" parent="7k4Nm1JUsRb4ZL0qA64T-32">
+          <mxGeometry y="50" width="210" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="7k4Nm1JUsRb4ZL0qA64T-34" value="User" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-220" y="540" width="180" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="7k4Nm1JUsRb4ZL0qA64T-35" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;userID: Long?&lt;/span&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;passwordHash: String&lt;/span&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;password: String&lt;/span&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;username: String&lt;/span&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;email: String&lt;/span&gt;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;" vertex="1" parent="7k4Nm1JUsRb4ZL0qA64T-34">
+          <mxGeometry y="50" width="180" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="7k4Nm1JUsRb4ZL0qA64T-36" value="Event" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="400" width="230" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="7k4Nm1JUsRb4ZL0qA64T-37" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;timestamp: Instant&lt;/span&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;type: String&lt;/span&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;details: Map&amp;lt;String, Object&amp;gt;&lt;/span&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;id: String?&lt;/span&gt;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;" vertex="1" parent="7k4Nm1JUsRb4ZL0qA64T-36">
+          <mxGeometry y="50" width="230" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="7k4Nm1JUsRb4ZL0qA64T-38" value="Vote" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-40" y="180" width="250" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="7k4Nm1JUsRb4ZL0qA64T-39" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;poll: Poll&lt;/span&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;lastModifiedAt: Instant?&lt;/span&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;publishedAt: Instant?&lt;/span&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;id: Long&lt;/span&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;voteOption: String&lt;/span&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;user: User&lt;/span&gt;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;" vertex="1" parent="7k4Nm1JUsRb4ZL0qA64T-38">
+          <mxGeometry y="50" width="250" height="190" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
