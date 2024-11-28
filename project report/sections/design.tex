@@ -24,9 +24,12 @@ Each use case is supported by the backend services to ensure proper functionalit
 \vspace{0.2cm}
 \noindent The sequence diagram shows the interactions involved in voting on a poll. A user either submits a vote successfully or receives an error response.
 
-\begin{center}
-\includegraphics[width=0.8\textwidth]{../images/SequenceDiagramVotingLogic.png}
-\end{center}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{../images/SequenceDiagramVotingLogic.png}
+	\caption{Sequence diagram for voting on a poll}
+	\label{fig:sequence_diagram}
+\end{figure}
 
 \subsection{Domain Model}
 The domain model of the FeedApp consists of several key entities that represent the core data objects of the system. These entities are mapped to the database and interact through the business logic.
@@ -37,13 +40,18 @@ The domain model of the FeedApp consists of several key entities that represent 
     \item \textbf{Event:} Represents events logged in the system, such as vote events, poll creation events, and poll edit events. Events are tracked for auditing and analytics purposes.
 \end{itemize}
 
-\begin{center}
-\includegraphics[width=0.5\textwidth]{./figs/domain-model.png}
-\end{center}
+\noindent The diagram below illustrates the relationships between the entities, with associations such as a user creating a poll, casting a vote, and generating events.
 
-\noindent The diagram above illustrates the relationships between the entities, with associations such as a user creating a poll, casting a vote, and generating events.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{./figs/domain-model.png}
+	\caption{Domain model for FeedApp}
+	\label{fig:domain_model}
+\end{figure}
+
+
 \subsection{Architecture and Applied Technologies}
-The architecture of the FeedApp is designed to be modular and scalable, with separate services responsible for managing user data, polls, votes, and events. 
+The architecture of the FeedApp is designed to be modular and scalable, with separate services responsible for managing user data, polls, votes, and events. This is represented in figure \ref{fig:architecture}. 
 \begin{itemize}
     \item \textbf{Backend Framework and Language:} 
     \begin{itemize}
@@ -72,6 +80,9 @@ The architecture of the FeedApp is designed to be modular and scalable, with sep
         \item \textbf{Docker:} The entire application, including the backend, frontend, and database, is containerized using Docker for easy deployment and scalability.
     \end{itemize}
 \end{itemize}
+
+\begin{figure}[H]
+\centering
 \begin{tikzpicture}[node distance=3cm, auto, font=\small]
     % Define the blocks for each component
     \node (frontend) [draw, rectangle, fill=green!10, text centered, minimum height=2cm, minimum width=3cm, align=center] {Frontend \\ Svelte(Kit)};
@@ -86,10 +97,17 @@ The architecture of the FeedApp is designed to be modular and scalable, with sep
     \draw[->, thick] (persistence) -- (container) node[midway, left, xshift=-0.5cm] {Data storage};
     \draw[->, thick] (messaging) -- (container) node[midway, below, yshift=-0.5cm, xshift=2cm] {Message processing};
 \end{tikzpicture}
+
+\caption{Architecture of FeedApp}
+\label{fig:architecture}
+\end{figure}
+
 \subsection{Backend}
 We will now look into how the Kotlin code is organized. We use Kotlin with Spring Boot as the backend. The code is organized into three main services: EventService, PollService, and UserService. These handle the business logic. We also have class JwtService,  which provides token management for authentication.
  
 \vspace{2cm}
+\begin{figure}[H]
+\centering
 \begin{tikzpicture}[node distance=1.5cm]
 % Define UML class styles
 \tikzstyle{class} = [rectangle, draw=black, fill=blue!10, text centered, minimum height=0.8cm, minimum width=2.5cm]
@@ -125,6 +143,10 @@ We will now look into how the Kotlin code is organized. We use Kotlin with Sprin
 \draw[arrow] (JwtAuthFilter) -- (SecurityConfig);
 \draw[arrow] (SecurityConfig) -- (RabbitMQConfig);
 \end{tikzpicture}
+
+\caption{Overview of the architecture in regards to controllers, services, repositories and configurations}
+\label{fig:controller_service_repo_config}
+\end{figure}
 \vspace{1cm}
 
 \noindent \textbf{Main Application Class}

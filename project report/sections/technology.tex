@@ -11,6 +11,7 @@ Kotlin, developed by JetBrains (the Czech software company behind IntelliJ IDEA)
     \item \textbf{Multi-Platform Development}: Kotlin Multiplatform and Kotlin/Native enable shared codebases across platforms, including mobile, web, and desktop applications.
 \end{itemize}
 
+\begin{figure}[H]
 \begin{tikzpicture}[node distance=1.5cm]
 
 \hspace*{-1.5cm}  % Shifts everything 1.5 cm to the left
@@ -62,6 +63,10 @@ Kotlin, developed by JetBrains (the Czech software company behind IntelliJ IDEA)
 \draw [arrow] (usecase3) -- (context);
 
 \end{tikzpicture}
+
+\caption{Overview of Kotlin's features and benefits in the context of Java development}
+\label{fig:kotlin_java_overview}
+\end{figure}
 \vspace{1cm}
 
 \noindent \textbf{Key features of Kotlin}
@@ -98,6 +103,8 @@ Kotlin’s syntax is designed to be more compact and expressive, which should re
 \\
 \\
 \textbf{Experiment Example}:
+\begin{figure}[H]
+\centering
 \begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}, boxrule=0.5mm, width=0.8\textwidth, sharp corners=south]
     \begin{itemize}
     \vspace{0.2cm}
@@ -128,6 +135,9 @@ public class Person {
         \end{lstlisting}
     \end{itemize}
 \end{tcolorbox}
+\caption{Example of class implementation in Kotlin and Java}
+\label{fig:class_implementation}
+\end{figure}
 
 \vspace{1cm}
 
@@ -142,6 +152,8 @@ We will provide a small example that highlights why Java are more prone to null 
 \\
 \textbf{Experiment Example}:
 
+\begin{figure}[H]
+\centering
 \begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}, boxrule=0.5mm, width=0.8\textwidth, sharp corners=south]
     \begin{itemize}
     \vspace{0.2cm}
@@ -165,6 +177,9 @@ greet(null);  // Output: Hello, Guest!
         \end{lstlisting}
     \end{itemize}
 \end{tcolorbox}
+\caption{Example of null check in Kotlin and Java}
+\label{fig:null_check}
+\end{figure}
 
 \noindent \textbf{Evaluation}: From the examples we see that Kotlin is designed so that it does not need to handle null checks manually. Kotlin’s \texttt{null} safety ensures that nullability is explicitly handled using \texttt{?} and \texttt{?:}, reducing runtime errors. Java’s manual null checks are error-prone and can be easily missed, leading to potential \texttt{NullPointerException} risks. Hypothesis 2 holds.
 \\
@@ -177,7 +192,8 @@ To validate this hypothesis, we present an example demonstrating the use of Kotl
 \\
 \\
 \textbf{Experiment Example}:
-
+\begin{figure}[H]
+\centering	
 \begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}, boxrule=0.5mm, width=0.8\textwidth, sharp corners=south]
     \begin{itemize}
     \vspace{0.2cm}
@@ -215,6 +231,9 @@ public class Main {
         \end{lstlisting}
     \end{itemize}
 \end{tcolorbox}
+\caption{Example of Kotlin's coroutines versus Java's threads}
+\label{coroutines_threads}
+\end{figure}
 
 \noindent \textbf{Evaluation}: Kotlin coroutines simplify asynchronous code, making it more readable and reducing boilerplate code. Java’s thread-based approach requires more code and is harder to manage due to explicit thread handling and synchronization. Coroutines are lightweight, allowing many concurrent tasks with minimal memory usage, whereas Java threads consume more resources. Coroutines scale efficiently since they are managed by a dispatcher and don't block threads, resulting in faster response times compared to Java threads, which block during operations like Thread.sleep(). Additionally, coroutines are simpler to manage and more readable than Java threads, making them a more efficient choice for asynchronous data handling in performance-sensitive applications. Hypothesis 3 holds.
 
@@ -231,6 +250,8 @@ public class Main {
 
 \noindent \textbf{Experiment Example}:
 
+\begin{figure}[H]
+\centering	
 \begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}, boxrule=0.5mm, width=0.8\textwidth, sharp corners=south]
     \begin{itemize}
         \item \textbf{\scriptsize Kotlin}:
@@ -250,6 +271,9 @@ public class Main {
         \end{lstlisting}
     \end{itemize}
 \end{tcolorbox}
+\caption{Example of Kotlin importing and using Java's Hash Map}
+\label{fig:import_hashmap}
+\end{figure}
 
 \vspace{1em}
 
