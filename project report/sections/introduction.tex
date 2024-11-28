@@ -1,61 +1,56 @@
 \section{Introduction}
 \label{sec:introduction}
 
-Approximately 1 page on:
+The primary objective of this project was to develop a prototype implementation of a web-based polling application.
+This application allows users to create and participate in polls efficiently through a user-friendly interface.
+By leveraging web development frameworks and tools, the project aims to provide a robust and scalable platform for conducting polls.
 
-\begin{itemize}
-
-\item A brief introduction to the prototype implementation and topic of the project.
-
-\item Discuss (briefly) the technology stack that has been selected
-
-\item A brief account of the results that have been obtained in the project.
-
-\item A one paragraph overview at the end, explaining how the rest of the report is / has been organised.
-
-\end{itemize}
-
-
-We will now introduce the app and it's features, and the technologies we have used.
-
-
-\textbf{Technology overview}
-
+To achieve this we made use of the following technology stack:
 
 \begin{itemize}
     \item \textbf{Backend Framework and Language}
     \begin{itemize}
-        \item Spring Boot (Backend framework)
-        \item Kotlin (Programming language)
+        \item Spring Boot
+        \item Kotlin
     \end{itemize}
-    
+
     \item \textbf{Persistence Layer}
     \begin{itemize}
-        \item Spring JPA (Java Persistence API)
+        \item Spring JPA
         \item Database Options:
         \begin{itemize}
-            \item PostgreSQL (relational database)
-            \item MongoDB (non-relational database)
+            \item PostgreSQL
+            \item MongoDB
         \end{itemize}
     \end{itemize}
 
     \item \textbf{Frontend Framework}
     \begin{itemize}
-        \item Svelte(Kit)
+        \item SvelteKit
     \end{itemize}
 
     \item \textbf{Messaging}
     \begin{itemize}
-        \item Spring messaging with RabbitMQ (message broker)
+        \item Spring messaging with RabbitMQ
     \end{itemize}
 
     \item \textbf{Containerization and Deployment}
     \begin{itemize}
-        \item Docker (container engine)
+        \item Docker
     \end{itemize}
 \end{itemize}
 
+The results obtained through this project highlight the feasibility and effectiveness of the proposed architecture with a usable website for running polls.
+The prototype demonstrates key functionalities of the polling application, including poll creation, participation, and result aggregation.
+Kotlin, in particular, proved advantageous for backend development, offering concise syntax and seamless integration with Java-based frameworks, which streamlined development and reduced boilerplate code.
+The use of SvelteKit on the frontend ensures a responsive and engaging user experience, while the combination of Spring Boot, JPA and RabbitMQ in the backend provides a scalable and reliable infrastructure.
+In addition, the inclusion of both relational and non-relational database options offers flexibility to cater to diverse use cases. \\
 
-\noindent
-This rest of this report is organised as follows:
-Section~\ref{sec:design} gives an ....
+The remainder of this report is organised as follows:
+\begin{itemize}
+    \item \textbf{Section~\ref{sec:design}: Discusses the design of the application, outlining the design choices and user interface considerations.}
+    \item \textbf{Section~\ref{sec:technology}: Evaluates Kotlin as a programming language for this project.}
+    \item \textbf{Section~\ref{sec:implementation}: Delves into the prototype implementation.}
+    \item \textbf{Section~\ref{sec:conclusions}: Concludes the report with a summary of findings and potential areas for future work}
+    \item \textbf{Section 6: References}
+\end{itemize}
