@@ -36,7 +36,12 @@ The domain model of the FeedApp consists of several key entities that represent 
     \item \textbf{Vote:} Represents a vote cast by a user on a specific poll. A vote has a reference to the user who cast it, the poll being voted on, and the selected option.
     \item \textbf{Event:} Represents events logged in the system, such as vote events, poll creation events, and poll edit events. Events are tracked for auditing and analytics purposes.
 \end{itemize}
-The diagram above illustrates the relationships between the entities, with associations such as a user creating a poll, casting a vote, and generating events.
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{./figs/domain-model.png}
+\end{center}
+
+\noindent The diagram above illustrates the relationships between the entities, with associations such as a user creating a poll, casting a vote, and generating events.
 \subsection{Architecture and Applied Technologies}
 The architecture of the FeedApp is designed to be modular and scalable, with separate services responsible for managing user data, polls, votes, and events. 
 \begin{itemize}
