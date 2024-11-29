@@ -40,13 +40,25 @@ The domain model of the FeedApp consists of several key entities that represent 
     \item \textbf{Event:} Represents events logged in the system, such as vote events, poll creation events, and poll edit events. Events are tracked for auditing and analytics purposes.
 \end{itemize}
 
-\noindent The diagram below illustrates the relationships between the entities, with associations such as a user creating a poll, casting a vote, and generating events.
+\noindent The diagram below illustrates the relationships between the entities, with associations such as a user creating a poll, casting a vote, and generating events. The domain model of the FeedApp consists of several key entities that represent the core data objects of the system. These entities are mapped to the database and interact through the business logic.
 
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=0.5\textwidth]{./figs/domain-model.png}
-	\caption{Domain model for FeedApp}
-	\label{fig:domain_model}
+    \begin{minipage}{0.45\textwidth}
+        \raggedright
+        \begin{itemize}
+            \item \textbf{User:} Represents the users of the system. Each user has a unique identifier, email, password, and roles (admin, voter).
+            \item \textbf{Poll:} Represents a poll created by a user. A poll has a unique identifier, a question, multiple options for voting, and a status (active, closed).
+            \item \textbf{Vote:} Represents a vote cast by a user on a specific poll. A vote has a reference to the user who cast it, the poll being voted on, and the selected option.
+            \item \textbf{Event:} Represents events logged in the system, such as vote events, poll creation events, and poll edit events. Events are tracked for auditing and analytics purposes.
+        \end{itemize}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./figs/domain-model.png}
+        \caption{Domain model for FeedApp}
+        \label{fig:domain_model}
+    \end{minipage}
 \end{figure}
 
 
@@ -102,95 +114,3 @@ The architecture of the FeedApp is designed to be modular and scalable, with sep
 \label{fig:architecture}
 \end{figure}
 
-\subsection{Backend}
-We will now look into how the Kotlin code is organized. We use Kotlin with Spring Boot as the backend. The code is organized into three main services: EventService, PollService, and UserService. These handle the business logic. We also have class JwtService,  which provides token management for authentication.
- 
-\vspace{2cm}
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[node distance=1.5cm]
-% Define UML class styles
-\tikzstyle{class} = [rectangle, draw=black, fill=blue!10, text centered, minimum height=0.8cm, minimum width=2.5cm]
-\tikzstyle{arrow} = [->, thick, draw=black]
-% Define nodes (classes)
-\node[class] (SploinkyboinkApplication) {SploinkyboinkApp};
-\node[class, below of=SploinkyboinkApplication] (PollController) {PollController};
-\node[class, below of=PollController] (UserController) {UserController};
-\node[class, below of=UserController] (EventListener) {EventListener};
-% Define second layer nodes (Services)
-\node[class, right of=PollController, xshift=3cm] (PollService) {PollService};
-\node[class, below of=PollService] (UserService) {UserService};
-\node[class, below of=UserService] (EventService) {EventService};
-% Define third layer nodes (Repositories)
-\node[class, right of=PollService, xshift=3cm] (VoteRepository) {VoteRepo};
-\node[class, below of=VoteRepository] (PollRepository) {PollRepo};
-\node[class, below of=PollRepository] (UserRepository) {UserRepo};
-\node[class, below of=UserRepository] (EventRepository) {EventRepo};
-
-% Define fourth layer nodes (Security)
-\node[class, right of=VoteRepository, xshift=3cm] (JwtAuthFilter) {JWT Filter};
-\node[class, below of=JwtAuthFilter] (SecurityConfig) {Security Config};
-% Define fifth layer nodes (Configurations)
-\node[class, below of=SecurityConfig] (RabbitMQConfig) {RabbitMQ Config};
-% Relationships (arrows)
-\draw[arrow] (PollController) -- (PollService);
-\draw[arrow] (UserController) -- (UserService);
-\draw[arrow] (EventListener) -- (EventService);
-\draw[arrow] (PollService) -- (PollRepository);
-\draw[arrow] (PollService) -- (VoteRepository);
-\draw[arrow] (UserService) -- (UserRepository);
-\draw[arrow] (EventService) -- (EventRepository);
-\draw[arrow] (JwtAuthFilter) -- (SecurityConfig);
-\draw[arrow] (SecurityConfig) -- (RabbitMQConfig);
-\end{tikzpicture}
-
-\caption{Overview of the architecture in regards to controllers, services, repositories and configurations}
-\label{fig:controller_service_repo_config}
-\end{figure}
-\vspace{1cm}
-
-\noindent \textbf{Main Application Class}
-\begin{itemize}
-    \item \textbf{SploinkyboinkApp}: The central class responsible for initializing and running the application.
-\end{itemize}
-
-\noindent \textbf{Controllers}
-\begin{itemize}
-    \item \textbf{PollController}: Manages HTTP requests related to polls.
-    \item \textbf{UserController}: Handles user-related HTTP requests.
-    \item \textbf{VoteController}: Processes vote-related HTTP requests.
-    \item \textbf{EventListener}: Handles event-triggered actions.
-\end{itemize}
-
-\noindent \textbf{Services (Business Logic)}
-\begin{itemize}
-    \item \textbf{EventService}: Logs events such as user votes and poll creation/editing.
-    \item \textbf{PollService}: Manages polls and voting logic.
-    \item \textbf{UserService}: Handles user registration, authentication, and data operations.
-    \item \textbf{VoteService}: Manages vote-related logic.
-    \item \textbf{JwtService}: Provides JWT token management for authentication.
-\end{itemize}
-
-\noindent \textbf{Repositories (Data Access)}
-\begin{itemize}
-    \item \textbf{PollRepo}: Interacts with the database for poll-related data.
-    \item \textbf{UserRepo}: Manages user data persistence.
-    \item \textbf{VoteRepo}: Handles database operations for votes.
-    \item \textbf{EventRepo}: Supports event-related data storage and access.
-\end{itemize}
-
-\noindent \textbf{Security and Messaging}
-\begin{itemize}
-    \item \textbf{Security Config}: Configures application-wide security settings and authentication mechanisms.
-    \item \textbf{JWT Filters}: Ensures secure token-based authentication.
-    \item \textbf{RabbitMQ Config}: Sets up RabbitMQ for message processing and event handling.
-\end{itemize}
-
-\vspace{0.5cm}
-\noindent \textbf{Achieved functionalities}
-\begin{itemize}
-    \item \textbf{Polling Functionality}: Users can create, manage, and participate in polls, with their votes accurately captured and stored.
-    \item \textbf{Event Tracking}: Tracks important user actions, enabling auditing or analytics.
-    \item \textbf{User Management}: Ensures secure user authentication and management through validation mechanisms.
-    \item \textbf{Integration with Messaging}: RabbitMQ integration supports a scalable, event-driven architecture, enabling the decoupling of services and enhancing overall application performance.
-\end{itemize}
