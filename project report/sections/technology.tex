@@ -12,7 +12,7 @@ Kotlin, developed by JetBrains (the Czech software company behind IntelliJ IDEA)
 \end{itemize}
 
 \begin{figure}[H]
-\begin{tikzpicture}[node distance=1.5cm]
+\begin{tikzpicture}[node distance=1.4cm]
 
 \hspace*{-1.5cm}  % Shifts everything 1.5 cm to the left
 
@@ -91,15 +91,15 @@ Kotlin’s powerful type system includes features like smart casts, which automa
 \textbf{Data Classes}: Kotlin’s data classes simplify the creation of classes primarily used for holding data by automatically generating common methods like \texttt{equals()}, \texttt{hashCode()}, and \texttt{toString()}, streamlining data handling.
 
 
-\subsection{Experiments: Is Kotlin better suited in developement than Java? }
+\subsection{Experiments: Is Kotlin better suited in development than Java? }
 
-In this section, we present a series of hypotheses regarding the potential benefits of using Kotlin over Java, along with experimental designs that could help validate or refute these assumptions. We are comparing Kotlin and Java code to see the differences between the languages. Some of the concepts discussed in the examples will also apply to our PollApp. 
+In this section, we present a series of hypotheses regarding the potential benefits of using Kotlin over Java, along with experimental designs that could help validate or refute these assumptions. We are comparing Kotlin and Java code to see the differences between the languages. Some of the concepts discussed in the examples will also apply to our application. 
 \\
 \\
 \textbf{Hypothesis 1: Using Kotlin will provide better development speed and code conciseness than Java.} 
 \\
 \\
-Kotlin’s syntax is designed to be more compact and expressive, which should reduce the time required to implement core functionalities such as user, poll, and vote management. To test this hypothesis, we can compare the time it takes to implement key features in both Kotlin and Java, while also measuring the number of lines of code required to achieve the same outcomes. We come up with a simple example for a class we call person, and compare the lines of code (LOC) to the same class implemented in Java. Our PollApp uses many classes, so a simple class structure is very beneficial:
+Kotlin’s syntax is designed to be more compact and expressive, which should reduce the time required to implement core functionalities such as user, poll, and vote management. To test this hypothesis, we can compare the time it takes to implement key features in both Kotlin and Java, while also measuring the number of lines of code required to achieve the same outcomes. We come up with a simple example for a class we call person, and compare the lines of code (LOC) to the same class implemented in Java. Our application uses many classes, so a simple class structure is very beneficial:
 \\
 \\
 \textbf{Experiment Example}:
@@ -109,12 +109,12 @@ Kotlin’s syntax is designed to be more compact and expressive, which should re
     \begin{itemize}
     \vspace{0.2cm}
         \item \textbf{\scriptsize Kotlin} \scriptsize (Data class):
-        \begin{lstlisting}[style=kotlin, basicstyle=\scriptsize\ttfamily]
+        \begin{lstlisting}[style=kotlin, basicstyle=\tiny\ttfamily]
 data class Person(val name: String, val age: Int)
         \end{lstlisting}
         
         \item \textbf{\scriptsize Java} \scriptsize (Full class):
-        \begin{lstlisting}[style=java, basicstyle=\scriptsize\ttfamily]
+        \begin{lstlisting}[style=java, basicstyle=\tiny\ttfamily]
 public class Person {
     private String name;
     private int age;
@@ -158,7 +158,7 @@ We will provide a small example that highlights why Java are more prone to null 
     \begin{itemize}
     \vspace{0.2cm}
         \item \textbf{\scriptsize Kotlin} \scriptsize (Null safety):
-        \begin{lstlisting}[style=kotlin, basicstyle=\scriptsize\ttfamily]
+        \begin{lstlisting}[style=kotlin, basicstyle=\tiny\ttfamily]
 fun greet(name: String?) {
       println("Hello, ${name ?: "Guest"}!")
 }
@@ -166,7 +166,7 @@ greet(null)  // Output: Hello, Guest!
         \end{lstlisting}
         
         \item \textbf{\scriptsize Java} \scriptsize (Manual null check):
-        \begin{lstlisting}[style=java, basicstyle=\scriptsize\ttfamily]
+        \begin{lstlisting}[style=java, basicstyle=\tiny\ttfamily]
 public void greet(String name) {
         if (name == null) {
             name = "Guest";
@@ -193,12 +193,13 @@ To validate this hypothesis, we present an example demonstrating the use of Kotl
 \\
 \textbf{Experiment Example}:
 \begin{figure}[H]
-\centering	
+\centering
+	
 \begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}, boxrule=0.5mm, width=0.8\textwidth, sharp corners=south]
     \begin{itemize}
     \vspace{0.2cm}
         \item \textbf{\scriptsize Kotlin} \scriptsize (Null Coroutines):
-        \begin{lstlisting}[style=kotlin, basicstyle=\scriptsize\ttfamily]
+        \begin{lstlisting}[style=kotlin, basicstyle=\tiny\ttfamily]
 import kotlinx.coroutines.*
 
 suspend fun fetchData() {
@@ -212,7 +213,7 @@ fun main() = runBlocking {
         \end{lstlisting}
         
         \item \textbf{\scriptsize Java} \scriptsize (Threads):
-        \begin{lstlisting}[style=java, basicstyle=\scriptsize\ttfamily]
+        \begin{lstlisting}[style=java, basicstyle=\tiny\ttfamily]
 public class Main {
     public static void fetchData() {
         try {
@@ -240,7 +241,7 @@ public class Main {
 \vspace{1em}
 
 
-\noindent \textbf{Hypothesis 4: Kotlin has seamless interoperability with Java in addtition to better features.}
+\noindent \textbf{Hypothesis 4: Kotlin has seamless interoperability with Java in addition to better features.}
 
 \vspace{1em}
 
@@ -255,7 +256,7 @@ public class Main {
 \begin{tcolorbox}[colframe=blue!80!black, colback=blue!5!white, coltitle=blue!50!black, title={-}, boxrule=0.5mm, width=0.8\textwidth, sharp corners=south]
     \begin{itemize}
         \item \textbf{\scriptsize Kotlin}:
-        \begin{lstlisting}[style=kotlin, basicstyle=\scriptsize\ttfamily]
+        \begin{lstlisting}[style=kotlin, basicstyle=\tiny\ttfamily]
     import java.util.HashMap
 
     fun main() {
