@@ -65,25 +65,13 @@ The domain model of the FeedApp consists of several key entities that represent 
     \item \textbf{Event:} Represents events logged in the system, such as vote events, poll creation events, and poll edit events. Events are tracked for auditing and analytics purposes.
 \end{itemize}
 
-\noindent The diagram below illustrates the relationships between the entities, with associations such as a user creating a poll, casting a vote, and generating events. The domain model of the FeedApp consists of several key entities that represent the core data objects of the system. These entities are mapped to the database and interact through the business logic.
+The diagram below illustrates the relationships between the entities, with associations such as a user creating a poll, casting a vote, and generating events. The domain model of the FeedApp consists of several key entities that represent the core data objects of the system. These entities are mapped to the database and interact through the business logic.
 
 \begin{figure}[H]
-    \begin{minipage}{0.45\textwidth}
-        \raggedright
-        \begin{itemize}
-            \item \textbf{User:} Represents the users of the system. Each user has a unique identifier, email, password, and roles (admin, voter).
-            \item \textbf{Poll:} Represents a poll created by a user. A poll has a unique identifier, a question, multiple options for voting, and a status (active, closed).
-            \item \textbf{Vote:} Represents a vote cast by a user on a specific poll. A vote has a reference to the user who cast it, the poll being voted on, and the selected option.
-            \item \textbf{Event:} Represents events logged in the system, such as vote events, poll creation events, and poll edit events. Events are tracked for auditing and analytics purposes.
-        \end{itemize}
-    \end{minipage}%
-    \hfill
-    \begin{minipage}{0.45\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{./figs/domain-model.png}
-        \caption{Domain model for FeedApp}
-        \label{fig:domain_model}
-    \end{minipage}
+    \centering
+    \includegraphics[width=0.65\textwidth]{./figs/domain-model.png}
+    \caption{Domain model for FeedApp}
+    \label{fig:domain_model}
 \end{figure}
 
 
