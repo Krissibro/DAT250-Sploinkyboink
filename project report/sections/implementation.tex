@@ -130,7 +130,7 @@ We use Kotlin with Spring Boot as the backend. The code is organized into three 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.6\textwidth]{../images/pollController.png}
-	\caption{Sequence diagram for voting on a poll}
+	\caption{Endpoints for creating and getting polls}
 	\label{fig:pollController}
 \end{figure}
 
@@ -139,9 +139,11 @@ We use Kotlin with Spring Boot as the backend. The code is organized into three 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.6\textwidth]{../images/pollService.png}
-	\caption{Sequence diagram for voting on a poll}
+	\caption{Functions for creating and getting a poll by its ID in the PollService}
 	\label{fig:pollService}
 \end{figure}
+
+\noindent The second screenshot is from our PollService class. We use this to configure what to send to the databases as queries or new polls and votes to be added, thus this class provides the buissness functionality for the parts related to polls for our app. The app uses separate services for the poll, user, event and security side of transactions in order to keep the functionality separate.
 
 \vspace{0.5cm}
 \noindent \textbf{Achieved functionalities}
