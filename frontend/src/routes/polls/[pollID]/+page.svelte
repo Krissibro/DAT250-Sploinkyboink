@@ -91,6 +91,26 @@
     async function viewResults() {
         await goto(`/polls/${poll.pollID}/results`);
     }
+
+    async function deletePoll() {
+        if (!isLoggedIn()) {
+            message = 'You must be logged in to delete this poll';
+            return;
+        }
+
+        const res = await fetch(`/sploinkyboinkend/polls/${poll.pollID}`, {
+            method: 'DELETE',
+        });
+
+        if (res.ok) {
+            message = 'Poll deleted successfully';
+            // Redirect to home page after deletion
+            await goto('/');
+        } else {
+            const errorText = await res.text();
+            message = `Error: ${errorText}`;
+        }
+    }
 </script>
 
 <div class="container mx-auto p-4">
@@ -124,6 +144,23 @@
                 </button>
                 {#if hasVoted}
                     <button type="button" on:click={deleteVote} class="py-2 px-4 bg-red-500 hover:bg-red-600 text-white font-semibold rounded ml-2">Delete Vote</button>
+                {/if}
+                {#if isLoggedIn() && user.username === poll.byUser?.username}
+                    <div class="mt-4">
+                        <p class="p-1 opacity-30">Editing does not work if you have voted for some reason :)</p>
+                        <button
+                                on:click={() => goto(`/polls/${poll.pollID}/edit`)}
+                                class="py-2 px-4 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold rounded"
+                        >
+                            Edit Poll
+                        </button>
+                        <button
+                                on:click={deletePoll}
+                                class="py-2 px-4 bg-red-500 hover:bg-red-600 text-white font-semibold rounded ml-2"
+                        >
+                            Delete Poll
+                        </button>
+                    </div>
                 {/if}
             </form>
             <button on:click={viewResults} class="mt-4 py-2 px-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded">View Results</button>
