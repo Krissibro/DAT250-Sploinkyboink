@@ -1,35 +1,22 @@
-# Stage 1: Build the SvelteKit app
-FROM node:18 AS builder
+# Use the official Node.js image for building and running the frontend
+FROM node:18 AS frontend
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json for dependency installation
+# Copy only package.json and package-lock.json initially
 COPY package*.json ./
 
-# Install only production dependencies
-RUN npm ci --omit=dev
+# Install all dependencies (both production and development)
+RUN npm ci
 
-# Copy the rest of the app files into the container
+# Install esbuild for linux-x64
+RUN npm install esbuild
+
+# Copy the rest of the application files after installing dependencies
 COPY . .
 
-# Build the app for production
-RUN npm run build
+# Expose the port Vite will run on
+EXPOSE 5173
 
-# Stage 2: Serve the production build using a lightweight server
-FROM node:18-alpine
-
-# Set the working directory inside the container
-WORKDIR /app
-
-# Copy the production build from the builder stage
-COPY --from=builder /app/.svelte-kit ./build
-
-# Install a lightweight HTTP server to serve the app
-RUN npm install -g serve
-
-# Expose the port the app will run on
-EXPOSE 3000
-
-# Serve the app in production mode
-CMD ["serve", "-s", "build"]
+CMD ["npm", "run", "dev", "--", "--host"]
