@@ -5,6 +5,8 @@ import com.example.sploinkyboink.services.PollService
 import org.springframework.data.domain.Page
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 import java.time.Instant
 
@@ -101,11 +103,16 @@ class PollController(
 
     @DeleteMapping("/polls/{pollID}")
     fun deletePoll(@PathVariable pollID: String): ResponseEntity<String> {
+        val authentication: Authentication? = SecurityContextHolder.getContext().authentication
+        val username = authentication?.name
+
         return try {
-            pollService.deletePoll(pollID)
+            pollService.deletePoll(pollID, username)
             ResponseEntity("Poll deleted", HttpStatus.OK)
         } catch (e: IllegalArgumentException) {
             ResponseEntity(e.message, HttpStatus.NOT_FOUND)
+        } catch (e: IllegalAccessException) {
+            ResponseEntity(e.message, HttpStatus.FORBIDDEN)
         }
     }
 
@@ -116,11 +123,16 @@ class PollController(
         @RequestParam voteOptions: List<String>,
         @RequestParam validUntil: Instant
     ): ResponseEntity<String> {
+        val authentication: Authentication? = SecurityContextHolder.getContext().authentication
+        val username = authentication?.name
+
         return try {
-            pollService.editPoll(pollID, question, voteOptions, validUntil)
+            pollService.editPoll(pollID, username, question, voteOptions, validUntil)
             ResponseEntity("Poll updated successfully", HttpStatus.OK)
         } catch (e: IllegalArgumentException) {
             ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+        } catch (e: IllegalAccessException) {
+            ResponseEntity(e.message, HttpStatus.FORBIDDEN)
         }
     }
 
