@@ -80,31 +80,31 @@ The architecture of the FeedApp is designed to be modular and scalable, with sep
 \begin{itemize}
     \item \textbf{Backend Framework and Language:} 
     \begin{itemize}
-        \item \textbf{Spring Boot:} Used for building the backend API, providing RESTful endpoints for managing users, polls, and votes.
-        \item \textbf{Kotlin:} Chosen for its concise syntax and interoperability with Java, making it a great fit for Spring Boot applications.
+        \item \textbf{Spring Boot:} Used for building the backend API, providing RESTful endpoints for managing users, polls, and votes. \cite{spring_boot}
+        \item \textbf{Kotlin:} Chosen for its concise syntax and interoperability with Java, making it a great fit for Spring Boot applications.\cite{kotlin}
     \end{itemize}
     
     \item \textbf{Persistence Layer:} 
     \begin{itemize}
-        \item \textbf{Spring JPA:} Used for database access with ORM (Object-Relational Mapping) support. Polls and votes are stored in PostgreSQL, while MongoDB is used for logging events.
-        \item \textbf{PostgreSQL:} Relational database used to store user and poll data.
-        \item \textbf{MongoDB:} Non-relational database used for storing event logs, providing scalability and flexibility for log data.
+        \item \textbf{Spring JPA:} Used for database access with ORM (Object-Relational Mapping) support. Polls and votes are stored in PostgreSQL, while MongoDB is used for logging events. \cite{spring_jpa}
+        \item \textbf{PostgreSQL:} Relational database used to store user and poll data. \cite{postgresql}
+        \item \textbf{MongoDB:} Non-relational database used for storing event logs, providing scalability and flexibility for log data. \cite{mongodb}
     \end{itemize}
     
     \item \textbf{Frontend Framework:} 
     \begin{itemize}
-        \item \textbf{SvelteKit:} A modern frontend framework used for building fast, reactive web applications with minimal overhead.
-        \item \textbf{TailwindCSS:} A utility-first CSS framework for creating responsive and customizable user interfaces.
-        \item \textbf{Vite:} A next-generation build tool offering fast development and optimized production builds.
+        \item \textbf{SvelteKit:} A modern frontend framework used for building fast, reactive web applications with minimal overhead. \cite{sveltekit}
+        \item \textbf{TailwindCSS:} A utility-first CSS framework for creating responsive and customizable user interfaces. \cite{tailwindcss}
+        \item \textbf{Vite:} A next-generation build tool offering fast development and optimized production builds. \cite{vite}
     \end{itemize}
     
     \item \textbf{Messaging:}
     \begin{itemize}
-        \item \textbf{RabbitMQ:} Used as a message broker to handle asynchronous communication between services. Events like votes and poll updates are sent to RabbitMQ for processing and tracking.
+        \item \textbf{RabbitMQ:} Used as a message broker to handle asynchronous communication between services. Events like votes and poll updates are sent to RabbitMQ for processing and tracking. \cite{rabbitmq}
     \end{itemize}
     \item \textbf{Containerization and Deployment:} 
     \begin{itemize}
-        \item \textbf{Docker:} The entire application, including the backend, frontend, and database, is containerized using Docker for easy deployment and scalability.
+        \item \textbf{Docker:} The entire application, including the backend, frontend, and database, is containerized using Docker for easy deployment and scalability. \cite{docker}
     \end{itemize}
 \end{itemize}
 
