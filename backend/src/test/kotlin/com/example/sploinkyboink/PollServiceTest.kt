@@ -358,7 +358,7 @@ class PollServiceTest {
             mockPollRepositorySave(updatedPoll)
 
             // Act
-            val result = pollService.editPoll(poll.pollID, updatedQuestion, updatedOptions, updatedValidUntil)
+            val result = pollService.editPoll(poll.pollID, user.username, updatedQuestion, updatedOptions, updatedValidUntil)
 
             // Assert
             assertNotNull(result)
@@ -383,7 +383,7 @@ class PollServiceTest {
 
             // Act & Assert
             val exception = assertThrows<IllegalArgumentException> {
-                pollService.editPoll("nonexistentpoll", updatedQuestion, updatedOptions, updatedValidUntil)
+                pollService.editPoll("nonexistentpoll", "hello", updatedQuestion, updatedOptions, updatedValidUntil)
             }
             assertEquals("Poll not found", exception.message)
 
@@ -405,7 +405,7 @@ class PollServiceTest {
             doNothing().`when`(pollRepository).deleteById(poll.pollID)
 
             // Act
-            pollService.deletePoll(poll.pollID)
+            pollService.deletePoll(poll.pollID, user.username)
 
             // Assert
             verify(pollRepository, times(1)).findById(poll.pollID)
@@ -420,7 +420,7 @@ class PollServiceTest {
 
             // Act & Assert
             val exception = assertThrows<IllegalArgumentException> {
-                pollService.deletePoll("nonexistentpoll")
+                pollService.deletePoll("nonexistentpoll", "no exist")
             }
             assertEquals("Poll not found", exception.message)
 
