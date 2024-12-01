@@ -4,12 +4,20 @@
 We will now look into how the prototype is organized in the frontend and the backend.  This will hopefully show how our system works as a whole. We will focus more on the backend than the frontend in this section. 
 
 \subsection{Frontend overview}
-\noindent We will now give an overview over our frontend. The frontend is responsible for displaying the backend as a UI (user interface). \\ \\
+\noindent We will now look at our frontend and include main features, components, development tools and configuration. The frontend is responsible for displaying the backend as a UI (user interface). For our frontend we use SvelteKit with Vite and Tailwind.
 
 \begin{figure}[H]
 \centering
 \resizebox{\textwidth}{!}{ % Resize the image to fit within the page width
 \begin{tikzpicture}[node distance=1.5cm, font=\small] % Set the font size for better visibility
+\tikzstyle{container} = [draw=black, thick, inner sep=0.5cm] % Removed dashed line for container
+\tikzstyle{label} = [font=\bfseries, text centered, minimum width=3.5cm]
+
+% Define the top container for "Frontend Features and Components" with smaller font size and no dotted line
+\node[container, fill=yellow!60, text width=10cm, minimum height=1cm, font=\normalsize] (Frontend) {
+Frontend (SvelteKit with Tailwind and Vite)};
+
+\vspace{1cm}
 
 % Define node styles
 \tikzstyle{class} = [rectangle, draw=black, fill=yellow!40, text centered, minimum height=0.8cm, minimum width=3.5cm]
@@ -18,7 +26,7 @@ We will now look into how the prototype is organized in the frontend and the bac
 \tikzstyle{label} = [font=\bfseries, text centered, minimum width=3.5cm]
 
 % Define categories under "Frontend Features and Components" with yellow boxes
-\node[class, node distance=1.5cm] (Features) {Features};
+\node[class, below of=Frontend, node distance=1.5cm] (Features) {Features};
 \node[class, below of=Features] (ReusableComponents) {Reusable Components};
 \node[class, below of=ReusableComponents] (StateManagement) {State Management};
 \node[class, below of=StateManagement] (PlaywrightTesting) {End-to-End Testing with Playwright};
@@ -54,6 +62,7 @@ We will now look into how the prototype is organized in the frontend and the bac
 \caption{Frontend Overview for PollApp Architecture (with Configuration)}
 \label{fig:frontend_overview_with_configuration}
 \end{figure}
+
 
 
 \noindent \textbf{Framework:} SvelteKit for SSR and client-side transitions. \\
