@@ -32,6 +32,10 @@
         }
     }
 
+    async function editVote(){
+        await goto(`/polls/${poll.pollID}/edit`);
+    }
+
     async function submitVote() {
         if (!isLoggedIn()) {
             message = 'You must be logged in to vote';
@@ -54,7 +58,7 @@
         if (res.ok) {
             message = hasVoted ? 'Vote updated successfully' : 'Vote registered successfully';
             // Refresh the page to reflect changes
-            await goto(`/polls/${poll.pollID}`, { replaceState: true });
+            window.location.reload();
         } else {
             const errorText = await res.text();
             message = `Error: ${errorText}`;
@@ -81,7 +85,7 @@
         if (res.ok) {
             message = 'Vote deleted successfully';
             // Refresh the page to reflect changes
-            await goto(`/polls/${poll.pollID}`, { replaceState: true });
+            window.location.reload();
         } else {
             const errorText = await res.text();
             message = `Error: ${errorText}`;
@@ -145,24 +149,24 @@
                 {#if hasVoted}
                     <button type="button" on:click={deleteVote} class="py-2 px-4 bg-red-500 hover:bg-red-600 text-white font-semibold rounded ml-2">Delete Vote</button>
                 {/if}
-                {#if isLoggedIn() && user.username === poll.byUser?.username}
-                    <div class="mt-4">
-                        <p class="p-1 opacity-30">Editing does not work if you have voted for some reason :)</p>
-                        <button
-                                on:click={() => goto(`/polls/${poll.pollID}/edit`)}
-                                class="py-2 px-4 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold rounded"
-                        >
-                            Edit Poll
-                        </button>
-                        <button
-                                on:click={deletePoll}
-                                class="py-2 px-4 bg-red-500 hover:bg-red-600 text-white font-semibold rounded ml-2"
-                        >
-                            Delete Poll
-                        </button>
-                    </div>
-                {/if}
             </form>
+
+            {#if isLoggedIn() && user.username === poll.byUser?.username}
+                <div class="mt-4">
+                    <button
+                            on:click={editVote}
+                            class="py-2 px-4 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold rounded"
+                    >
+                        Edit Poll
+                    </button>
+                    <button
+                            on:click={deletePoll}
+                            class="py-2 px-4 bg-red-500 hover:bg-red-600 text-white font-semibold rounded ml-2"
+                    >
+                        Delete Poll
+                    </button>
+                </div>
+            {/if}
             <button on:click={viewResults} class="mt-4 py-2 px-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded">View Results</button>
         {:else}
             <p class="text-slate">You must be logged in to vote. <a href="/login" class="text-blue-400 hover:underline">Login</a></p>
