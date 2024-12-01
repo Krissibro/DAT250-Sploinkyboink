@@ -16,15 +16,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # 2. Set up JDK for backend
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
           java-version: '21'
 
+      # 3. Cache Gradle packages to speed up builds
       - name: Cache Gradle packages
         uses: actions/cache@v4
         with:
@@ -35,15 +38,19 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      # 4. Make gradlew executable
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Build with gradle
+      # 5. Build the backend with Gradle
+      - name: Build with Gradle
         run: ./gradlew clean build
 
+      # 6. Run tests
       - name: Run tests
         run: ./gradlew test
 
+      # 7. Log in to GitHub Container Registry
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -51,6 +58,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # 8. Build and push backend Docker image
       - name: Build and push backend Docker image
         uses: docker/build-push-action@v4
         with:
@@ -60,6 +68,7 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/backend:latest
             ghcr.io/${{ github.repository_owner }}/backend:${{ github.sha }}
 
+      # 9. Build and push frontend Docker image
       - name: Build and push frontend Docker image
         uses: docker/build-push-action@v4
         with:
