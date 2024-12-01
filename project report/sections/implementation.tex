@@ -125,6 +125,23 @@ We use Kotlin with Spring Boot as the backend. The code is organized into three 
 \end{figure}
 \vspace{1cm}
 
+\noindent \textbf{Screenshots from some of the backend code}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{../images/pollController.png}
+	\caption{Sequence diagram for voting on a poll}
+	\label{fig:pollController}
+\end{figure}
+
+\noindent The screenshot is from our PollController class. The pollController works as a man in the middle between the UI and the backend. We display some of this code because it is central. The controllers have also many more endpoints that connects the UI actions to the backend services. Underneath you can see som e of the code from the PollService class.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{../images/pollService.png}
+	\caption{Sequence diagram for voting on a poll}
+	\label{fig:pollService}
+\end{figure}
 
 \vspace{0.5cm}
 \noindent \textbf{Achieved functionalities}
