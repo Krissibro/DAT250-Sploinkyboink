@@ -147,6 +147,7 @@
                 {/if}
                 {#if isLoggedIn() && user.username === poll.byUser?.username}
                     <div class="mt-4">
+                        <p class="p-1 opacity-30">Editing does not work if you have voted for some reason :)</p>
                         <button
                                 on:click={() => goto(`/polls/${poll.pollID}/edit`)}
                                 class="py-2 px-4 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold rounded"
