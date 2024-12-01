@@ -21,7 +21,7 @@ services:
     build:
       context: ./frontend  # This tells Docker Compose to use the Dockerfile in the frontend folder
     ports:
-      - "5173:5173"        # Exposes frontend on localhost:3000
+      - "5173:5173"        # Exposes frontend on localhost:5173
     networks:
       - app-network        # Shared network for frontend and backend
     depends_on:
