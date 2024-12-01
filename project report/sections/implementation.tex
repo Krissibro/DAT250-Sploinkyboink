@@ -125,43 +125,6 @@ We use Kotlin with Spring Boot as the backend. The code is organized into three 
 \end{figure}
 \vspace{1cm}
 
-\noindent \textbf{Main Application Class}
-\begin{itemize}
-    \item \textbf{SploinkyboinkApp}: The central class responsible for initializing and running the application.
-\end{itemize}
-
-
-\noindent \textbf{Controllers}
-\begin{itemize}
-    \item \textbf{PollController}: Manages HTTP requests related to polls.
-    \item \textbf{UserController}: Handles user-related HTTP requests.
-    \item \textbf{VoteController}: Processes vote-related HTTP requests.
-    \item \textbf{EventListener}: Handles event-triggered actions.
-\end{itemize}
-
-\noindent \textbf{Services (Business Logic)}
-\begin{itemize}
-    \item \textbf{EventService}: Logs events such as user votes and poll creation/editing.
-    \item \textbf{PollService}: Manages polls and voting logic.
-    \item \textbf{UserService}: Handles user registration, authentication, and data operations.
-    \item \textbf{VoteService}: Manages vote-related logic.
-    \item \textbf{JwtService}: Provides JWT token management for authentication.
-\end{itemize}
-
-\noindent \textbf{Repositories (Data Access)}
-\begin{itemize}
-    \item \textbf{PollRepo}: Interacts with the database for poll-related data.
-    \item \textbf{UserRepo}: Manages user data persistence.
-    \item \textbf{VoteRepo}: Handles database operations for votes.
-    \item \textbf{EventRepo}: Supports event-related data storage and access.
-\end{itemize}
-
-\noindent \textbf{Security and Messaging}
-\begin{itemize}
-    \item \textbf{Security Config}: Configures application-wide security settings and authentication mechanisms.
-    \item \textbf{JWT Filters}: Ensures secure token-based authentication.
-    \item \textbf{RabbitMQ Config}: Sets up RabbitMQ for message processing and event handling.
-\end{itemize}
 
 \vspace{0.5cm}
 \noindent \textbf{Achieved functionalities}

@@ -18,7 +18,6 @@ The FeedApp application provides a polling system where users can create, partic
 Each use case is supported by the backend services to ensure proper functionality, and the user interface provides a seamless experience for interacting with these actions.
 
 \vspace{1cm}
-
 \noindent \textbf{Sequence Diagram (Voting for poll)}
 
 \vspace{0.2cm}
@@ -30,6 +29,32 @@ Each use case is supported by the backend services to ensure proper functionalit
 	\caption{Sequence diagram for voting on a poll}
 	\label{fig:sequence_diagram}
 \end{figure}
+
+\noindent \textbf{Application screenshots}
+
+\vspace{0.2cm}
+\noindent Underneath you can see various screenshots from the application. The user must logs in first, comes to an interface where he can manage his own polls. The last screenshot shows te screen display when a user votes for a poll.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{../images/login.png}
+	\caption{The login screen of the application}
+	\label{fig:Login sceen}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{../images/loggedInDashboard.png}
+	\caption{The poll management interface for logged in users}
+	\label{fig:Poll management interface}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{../images/votingScreen.png}
+	\caption{Screen for users that votes for a poll}
+	\label{fig: Voting for poll}
+\end{figure}
+
+
 
 \subsection{Domain Model}
 The domain model of the FeedApp consists of several key entities that represent the core data objects of the system. These entities are mapped to the database and interact through the business logic.
