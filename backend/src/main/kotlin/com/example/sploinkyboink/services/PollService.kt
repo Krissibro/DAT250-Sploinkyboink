@@ -58,29 +58,52 @@ class PollService(
         return pollRepository.findByValidUntilAfter(Instant.now(), pageable)
     }
 
-    // Delete a poll
+    // Delete a user's vote from a poll
     @Transactional
-    fun deletePoll(pollID: String) {
-        // Verify poll existence
+    fun deletePoll(pollID: String, username: String?) {
+        if (username == null) {
+            throw IllegalAccessException("User must be logged in to delete poll")
+        }
+
         val poll = pollRepository.findById(pollID).orElseThrow {
             IllegalArgumentException("Poll not found")
         }
-        // Proceed to delete
+
+        if (poll.byUser?.username != username) {
+            throw IllegalAccessException("You are not authorized to delete this poll")
+        }
+
         pollRepository.deleteById(pollID)
     }
 
     // Edit a poll (update allowed fields)
     @Transactional
-    fun editPoll(pollID: String, updatedQuestion: String, updatedVoteOptions: List<String>, updatedValidUntil: Instant): Poll {
+    fun editPoll(
+        pollID: String,
+        username: String?,
+        updatedQuestion: String,
+        updatedVoteOptions: List<String>,
+        updatedValidUntil: Instant
+    ): Poll {
+        if (username == null) {
+            throw IllegalAccessException("User must be logged in to edit poll")
+        }
+
         val existingPoll = pollRepository.findById(pollID)
             .orElseThrow { IllegalArgumentException("Poll not found") }
 
-        // Delete votes for options that no longer exist
+        if (existingPoll.byUser?.username != username) {
+            throw IllegalAccessException("You are not authorized to edit this poll")
+        }
+
+        // Proceed with updating the poll
+        existingPoll.question = updatedQuestion
+        existingPoll.validUntil = updatedValidUntil
+
+        // Remove votes for options that no longer exist
         val optionsToRemove = existingPoll.voteOptions - updatedVoteOptions.toSet()
         existingPoll.votes.removeIf { it.voteOption in optionsToRemove }
 
-        existingPoll.question = updatedQuestion
-        existingPoll.validUntil = updatedValidUntil
         existingPoll.voteOptions = updatedVoteOptions
 
         val updatedPoll = pollRepository.save(existingPoll)
@@ -156,6 +179,7 @@ class PollService(
 
         return voteRepository.save(existingVote)
     }
+
 
     // Delete a user's vote from a poll
     @Transactional
