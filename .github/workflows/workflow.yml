@@ -85,8 +85,8 @@ jobs:
           context: ./backend
           push: true
           tags: |
-            ghcr.io/krissibro/dat250-sploinkyboink-backend:latest
-            ghcr.io/krissibro/dat250-sploinkyboink-backend:${{ github.sha }}
+            ghcr.io/krissibro/sploinkyboink-backend:latest
+            ghcr.io/krissibro/sploinkyboink-backend:${{ github.sha }}
 
       # Frontend Docker Build and Push
       - name: Build and push frontend Docker image
@@ -96,6 +96,6 @@ jobs:
           context: ./frontend
           push: true
           tags: |
-            ghcr.io/krissibro/dat250-sploinkyboink-frontend:latest
-            ghcr.io/krissibro/dat250-sploinkyboink-frontend:${{ github.sha }}
+            ghcr.io/krissibro/sploinkyboink-frontend:latest
+            ghcr.io/krissibro/sploinkyboink-frontend:${{ github.sha }}
 
