@@ -92,12 +92,17 @@
 }
 	
 \begin{document}
+\pagenumbering{roman}
 
 \title{DAT250 FeedApp Report}
-
 \author{Kristoffer, Håvard, Brian and Audun}
-
 \maketitle
+\newpage
+
+\tableofcontents
+\newpage
+
+\pagenumbering{arabic}
 
 \begin{abstract}
 
@@ -105,11 +110,11 @@
  This report focuses on the development of a poll application called FeedApp. The application allows users to create polls, vote on them, and view results. Users can submit a question with multiple answer options, vote for their preferred option, and see the current vote counts displayed in real time. This app features a frontend for user interaction and a backend that processes votes and manages poll data in a database.  The frameworks this app is using are Spring Boot and Kotlin for the backend and SvelteKit for the frontend. We implemented data persistence with PostgreSQL and MongoDB, managed messaging with RabbitMQ, and containerized the application with Docker. We aimed to have a user-friendly interface, making it easy for users to register and create and manage polls.
   
 
-  
-
 \end{abstract}
+\newpage
 
-%\input{commands}	
+%\input{commands}
+	
 
 \input{sections/introduction}
 
